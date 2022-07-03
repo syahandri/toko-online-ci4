@@ -118,6 +118,7 @@ class ProfileController extends BaseController
          'kode_kabupaten' => $this->request->getVar('kode_kabupaten'),
          'kode_provinsi' => $this->request->getVar('kode_provinsi'),
          'kode_pos' => $this->request->getVar('kode_pos'),
+         'flags' => 1
       ];
 
       $this->users->save($dataUser);

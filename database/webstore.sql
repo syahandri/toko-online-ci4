@@ -1,1384 +1,1617 @@
-/*
- Navicat Premium Data Transfer
+-- phpMyAdmin SQL Dump
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost
+-- Generation Time: Jun 13, 2022 at 04:48 AM
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 8.1.6
 
- Source Server         : webstore
- Source Server Type    : MySQL
- Source Server Version : 100424
- Source Host           : localhost:3306
- Source Schema         : webstore
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
 
- Target Server Type    : MySQL
- Target Server Version : 100424
- File Encoding         : 65001
 
- Date: 07/06/2022 09:52:33
-*/
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
+--
+-- Database: `webstore`
+--
 
--- ----------------------------
--- Table structure for address
--- ----------------------------
-DROP TABLE IF EXISTS `address`;
-CREATE TABLE `address`  (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `user_id` int UNSIGNED NOT NULL,
-  `jalan` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `kecamatan` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `kabupaten` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `provinsi` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `kode_kabupaten` int UNSIGNED NOT NULL,
-  `kode_provinsi` int UNSIGNED NOT NULL,
-  `kode_pos` int UNSIGNED NOT NULL,
-  `flags` bit(1) NOT NULL,
-  `created_at` datetime NULL DEFAULT NULL,
-  `updated_at` datetime NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+-- --------------------------------------------------------
 
--- ----------------------------
--- Records of address
--- ----------------------------
-INSERT INTO `address` VALUES (1, 2, 'Jln. ABC No. 6, Kebogadung, RT 05 / RW 02', 'Jatibarang', 'Brebes', 'Jawa Tengah', 92, 10, 52261, b'1', '2006-09-30 22:20:33', '2022-06-07 09:39:25');
-INSERT INTO `address` VALUES (2, 3, 'Jln. XYZ No. 7, Kebogadung, RT 02 / RW 05', 'Jatibarang', 'Brebes', 'Jawa Tengah', 92, 10, 52261, b'1', '1975-03-24 03:22:37', '2022-06-07 09:39:25');
+--
+-- Table structure for table `address`
+--
 
--- ----------------------------
--- Table structure for auth_activation_attempts
--- ----------------------------
-DROP TABLE IF EXISTS `auth_activation_attempts`;
-CREATE TABLE `auth_activation_attempts`  (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `ip_address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `user_agent` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `token` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `created_at` datetime NOT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+CREATE TABLE `address` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL,
+  `jalan` text NOT NULL,
+  `kecamatan` varchar(50) NOT NULL,
+  `kabupaten` varchar(50) NOT NULL,
+  `provinsi` varchar(50) NOT NULL,
+  `kode_kabupaten` int(11) UNSIGNED NOT NULL,
+  `kode_provinsi` int(11) UNSIGNED NOT NULL,
+  `kode_pos` int(11) UNSIGNED NOT NULL,
+  `flags` bit(1) NOT NULL DEFAULT b'1',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of auth_activation_attempts
--- ----------------------------
-INSERT INTO `auth_activation_attempts` VALUES (1, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.63 Safari/537.36 Edg/102.0.1245.33', '77a973312d1e6dc87855595bc1402555', '2022-06-07 09:40:53');
+-- --------------------------------------------------------
 
--- ----------------------------
--- Table structure for auth_groups
--- ----------------------------
-DROP TABLE IF EXISTS `auth_groups`;
-CREATE TABLE `auth_groups`  (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+--
+-- Table structure for table `auth_activation_attempts`
+--
 
--- ----------------------------
--- Records of auth_groups
--- ----------------------------
-INSERT INTO `auth_groups` VALUES (1, 'admin', 'administrator');
-INSERT INTO `auth_groups` VALUES (2, 'member', 'member user');
-INSERT INTO `auth_groups` VALUES (3, 'user', 'reguler user');
+CREATE TABLE `auth_activation_attempts` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `ip_address` varchar(255) NOT NULL,
+  `user_agent` varchar(255) NOT NULL,
+  `token` varchar(255) DEFAULT NULL,
+  `created_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for auth_groups_permissions
--- ----------------------------
-DROP TABLE IF EXISTS `auth_groups_permissions`;
-CREATE TABLE `auth_groups_permissions`  (
-  `group_id` int UNSIGNED NOT NULL DEFAULT 0,
-  `permission_id` int UNSIGNED NOT NULL DEFAULT 0,
-  INDEX `auth_groups_permissions_permission_id_foreign`(`permission_id`) USING BTREE,
-  INDEX `group_id_permission_id`(`group_id`, `permission_id`) USING BTREE,
-  CONSTRAINT `auth_groups_permissions_group_id_foreign` FOREIGN KEY (`group_id`) REFERENCES `auth_groups` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
-  CONSTRAINT `auth_groups_permissions_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `auth_permissions` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+-- --------------------------------------------------------
 
--- ----------------------------
--- Records of auth_groups_permissions
--- ----------------------------
+--
+-- Table structure for table `auth_groups`
+--
 
--- ----------------------------
--- Table structure for auth_groups_users
--- ----------------------------
-DROP TABLE IF EXISTS `auth_groups_users`;
-CREATE TABLE `auth_groups_users`  (
-  `group_id` int UNSIGNED NOT NULL DEFAULT 0,
-  `user_id` int UNSIGNED NOT NULL DEFAULT 0,
-  INDEX `auth_groups_users_user_id_foreign`(`user_id`) USING BTREE,
-  INDEX `group_id_user_id`(`group_id`, `user_id`) USING BTREE,
-  CONSTRAINT `auth_groups_users_group_id_foreign` FOREIGN KEY (`group_id`) REFERENCES `auth_groups` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
-  CONSTRAINT `auth_groups_users_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+CREATE TABLE `auth_groups` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of auth_groups_users
--- ----------------------------
-INSERT INTO `auth_groups_users` VALUES (1, 1);
-INSERT INTO `auth_groups_users` VALUES (3, 2);
+--
+-- Dumping data for table `auth_groups`
+--
 
--- ----------------------------
--- Table structure for auth_logins
--- ----------------------------
-DROP TABLE IF EXISTS `auth_logins`;
-CREATE TABLE `auth_logins`  (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `ip_address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `user_id` int UNSIGNED NULL DEFAULT NULL,
+INSERT INTO `auth_groups` (`id`, `name`, `description`) VALUES
+(1, 'admin', 'administrator'),
+(2, 'member', 'member user'),
+(3, 'user', 'reguler user');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `auth_groups_permissions`
+--
+
+CREATE TABLE `auth_groups_permissions` (
+  `group_id` int(11) UNSIGNED NOT NULL DEFAULT 0,
+  `permission_id` int(11) UNSIGNED NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `auth_groups_users`
+--
+
+CREATE TABLE `auth_groups_users` (
+  `group_id` int(11) UNSIGNED NOT NULL DEFAULT 0,
+  `user_id` int(11) UNSIGNED NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `auth_groups_users`
+--
+
+INSERT INTO `auth_groups_users` (`group_id`, `user_id`) VALUES
+(1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `auth_logins`
+--
+
+CREATE TABLE `auth_logins` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `ip_address` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `user_id` int(11) UNSIGNED DEFAULT NULL,
   `date` datetime NOT NULL,
-  `success` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `email`(`email`) USING BTREE,
-  INDEX `user_id`(`user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+  `success` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of auth_logins
--- ----------------------------
-INSERT INTO `auth_logins` VALUES (1, '::1', 'userbaru@gmail.com', 2, '2022-06-07 09:41:03', 1);
-INSERT INTO `auth_logins` VALUES (2, '::1', 'admin@gmail.com', 1, '2022-06-07 09:43:40', 1);
-INSERT INTO `auth_logins` VALUES (3, '::1', 'userbaru@gmail.com', 2, '2022-06-07 09:45:14', 1);
-INSERT INTO `auth_logins` VALUES (4, '::1', 'admin@gmail.com', 1, '2022-06-07 09:46:57', 1);
-INSERT INTO `auth_logins` VALUES (5, '::1', 'userbaru@gmail.com', 2, '2022-06-07 09:48:58', 1);
-INSERT INTO `auth_logins` VALUES (6, '::1', 'admin', NULL, '2022-06-07 09:50:21', 0);
-INSERT INTO `auth_logins` VALUES (7, '::1', 'admin@gmail.com', 1, '2022-06-07 09:50:29', 1);
+-- --------------------------------------------------------
 
--- ----------------------------
--- Table structure for auth_permissions
--- ----------------------------
-DROP TABLE IF EXISTS `auth_permissions`;
-CREATE TABLE `auth_permissions`  (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+--
+-- Table structure for table `auth_permissions`
+--
 
--- ----------------------------
--- Records of auth_permissions
--- ----------------------------
+CREATE TABLE `auth_permissions` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for auth_reset_attempts
--- ----------------------------
-DROP TABLE IF EXISTS `auth_reset_attempts`;
-CREATE TABLE `auth_reset_attempts`  (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `ip_address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `user_agent` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `token` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `created_at` datetime NOT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+-- --------------------------------------------------------
 
--- ----------------------------
--- Records of auth_reset_attempts
--- ----------------------------
+--
+-- Table structure for table `auth_reset_attempts`
+--
 
--- ----------------------------
--- Table structure for auth_tokens
--- ----------------------------
-DROP TABLE IF EXISTS `auth_tokens`;
-CREATE TABLE `auth_tokens`  (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `selector` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `hashedValidator` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `user_id` int UNSIGNED NOT NULL,
-  `expires` datetime NOT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `auth_tokens_user_id_foreign`(`user_id`) USING BTREE,
-  INDEX `selector`(`selector`) USING BTREE,
-  CONSTRAINT `auth_tokens_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+CREATE TABLE `auth_reset_attempts` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `ip_address` varchar(255) NOT NULL,
+  `user_agent` varchar(255) NOT NULL,
+  `token` varchar(255) DEFAULT NULL,
+  `created_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of auth_tokens
--- ----------------------------
+-- --------------------------------------------------------
 
--- ----------------------------
--- Table structure for auth_users_permissions
--- ----------------------------
-DROP TABLE IF EXISTS `auth_users_permissions`;
-CREATE TABLE `auth_users_permissions`  (
-  `user_id` int UNSIGNED NOT NULL DEFAULT 0,
-  `permission_id` int UNSIGNED NOT NULL DEFAULT 0,
-  INDEX `auth_users_permissions_permission_id_foreign`(`permission_id`) USING BTREE,
-  INDEX `user_id_permission_id`(`user_id`, `permission_id`) USING BTREE,
-  CONSTRAINT `auth_users_permissions_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `auth_permissions` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
-  CONSTRAINT `auth_users_permissions_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+--
+-- Table structure for table `auth_tokens`
+--
 
--- ----------------------------
--- Records of auth_users_permissions
--- ----------------------------
+CREATE TABLE `auth_tokens` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `selector` varchar(255) NOT NULL,
+  `hashedValidator` varchar(255) NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL,
+  `expires` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for cancel_orders
--- ----------------------------
-DROP TABLE IF EXISTS `cancel_orders`;
-CREATE TABLE `cancel_orders`  (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `invoice` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `user_id` int UNSIGNED NOT NULL,
-  `product` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `color` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `size` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `quantity` int UNSIGNED NOT NULL,
-  `status` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `auth_users_permissions`
+--
+
+CREATE TABLE `auth_users_permissions` (
+  `user_id` int(11) UNSIGNED NOT NULL DEFAULT 0,
+  `permission_id` int(11) UNSIGNED NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cancel_orders`
+--
+
+CREATE TABLE `cancel_orders` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `invoice` varchar(50) NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL,
+  `product` varchar(100) NOT NULL,
+  `color` varchar(15) NOT NULL,
+  `size` varchar(5) NOT NULL,
+  `quantity` int(11) UNSIGNED NOT NULL,
+  `status` varchar(50) NOT NULL,
   `flags` bit(1) NOT NULL DEFAULT b'0',
-  `created_at` datetime NULL DEFAULT NULL,
-  `updated_at` datetime NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of cancel_orders
--- ----------------------------
+-- --------------------------------------------------------
 
--- ----------------------------
--- Table structure for carts
--- ----------------------------
-DROP TABLE IF EXISTS `carts`;
-CREATE TABLE `carts`  (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `user_id` int UNSIGNED NOT NULL,
-  `created_at` datetime NULL DEFAULT NULL,
-  `updated_at` datetime NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+--
+-- Table structure for table `carts`
+--
 
--- ----------------------------
--- Records of carts
--- ----------------------------
+CREATE TABLE `carts` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for categories
--- ----------------------------
-DROP TABLE IF EXISTS `categories`;
-CREATE TABLE `categories`  (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `slug` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `created_at` datetime NULL DEFAULT NULL,
-  `updated_at` datetime NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `slug`(`slug`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+-- --------------------------------------------------------
 
--- ----------------------------
--- Records of categories
--- ----------------------------
-INSERT INTO `categories` VALUES (1, 'Aksesoris', 'aksesoris', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `categories` VALUES (2, 'Jaket', 'jaket', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `categories` VALUES (3, 'Celana', 'celana', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `categories` VALUES (4, 'Kaos', 'kaos', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `categories` VALUES (5, 'Kemeja', 'kemeja', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
+--
+-- Table structure for table `categories`
+--
 
--- ----------------------------
--- Table structure for checkouts
--- ----------------------------
-DROP TABLE IF EXISTS `checkouts`;
-CREATE TABLE `checkouts`  (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `invoice` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `user_id` int UNSIGNED NOT NULL,
-  `courier` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `shipping_type` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `estimate_date` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `cost` int UNSIGNED NOT NULL,
-  `total` bigint UNSIGNED NOT NULL,
-  `status` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'Pending',
-  `resi_number` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `jalan` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `kecamatan` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `kabupaten` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `provinsi` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `kode_pos` int UNSIGNED NOT NULL,
-  `created_at` datetime NULL DEFAULT NULL,
-  `updated_at` datetime NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+CREATE TABLE `categories` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `slug` varchar(200) NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of checkouts
--- ----------------------------
-INSERT INTO `checkouts` VALUES (1, 'ONKHT202206070941512', 2, 'jne', 'Ongkos Kirim Ekonomis', '3-6', 108000, 2860224, 'Sending', 'RESI12345', 'Jln. ABC No. 6, Kebogadung, RT 05 / RW 02', 'Jatibarang', 'Brebes', 'Jawa Tengah', 52261, '2022-06-07 09:41:51', '2022-06-07 09:44:35');
-INSERT INTO `checkouts` VALUES (2, '6M4PN202206070945532', 2, 'pos', 'Paket Kilat Khusus', '2 HARI', 159600, 559045, 'Sending', 'RESI12345', 'Jln. ABC No. 6, Kebogadung, RT 05 / RW 02', 'Jatibarang', 'Brebes', 'Jawa Tengah', 52261, '2022-06-07 09:45:53', '2022-06-07 09:47:38');
-INSERT INTO `checkouts` VALUES (3, '1GZNC202206070949422', 2, 'jne', 'Ongkos Kirim Ekonomis', '3-6', 168000, 534879, 'Sending', 'RESI12345', 'Jln. ABC No. 6, Kebogadung, RT 05 / RW 02', 'Jatibarang', 'Brebes', 'Jawa Tengah', 52261, '2022-06-07 09:49:42', '2022-06-07 09:51:21');
+--
+-- Dumping data for table `categories`
+--
 
--- ----------------------------
--- Table structure for colors
--- ----------------------------
-DROP TABLE IF EXISTS `colors`;
-CREATE TABLE `colors`  (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `created_at` datetime NULL DEFAULT NULL,
-  `updated_at` datetime NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+INSERT INTO `categories` (`id`, `name`, `slug`, `created_at`, `updated_at`) VALUES
+(1, 'Aksesoris', 'aksesoris', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(2, 'Jaket', 'jaket', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(3, 'Celana', 'celana', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(4, 'Kaos', 'kaos', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(5, 'Kemeja', 'kemeja', '2022-06-13 09:45:46', '2022-06-13 09:45:46');
 
--- ----------------------------
--- Records of colors
--- ----------------------------
-INSERT INTO `colors` VALUES (1, 'black', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `colors` VALUES (2, 'navy', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `colors` VALUES (3, 'blue', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `colors` VALUES (4, 'darkgreen', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `colors` VALUES (5, 'green', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `colors` VALUES (6, 'teal', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `colors` VALUES (7, 'deepskyblue', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `colors` VALUES (8, 'lime', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `colors` VALUES (9, 'indigo', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `colors` VALUES (10, 'maroon', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `colors` VALUES (11, 'purple', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `colors` VALUES (12, 'gray', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `colors` VALUES (13, 'grey', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `colors` VALUES (14, 'darkred', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `colors` VALUES (15, 'brown', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `colors` VALUES (16, 'salmon', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `colors` VALUES (17, 'red', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `colors` VALUES (18, 'deeppink', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `colors` VALUES (19, 'orangered', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `colors` VALUES (20, 'hotpink', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `colors` VALUES (21, 'orange', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `colors` VALUES (22, 'lightpink', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `colors` VALUES (23, 'pink', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `colors` VALUES (24, 'gold', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `colors` VALUES (25, 'yellow', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `colors` VALUES (26, 'white', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
+-- --------------------------------------------------------
 
--- ----------------------------
--- Table structure for confirms
--- ----------------------------
-DROP TABLE IF EXISTS `confirms`;
-CREATE TABLE `confirms`  (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `invoice` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `user_id` int UNSIGNED NOT NULL,
-  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `bank` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `image_transfer` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `created_at` datetime NULL DEFAULT NULL,
-  `updated_at` datetime NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+--
+-- Table structure for table `checkouts`
+--
 
--- ----------------------------
--- Records of confirms
--- ----------------------------
-INSERT INTO `confirms` VALUES (1, 'ONKHT202206070941512', 2, 'User Baru', 'MANDIRI', '1654569788_3d6a7a2f0e9ff6cbb56c.jpg', '2022-06-07 09:43:14', '2022-06-07 09:43:14');
-INSERT INTO `confirms` VALUES (2, '6M4PN202206070945532', 2, 'User Baru', 'BCA', '1654569975_b542f35faac6270b157b.jpg', '2022-06-07 09:46:24', '2022-06-07 09:46:24');
-INSERT INTO `confirms` VALUES (3, '1GZNC202206070949422', 2, 'User Baru', 'BCA', '1654570200_c30e474d9172291f0ff8.jpg', '2022-06-07 09:50:06', '2022-06-07 09:50:06');
+CREATE TABLE `checkouts` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `invoice` varchar(50) NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL,
+  `courier` varchar(10) NOT NULL,
+  `shipping_type` varchar(100) NOT NULL,
+  `estimate_date` varchar(20) NOT NULL,
+  `cost` int(10) UNSIGNED NOT NULL,
+  `total` bigint(20) UNSIGNED NOT NULL,
+  `status` varchar(50) NOT NULL DEFAULT 'Pending',
+  `resi_number` varchar(100) NOT NULL,
+  `jalan` text NOT NULL,
+  `kecamatan` varchar(50) NOT NULL,
+  `kabupaten` varchar(50) NOT NULL,
+  `provinsi` varchar(50) NOT NULL,
+  `kode_pos` int(11) UNSIGNED NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for events
--- ----------------------------
-DROP TABLE IF EXISTS `events`;
-CREATE TABLE `events`  (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `slug` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `detail` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `image` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'event.jpg',
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `colors`
+--
+
+CREATE TABLE `colors` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `colors`
+--
+
+INSERT INTO `colors` (`id`, `name`, `created_at`, `updated_at`) VALUES
+(1, 'black', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(2, 'navy', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(3, 'blue', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(4, 'darkgreen', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(5, 'green', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(6, 'teal', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(7, 'deepskyblue', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(8, 'lime', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(9, 'indigo', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(10, 'maroon', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(11, 'purple', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(12, 'gray', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(13, 'grey', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(14, 'darkred', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(15, 'brown', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(16, 'salmon', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(17, 'red', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(18, 'deeppink', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(19, 'orangered', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(20, 'hotpink', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(21, 'orange', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(22, 'lightpink', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(23, 'pink', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(24, 'gold', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(25, 'yellow', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(26, 'white', '2022-06-13 09:45:46', '2022-06-13 09:45:46');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `confirms`
+--
+
+CREATE TABLE `confirms` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `invoice` varchar(50) NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `bank` varchar(20) NOT NULL,
+  `image_transfer` varchar(100) NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `events`
+--
+
+CREATE TABLE `events` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `slug` varchar(100) NOT NULL,
+  `detail` text NOT NULL,
+  `image` varchar(50) NOT NULL DEFAULT 'event.jpg',
   `published` bit(1) NOT NULL,
-  `start_date` date NULL DEFAULT NULL,
-  `end_date` date NULL DEFAULT NULL,
-  `created_at` datetime NULL DEFAULT NULL,
-  `updated_at` datetime NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of events
--- ----------------------------
-INSERT INTO `events` VALUES (1, 'Ratione et.', 'ratione-et.', 'Quo et aperiam id odio molestias. Quaerat eum odio et sit velit. Beatae nemo vel id praesentium rerum earum voluptate.\n\nPossimus in sequi rerum eaque magnam consequatur possimus. Quae esse dolorum harum occaecati.\n\nMinima sit autem assumenda est facilis enim quo. Rerum aliquam sint nisi non. Nulla blanditiis occaecati adipisci praesentium minima omnis numquam. Et rerum blanditiis similique natus in maiores.\n\nAlias perferendis similique eos porro doloremque fugiat. Enim qui quibusdam mollitia laudantium. Expedita excepturi reprehenderit voluptas sit non et. Dolores vel non sequi architecto maiores consequatur.\n\nEt sed sed illum natus. Velit soluta repellat consequuntur nihil quam. Iusto sed quas quae et enim culpa. Est eos voluptas sed repellat dolorum id reprehenderit.\n\nEt non voluptas ipsa rerum excepturi. Et nulla excepturi nostrum non corporis mollitia unde. Rerum tempore qui id et. Totam et cupiditate est distinctio nihil similique et.\n\nQuos incidunt corrupti laudantium quibusdam ut enim dolore perferendis. Temporibus quis iure consequatur quo quisquam necessitatibus. Dolor consectetur modi quis repudiandae quibusdam repellat.\n\nEt labore quia ut laborum. Ratione aliquam tempore sit deserunt. Minima tenetur maxime odio amet mollitia. Placeat nulla est non iste earum optio sint.\n\nIpsam ad quis libero odit odit unde deserunt. Sed quos mollitia voluptas et quibusdam odio mollitia. Illo esse excepturi et et. Dicta ut occaecati qui incidunt magni consequatur voluptatum rerum.\n\nVeritatis placeat deleniti et velit quas nostrum quidem. Fugiat molestiae voluptas cum ad aut officiis eveniet. Est quis vero impedit est.', 'event.jpg', b'1', '1978-04-05', '1978-04-06', '2003-02-08 10:29:07', '2012-09-06 12:19:17');
-INSERT INTO `events` VALUES (2, 'Et et dolores.', 'et-et-dolores.', 'Tempora est temporibus quia unde. Est sint quo quaerat asperiores qui quia. Dolorum iste commodi exercitationem voluptas eos dolor.\n\nQui eum quia tenetur laborum expedita alias corporis. Quisquam distinctio fuga quis veniam et qui similique. Adipisci unde nulla et sit id dicta. Consequuntur itaque est est commodi adipisci officiis.\n\nRem expedita exercitationem vero quod mollitia. Animi repellendus aspernatur magnam a provident quasi. Perferendis et quia harum et quae adipisci. Reprehenderit distinctio illo consequatur dignissimos quo.\n\nRerum officiis architecto dolorem eveniet. Quos quia aperiam tempore. Asperiores ea qui nemo architecto adipisci nostrum quis. Id qui ut exercitationem illum et voluptas dolor. Autem odio expedita ut natus quae perspiciatis voluptatum.\n\nRecusandae quia sapiente et voluptate assumenda. Rerum tempora quam eos dicta aliquid. Dolore tempora vitae velit est est perspiciatis.\n\nSimilique rerum qui laboriosam quia. Nostrum nostrum non quam necessitatibus et dolore. Sapiente alias consectetur eum nisi placeat minima.\n\nConsequatur esse nostrum perferendis voluptatem dolores molestiae impedit. Praesentium libero error commodi voluptate. Nemo natus ab iure dolorum. Sequi quis voluptatem consectetur aperiam provident sint qui.\n\nConsectetur rem aliquid odio nostrum excepturi. Molestiae voluptatem omnis dolores sit et voluptates amet ad. Ex reprehenderit et impedit et atque porro inventore reiciendis.\n\nEst sapiente sed odit velit repudiandae ut. Ipsum ea dignissimos eos illum nesciunt expedita est. Doloremque quisquam porro est consequatur.\n\nExcepturi consequatur quidem quibusdam dolore. Explicabo sed eos soluta non autem qui id. Et vel dolor consequatur doloribus qui. Nihil cum incidunt enim dolorum.', 'event.jpg', b'1', '1996-02-14', '1996-02-15', '1994-01-20 17:44:54', '2016-05-15 08:35:48');
-INSERT INTO `events` VALUES (3, 'In omnis quod.', 'in-omnis-quod.', 'Dignissimos atque expedita voluptas aliquid illum. Dolores debitis sunt occaecati maiores odit quidem. Sed cumque vitae omnis reprehenderit a. Voluptas sunt dolores quo aut officiis quis fugit.\n\nHic maiores iste nihil. Ut vero sapiente expedita exercitationem. Qui similique pariatur omnis officiis cumque natus quisquam. Aut necessitatibus nam deserunt.\n\nHic ab tempore expedita et numquam. Quod dolores maxime sint ut et eos deserunt itaque. Labore eum natus quasi.\n\nQuia et sint et ducimus pariatur. Dicta sed nulla dignissimos blanditiis porro labore aliquam ea. Veniam placeat explicabo voluptas eum.\n\nNemo dolor consequatur eos aut mollitia aspernatur eius. Sed sit quisquam sint est modi labore. Quia saepe aut accusantium officiis maiores aliquid.\n\nNihil doloremque tempora corporis ratione harum placeat. Esse ratione aliquid dolorem culpa. Ea non explicabo itaque saepe placeat tempora hic. Vel accusantium quibusdam totam debitis sequi omnis.\n\nQuibusdam ullam maiores accusantium dolorem mollitia. Doloribus quisquam labore cumque voluptate qui aliquam corrupti. Ea unde temporibus reprehenderit corrupti omnis. Eligendi quas velit voluptatibus corrupti dicta. Officia rem officiis voluptatem aut quae.\n\nError et iste nisi quia eligendi fuga facere. Adipisci qui vel quo ut voluptates ut. Placeat eius consequatur adipisci sit hic quam odio. In iste impedit voluptas eius consequatur distinctio voluptas.\n\nNon rerum rem reiciendis quisquam ea labore saepe vero. Omnis nam molestiae ut quidem maiores.\n\nNesciunt quasi cupiditate minima doloribus. Ut dicta labore eius natus illum qui sequi. Nulla perferendis at sapiente earum excepturi.', 'event.jpg', b'0', '1998-08-15', '1998-08-16', '2005-04-03 14:30:30', '2010-10-01 11:53:46');
-INSERT INTO `events` VALUES (4, 'Qui ipsum incidunt.', 'qui-ipsum-incidunt.', 'Eaque quasi mollitia quaerat unde quia voluptatem dolorem. Nostrum vitae inventore quae at corrupti suscipit. Debitis facilis laboriosam sit dolores eum. Enim autem labore consequatur maiores eligendi aut sunt.\n\nImpedit amet nesciunt incidunt suscipit tempora possimus optio distinctio. Voluptates consequatur accusantium sequi veritatis ea enim.\n\nId hic nobis nam cum occaecati. Iusto necessitatibus suscipit voluptatem nemo quo et sed. Delectus nulla et facilis facere vel animi. Non quis nihil veniam quo.\n\nMolestiae dicta enim alias velit exercitationem. Aperiam suscipit reprehenderit harum vitae exercitationem rerum. Corrupti sit reiciendis in molestiae ab debitis. Aut ipsa odio consequatur veniam velit ut quibusdam.\n\nCumque iusto architecto sunt nulla tenetur est reprehenderit sint. Nulla ratione similique odio fugiat sapiente illo soluta. Sit similique minus praesentium adipisci mollitia velit.\n\nNesciunt voluptatibus ut expedita fugit dolorem consequatur. Sed eius ex delectus error quidem placeat deleniti voluptas. Maiores et inventore ut quas. Ut sit sit ipsa quia sapiente et dolores et.\n\nEt voluptas doloribus atque beatae aut. Et recusandae ut sit debitis odio voluptates. Maiores vitae et aut libero eveniet eligendi. Quidem aut numquam velit unde in nam molestiae.\n\nExplicabo vitae illo tempore fugit et eius quo. Voluptates itaque et consequuntur ut iusto. Reprehenderit aut natus qui. Expedita maiores explicabo eum nisi eum atque.\n\nIure recusandae maiores numquam et. Dolore est quae qui eos qui. Voluptas quos aut molestiae vel voluptates est. Corrupti nemo molestias fugiat non repudiandae et.\n\nNumquam dolores eos corporis ut eos. Autem asperiores quia aspernatur inventore. Cumque ea consectetur voluptatem ut ea eligendi. Natus officiis quia voluptas est ut. Fuga non sit rem praesentium et iste.', 'event.jpg', b'1', '1992-08-20', '1992-08-21', '1993-05-15 11:56:11', '1974-10-16 07:03:20');
-INSERT INTO `events` VALUES (5, 'At quasi quod.', 'at-quasi-quod.', 'Et aut consequuntur illum ea numquam distinctio. Provident corrupti doloribus deleniti. Deserunt necessitatibus atque culpa et nihil quos eos. Cupiditate et repellat et eos iste.\n\nSoluta aspernatur ea suscipit blanditiis. Et veritatis modi maxime asperiores aliquid et et est. Aliquid enim asperiores repellat rerum voluptas. Suscipit velit est quam repellendus recusandae nam beatae.\n\nBlanditiis minus sunt et sequi non minima vitae. Quaerat iusto architecto vel quo. Voluptas necessitatibus et debitis iure. Animi impedit aut rerum error blanditiis.\n\nAut consequatur quo atque. Eos aut nobis dolorum architecto rerum consequatur.\n\nQuia architecto quo rerum a praesentium. Et doloribus maxime molestias ratione. Sit consequatur nesciunt quaerat error. Sit commodi libero necessitatibus nam velit.\n\nEst et voluptatem earum officiis. Ab et libero sed aspernatur. Incidunt et qui nesciunt officiis veritatis. Accusamus est omnis quo quisquam officiis at.\n\nRepudiandae sequi reiciendis alias fuga vel fugiat sit. Ipsum accusantium ad dolores reprehenderit quas aliquid porro.\n\nTemporibus quae earum in qui debitis qui sit. Rerum eum nostrum tempore quo veritatis dolorum nesciunt. Rerum impedit aut accusantium eius nihil recusandae.\n\nNatus aperiam cumque eos. Architecto ut quos nesciunt enim autem. Et labore numquam sit quae et temporibus aliquid.\n\nVel quaerat accusamus aut quas. Delectus temporibus nihil est quis cum consequatur et. Neque reprehenderit ut natus eaque a natus at.', 'event.jpg', b'1', '2014-02-04', '2014-02-05', '2003-01-19 09:46:18', '1990-09-20 16:49:14');
-INSERT INTO `events` VALUES (6, 'Deleniti dolorum voluptates.', 'deleniti-dolorum-voluptates.', 'Quidem ut non illum exercitationem. Consequatur voluptas aut culpa quis dolorem blanditiis ut. Aut et vel temporibus qui quos.\n\nQui quidem est modi id recusandae est necessitatibus ut. Quas natus eligendi vero tempore. Qui natus aspernatur ut nulla.\n\nOfficia saepe officia suscipit hic. Hic perferendis voluptatem ratione distinctio molestias. Accusamus maxime iste et dolorem repudiandae unde ut. Et sint dolor nihil ut. Architecto soluta ut saepe commodi tenetur commodi soluta.\n\nEos aut qui a et voluptatem. Dicta dolorum ut est odit. Consequatur perspiciatis unde blanditiis minima libero autem cum doloremque.\n\nId voluptates nisi dolorum. Esse similique dignissimos architecto culpa assumenda facere. Sed accusamus illo eaque fuga.\n\nMaiores animi impedit natus sit alias autem et. Quia repellat ratione facere recusandae.\n\nPerspiciatis voluptatem minima voluptatem voluptatem sapiente blanditiis sunt mollitia. Pariatur temporibus occaecati sit nihil ullam. Quas facere eveniet in magnam ullam et perferendis.\n\nLibero vitae maiores illum non. Explicabo id hic deserunt architecto. In quia voluptatem ab velit quia atque autem.\n\nVel iste et aperiam laboriosam est quidem adipisci. Nostrum laborum praesentium libero reiciendis et dolores. Quo architecto voluptas modi cumque vitae et deleniti.\n\nVoluptatem laboriosam sit quae dolor quae nobis voluptatem delectus. Fugit sed est porro illo. Corporis aut sed nisi ut.', 'event.jpg', b'1', '2001-04-09', '2001-04-10', '2015-07-03 15:26:19', '1974-09-09 18:10:23');
-INSERT INTO `events` VALUES (7, 'Culpa expedita magnam repudiandae.', 'culpa-expedita-magnam-repudiandae.', 'Nobis labore reprehenderit rerum et aliquam quae quae. Rerum cupiditate rerum cumque magnam cum. Maxime magni sapiente quibusdam nemo qui vitae. Amet atque veniam ipsum ipsam ducimus non optio hic. Optio reiciendis ipsam quo consequatur tenetur non.\n\nPossimus accusantium libero totam tempora necessitatibus eos eos. Amet non illum magnam nobis. Voluptatem aliquam voluptates dolores aut impedit quisquam. Voluptate ipsa et amet id.\n\nDucimus beatae est et corrupti eveniet aut. Alias qui quas molestiae consequatur. Corrupti et eius quis molestiae eos sint pariatur.\n\nCum illo et numquam. Unde expedita impedit corrupti omnis eum et itaque. Quibusdam molestias illum et voluptas. Nulla sit saepe voluptate pariatur ab amet.\n\nSimilique est facilis illum totam. Aut vel ex ipsa facilis et. Vel cum qui voluptatem dolores.\n\nCulpa aut aut et. Vitae ut aut quos mollitia quia sed architecto. Explicabo natus unde reiciendis aut velit.\n\nMolestias labore aut nisi et voluptatem ratione laboriosam sit. Quas fuga voluptatem officiis. Repellendus vel assumenda excepturi et qui fugiat quas.\n\nAutem recusandae perspiciatis rerum atque praesentium. Eveniet soluta repellat voluptas. Unde reiciendis nulla laborum eius ut aperiam tempora.\n\nOfficia ab ea eos similique temporibus. Doloribus repellat earum non voluptatem iure officia. Magni quas nihil exercitationem deleniti.\n\nIste omnis et sed id et facere voluptate dolores. Quis nihil cumque deleniti aut tempore dolore. Ipsum voluptatem nihil laborum laudantium. Nostrum minima totam ad.', 'event.jpg', b'1', '2002-04-06', '2002-04-07', '2003-03-19 16:57:06', '1993-06-18 02:53:46');
-INSERT INTO `events` VALUES (8, 'Consectetur consequuntur.', 'consectetur-consequuntur.', 'Et quis fugiat doloribus eum ipsam. Non occaecati consequatur illo rerum sint. Iste in molestiae inventore.\n\nRatione magnam voluptatem qui est eos nemo dolores. Dolores occaecati dolor expedita et quia eligendi. Et corporis doloribus minus id.\n\nAutem non enim dicta voluptas accusantium quibusdam numquam. Quia corrupti voluptatem veritatis commodi. Nobis ab saepe et voluptatem itaque iure dolore. Maiores est nihil vel enim quidem.\n\nDeleniti suscipit nulla atque. Expedita ut optio dolorem fugit dolor mollitia. Quisquam repudiandae quod vitae consequatur accusantium.\n\nTempora reiciendis temporibus ab. Ducimus explicabo veniam ea est. Quasi qui tempore sed at sit est eius.\n\nDucimus officia illum necessitatibus soluta dolore aut. Doloremque eos et qui temporibus officia quis sed. Dolorum odit dicta dolorem cumque. Et voluptatem doloribus excepturi est aut corrupti.\n\nEarum ut doloribus aut iste voluptate. Consectetur ab doloremque maiores magnam. Illum provident nihil nihil consectetur et.\n\nUt atque assumenda adipisci voluptatem numquam sunt fugiat. Molestiae dolores ab explicabo sit architecto rem dolorem. Molestiae sunt velit occaecati voluptatem minus aut vitae. Similique excepturi reprehenderit totam voluptate veritatis qui.\n\nConsequatur amet dolore facere. Voluptatem omnis est illum velit nesciunt. Dolor error commodi necessitatibus nostrum sint ut.\n\nBlanditiis inventore odio quas et nam est. Voluptas fuga quis porro aut alias. Aut dicta enim unde ut.', 'event.jpg', b'0', '1989-01-16', '1989-01-17', '2014-11-05 07:54:34', '1992-07-29 17:32:53');
-INSERT INTO `events` VALUES (9, 'Non ad corporis laudantium.', 'non-ad-corporis-laudantium.', 'Ullam sit repellendus culpa eum quasi et ut quibusdam. Optio voluptatum totam quo dolores a omnis.\n\nNumquam qui corrupti tempora expedita. Et quo eveniet quis quaerat reprehenderit. Ut labore quibusdam non dolorem vero quos. Labore et dicta architecto.\n\nEa non officia temporibus. Voluptas incidunt veniam eos architecto non voluptatem reprehenderit. Tempore voluptatem dolores reprehenderit est laudantium. Nostrum praesentium ut aut debitis facilis.\n\nEx saepe qui aut corporis eius assumenda sequi. Nostrum voluptatem cupiditate itaque excepturi. Quis eum debitis ut laborum sit ut voluptatum. Ad aliquid cupiditate minima adipisci voluptatem esse.\n\nRepellat saepe ratione ipsum mollitia. Sequi velit itaque explicabo est. Quibusdam et vel aut ea. Est consequatur ea ducimus harum.\n\nNeque deserunt accusantium molestiae voluptas voluptate nisi consequatur molestiae. Facilis ad rerum nihil sequi ea ex quae. Error eos impedit accusantium quia.\n\nSed rerum totam ex. Dolorem ut ut numquam. Vitae recusandae quae suscipit quod. Et architecto officia iste beatae eveniet exercitationem. Sed iusto fugiat corrupti voluptatibus.\n\nVeniam quis iure nihil neque debitis eum reiciendis. Est doloremque autem ut sunt ullam. Eligendi saepe quia necessitatibus alias sint. Ducimus eaque eligendi et quod nostrum.\n\nAut aut facere ex voluptas dignissimos. Iste a magni consequuntur ad. Nobis odio voluptates ab temporibus doloremque. Ratione qui labore magni qui natus tempora dolores.\n\nNon pariatur voluptate amet est dicta distinctio hic. Sit harum aperiam numquam hic fugiat sit. Expedita ut voluptatem illum at quibusdam earum inventore.', 'event.jpg', b'0', '1971-12-28', '1971-12-29', '2016-11-01 03:59:02', '1995-06-11 16:54:03');
-INSERT INTO `events` VALUES (10, 'Ipsa aspernatur suscipit.', 'ipsa-aspernatur-suscipit.', 'Quae vel nulla harum. Beatae sunt odio et rerum.\n\nHic aut autem inventore aliquam corrupti eum quia quod. Praesentium veritatis itaque consequatur et qui blanditiis. Repellat repellendus natus impedit.\n\nUllam deserunt molestias est architecto quia expedita ut dolore. Et quod aut quae necessitatibus explicabo neque voluptatem. Quis ut reprehenderit et vel nihil et. Ea sunt tempora accusamus vel ducimus voluptate hic.\n\nVeniam repudiandae ut eveniet rerum ut rerum. Tempora illum rerum qui expedita autem repudiandae. Mollitia a tempora quia asperiores.\n\nMagnam numquam quasi quae iste quae velit. Voluptatem dolorem molestiae voluptate sunt perferendis iure. Occaecati sequi molestias eum. Harum est ut qui quibusdam illum sunt dolores. Et nulla optio quis harum culpa possimus quod similique.\n\nIure eveniet provident corporis quasi dolorem ad. Cum neque dolorem qui. Velit ut fugiat deleniti occaecati iusto ratione aut aut.\n\nAssumenda laborum rem dolorem aliquid. Sint neque asperiores qui aut minus consequatur. Omnis fuga corporis sit maxime accusantium dolor praesentium et.\n\nNulla consequatur illo et in voluptatem. Fugiat id eum occaecati. Veniam sed sunt illum sit consectetur animi.\n\nQuidem corrupti beatae ut id recusandae. Aliquid nostrum aperiam facere pariatur dolores at. Hic id tempore quod numquam dolorum et. Soluta dignissimos at quisquam fugiat.\n\nConsequuntur molestiae dolorem dignissimos repellat mollitia. Harum et voluptas optio iure consequatur id perferendis et. Vel perferendis ducimus ut expedita architecto. Et error sunt qui eligendi ex eius nihil.', 'event.jpg', b'0', '2014-12-19', '2014-12-20', '1993-05-11 17:46:37', '2007-04-08 20:43:37');
+--
+-- Dumping data for table `events`
+--
 
--- ----------------------------
--- Table structure for historysales
--- ----------------------------
-DROP TABLE IF EXISTS `historysales`;
-CREATE TABLE `historysales`  (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `product` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `stock` int NOT NULL,
-  `sold` int NOT NULL,
-  `tgl_transaksi` datetime NOT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+INSERT INTO `events` (`id`, `name`, `slug`, `detail`, `image`, `published`, `start_date`, `end_date`, `created_at`, `updated_at`) VALUES
+(1, 'Ut facere aut.', 'ut-facere-aut.', 'Laborum qui in pariatur aut. Aliquid dolor quam porro voluptatem vero doloribus dolor amet. Voluptas ad qui aperiam quis dolores. Laudantium et itaque necessitatibus at quaerat inventore.\n\nAnimi veritatis quas harum. Doloribus repellendus ut quisquam ut repellat non velit facere. Dolores consequuntur velit officiis et facilis. Voluptatem itaque velit distinctio reprehenderit earum omnis quis illo.\n\nDolores repudiandae saepe eum quis quaerat adipisci eum. Et ipsam illo quo qui consequatur.\n\nAlias tempora deserunt culpa quia laboriosam. Impedit rerum corporis saepe asperiores et. Ut accusantium amet enim expedita mollitia nostrum esse.\n\nTemporibus distinctio at velit dicta harum aut beatae possimus. Voluptatem ut voluptates temporibus itaque iste. Quasi nam sint corrupti facere occaecati pariatur cum qui.\n\nAnimi facilis dignissimos nemo at in. Non quidem eligendi suscipit et. Alias eveniet laborum eaque temporibus expedita.\n\nVoluptate voluptatibus recusandae quod sint. Qui aut ipsa et quaerat laudantium omnis voluptates molestiae. Sed repudiandae error vel est hic rerum inventore perspiciatis. Eum consequuntur est qui quo est.\n\nDolor itaque aut dolor perferendis quidem unde. Quia temporibus ipsa blanditiis eos ipsam. Praesentium autem ut distinctio quas ab. Incidunt quam et incidunt nam voluptatem illum.\n\nRepellendus itaque ut quidem vitae fugit nobis. Cupiditate soluta voluptatem qui impedit. In quia officiis occaecati non quas quibusdam magnam et.\n\nEst sunt necessitatibus aut enim nihil autem. Non incidunt soluta minus perferendis fugiat sint cum. Et est ut voluptate error ex ab id.', 'event.jpg', b'1', '2005-01-21', '2005-01-22', '2006-12-07 09:52:24', '1977-01-29 21:11:21'),
+(2, 'Illum et vel.', 'illum-et-vel.', 'Officiis qui non mollitia qui. Ullam est consectetur voluptates doloremque molestias omnis. Pariatur id dolor excepturi at et et eum.\n\nVoluptas incidunt porro consequuntur vitae voluptatibus odit et. Et cupiditate aperiam aperiam molestiae dolorem eum error. Voluptates fugit atque velit non.\n\nDistinctio ea aperiam neque quod. Dolorum architecto asperiores sed aut deleniti. Dignissimos dolores magnam nihil repudiandae et delectus ut.\n\nEt voluptates eveniet ab reprehenderit et ipsum. Sint illo blanditiis deserunt. Saepe ad vel qui sint maiores aliquid vel asperiores. Est delectus temporibus eum tenetur.\n\nLaudantium consectetur dicta sed nemo autem magnam et. Harum accusantium voluptas ea ut nobis. Enim fugiat ut cum nemo eveniet. Qui et ex sint.\n\nTotam sed consequatur fugit non. Iure autem aperiam ipsum. Iure beatae quod qui.\n\nNostrum officia quos ducimus at. Aut iusto aut molestiae labore. Vel nesciunt sint eveniet nostrum assumenda est suscipit.\n\nQui aut dolor neque sit. Omnis excepturi accusamus quasi incidunt nihil quasi saepe. Eius numquam quis accusamus sint libero. Commodi reiciendis doloribus qui aut quaerat.\n\nVoluptas sit eos suscipit sunt hic. Non est et ut temporibus nobis nulla sunt. Pariatur voluptatem cum eum sit iste. Quod facere et itaque neque quos aliquam vel.\n\nEt fugiat expedita in qui. Quia voluptas sapiente enim sed.', 'event.jpg', b'0', '1986-05-21', '1986-05-22', '2015-07-03 11:19:28', '1976-08-06 02:06:39'),
+(3, 'Modi amet numquam.', 'modi-amet-numquam.', 'Dicta rerum eius quis dolores. Qui corporis eius unde error animi nemo. Vel praesentium consequuntur sint nam. Et iusto fuga non et officia.\n\nLabore illum ab dolor consequatur. Et quia reprehenderit ipsum quis veniam natus provident. At aut et rerum asperiores possimus rem. Cumque ex nemo modi rerum non.\n\nMaiores eaque vel perspiciatis quia. Laboriosam totam facere aliquid aut. Iure eum itaque voluptatem nihil consequuntur.\n\nAutem adipisci repudiandae quia error est aliquam vel. Placeat possimus ea voluptatibus quibusdam perspiciatis est assumenda omnis. Sed dicta eligendi repellendus. Et consequatur occaecati et vero aut officia quis est. Voluptatem et quis et.\n\nAut aut deleniti molestiae est. Impedit ab voluptate odio. Ut quidem quia ullam repellat et sunt quis et. Corrupti perspiciatis aperiam modi et praesentium et.\n\nEveniet nostrum voluptas asperiores aliquam. Esse quae sunt sit itaque nihil consequuntur neque sed. Nesciunt nulla et dolores eos id. Illum odio inventore non et libero id est repudiandae.\n\nEa qui excepturi voluptates nesciunt cupiditate pariatur et. Ab necessitatibus dolores assumenda minus enim quae nulla reiciendis. Assumenda praesentium velit sint qui odio odio dolores.\n\nAmet ut quia sint assumenda qui consequatur voluptates. Illo est reprehenderit aspernatur necessitatibus.\n\nVoluptas quis dolor autem unde dolor ut facere. Consequatur est assumenda a et. Dolorem quis perspiciatis architecto et velit ipsa.\n\nDignissimos sint atque sed enim ut rerum necessitatibus. Magnam necessitatibus in voluptatibus alias repellat suscipit. Dolorum tempora nam iure atque et. Ipsam sit deserunt voluptatem sed.', 'event.jpg', b'1', '2007-05-20', '2007-05-21', '2007-04-19 01:12:09', '2017-10-29 19:52:46'),
+(4, 'Ut voluptatum qui id.', 'ut-voluptatum-qui-id.', 'Beatae illo culpa nihil quo ipsa. Exercitationem sint sed aliquid praesentium. Fugiat inventore ratione ut laboriosam iusto qui veritatis fugit. Nihil aspernatur perferendis ipsam omnis voluptatem rerum corrupti repellendus.\n\nQui eveniet omnis laudantium. Voluptas consectetur et ab eaque provident at rerum. Dicta beatae qui excepturi quia consequuntur.\n\nVero architecto et maxime odio enim. Sunt eos quia quasi eos. Porro blanditiis voluptate velit et quibusdam sed.\n\nAutem voluptatem et veniam est accusamus alias consectetur dicta. Consequuntur voluptatum qui sint. Exercitationem omnis quae tempore cupiditate quis vitae voluptate eum. Optio necessitatibus consectetur suscipit architecto et.\n\nVero sint autem aliquid officiis quam. Repellendus quo modi dolore ad corporis harum. Sed ea beatae unde voluptas.\n\nQui qui et doloremque. Ut optio excepturi illo mollitia quia explicabo repudiandae. Quis minus maiores doloribus qui accusamus. Et saepe quis consequatur impedit esse.\n\nError ad et est eaque praesentium. Quae rerum similique in consequuntur aut amet voluptate error. Laudantium aut quam quaerat officia est quis. Quo quisquam et sint dolorem nisi vero.\n\nDolores architecto eos commodi est. Tempora amet a voluptas. Ut doloribus occaecati ex ut dolor at.\n\nQui dolorem nisi et quia reprehenderit consequatur dolorum. Impedit maxime provident quo aperiam maiores quia blanditiis in. Reiciendis occaecati voluptas neque sunt aliquam. Sint inventore aut quibusdam possimus.\n\nProvident ad voluptate consequatur tempora sunt rem. Voluptates sequi et neque repudiandae ut adipisci minus. Perspiciatis et ea rerum est fuga. A dolores voluptatem commodi ipsam nemo ducimus.', 'event.jpg', b'0', '1996-07-21', '1996-07-22', '1983-03-12 22:10:10', '2021-10-16 21:00:31'),
+(5, 'Aliquam vel est.', 'aliquam-vel-est.', 'Qui nostrum magni molestiae ut vero voluptatum accusantium. Occaecati ut laboriosam molestiae occaecati odit et cumque. Optio iure sint voluptatem dignissimos aliquid.\n\nEt repellendus maiores omnis nam. Similique dicta ut quas ipsum suscipit. Aliquid fuga corrupti rerum at molestiae temporibus.\n\nDistinctio provident nisi ea laboriosam ea laboriosam eum. Voluptatum ab non asperiores aut quidem eveniet. Et ut hic eveniet aut voluptatum atque. Neque omnis quia voluptatem.\n\nAb omnis quos qui. Tempora ut aut minus in nostrum sed. Laborum quae iste corrupti saepe quia. Distinctio odio eum eum asperiores atque.\n\nAssumenda ut iusto corrupti. Enim quibusdam doloremque deserunt nihil omnis. Aut mollitia iure qui explicabo doloremque. Id provident ducimus facere dolor quaerat soluta. Exercitationem odit neque dolore veniam provident.\n\nAspernatur aut quis quibusdam voluptas. Velit non animi alias distinctio perferendis est. Doloribus magni tenetur doloremque numquam quis non.\n\nOptio aut deserunt voluptas voluptas sed. Maiores ut at commodi facilis. Qui vitae ut minus molestiae esse a voluptate. Dignissimos placeat deserunt doloribus eveniet aut.\n\nSoluta nulla laudantium cumque ut. Voluptatibus molestiae tenetur non possimus. Molestiae repudiandae qui est repellendus quod.\n\nSequi aperiam id suscipit harum accusamus. Accusamus quia delectus non deserunt animi enim aut harum. Assumenda iste magni modi voluptas. Libero dolores esse optio labore.\n\nOdio eveniet qui expedita non magni non et. Ea doloribus in soluta et ex vel. Et cumque officia delectus velit quia cum tenetur et. Voluptas commodi doloribus voluptas.', 'event.jpg', b'0', '2020-04-22', '2020-04-23', '1975-06-13 14:26:50', '1998-01-18 03:28:27'),
+(6, 'Quis culpa sint.', 'quis-culpa-sint.', 'Et soluta eveniet qui nemo. Maiores sint autem sed rerum enim iusto debitis. Itaque quo occaecati et et. Nihil rerum voluptates molestiae quasi voluptatem.\n\nPerspiciatis et sit quis velit qui. Corrupti ut reprehenderit eaque adipisci et libero.\n\nAb qui similique placeat quis. Maxime eveniet est temporibus veritatis aut. Eos itaque fugiat quis deserunt omnis omnis ipsam.\n\nRepellat voluptatem modi nam quia minima nisi quis. Quia sunt dignissimos rem occaecati amet quia eos. Animi non dolorum id excepturi.\n\nDolores dolores illo et accusantium quos aut autem explicabo. Qui placeat quas est quia id ipsum. Consequatur quia vel quod eligendi consequatur non nesciunt. Fugit perferendis illo eum velit.\n\nAnimi sit ex molestiae ea. Sapiente et nihil deserunt quidem voluptas recusandae. Animi pariatur dolor quo quidem dolore dignissimos. Dolor ipsum fugit est autem dolores sequi exercitationem.\n\nMagnam distinctio sunt voluptas sapiente voluptas qui. Et sint ut sequi. Magnam aut velit eos autem temporibus aspernatur facere doloribus. Aut soluta ut assumenda vel quia.\n\nDoloribus cumque vitae est hic. Vitae cumque eveniet doloribus incidunt. Vitae neque dolorum voluptatibus qui quos facilis recusandae. Eius minus rerum facere nulla possimus dolorem.\n\nAt dolorem vel modi voluptas quia nihil. Eos atque vel necessitatibus molestias quae dolores. Laboriosam nesciunt alias fugiat dolorum. Eligendi quod aut vel modi maiores.\n\nPerspiciatis blanditiis architecto quidem iste. Officiis quis aliquam consectetur velit dolorem perferendis eos ut. In ea nostrum veritatis commodi ut laboriosam.', 'event.jpg', b'1', '2021-12-09', '2021-12-10', '1970-07-27 02:20:03', '1973-02-02 09:05:11'),
+(7, 'Sint est.', 'sint-est.', 'Impedit consequatur sit unde doloribus nihil eveniet. Iure quas in nam quod omnis et. Voluptate aut alias ullam illo ducimus.\n\nArchitecto autem in magnam autem voluptas. Voluptatem error enim dolore earum expedita necessitatibus voluptatum aut. Velit quam a dolores eveniet velit consequatur et. Dolores ut delectus inventore quo laborum consequatur.\n\nQuis maxime maxime et cumque ipsam provident. Totam perspiciatis qui dolor. Sequi et quasi voluptatem voluptatem ratione est omnis. Quia amet ullam tempore quam.\n\nUt natus numquam optio consequatur molestiae. Et culpa dolores in quia neque laudantium sit. Non voluptas quod ducimus possimus dolor quis ea.\n\nQuam nisi impedit enim quas sunt qui. Doloribus est ut aut dolor voluptatem in sed. Magnam sit harum reprehenderit assumenda aut.\n\nPorro exercitationem fugiat vel repellat corrupti. Maxime minima hic nihil beatae aut. Pariatur maiores eos unde ut quia. Numquam inventore molestiae numquam voluptatem laborum. Officia et sed quisquam eum enim aperiam molestiae.\n\nVoluptas doloremque accusamus et soluta soluta. Consequatur rerum et aut quisquam atque. Commodi beatae non qui.\n\nAutem fugiat consequatur sit exercitationem est nobis. Cupiditate est accusamus ut impedit quasi minus. Vero eius earum qui expedita repellendus suscipit minus.\n\nPlaceat voluptas amet vel impedit porro consectetur veniam. Quia et sit sequi consequatur assumenda.\n\nId sed possimus itaque ut ut. Eos qui non aut voluptatem eveniet. Recusandae aut quod officiis provident quis et distinctio. Sapiente labore laudantium reprehenderit nulla earum.', 'event.jpg', b'1', '2021-05-06', '2021-05-07', '1980-09-30 21:00:51', '1991-01-26 13:36:16'),
+(8, 'Inventore velit harum animi.', 'inventore-velit-harum-animi.', 'Dolorem animi quisquam ullam voluptates et. Dolore quasi ad tempore totam voluptates odio. Vel minus cupiditate velit est est rem numquam.\n\nEnim accusamus ratione ipsam et. Est hic consequatur eum autem. Et culpa ullam animi animi dignissimos quasi consequatur.\n\nTenetur iure saepe magnam atque repudiandae omnis nostrum. Sed eius perferendis et deleniti rerum quae quidem.\n\nQui aut ea nulla placeat nostrum. Nostrum rerum omnis aut. Soluta accusantium hic veniam numquam.\n\nDolorum officiis nihil sed iste asperiores vitae. Temporibus fuga aut at qui expedita enim. Sunt qui aut consectetur molestiae est odit ut.\n\nIpsam qui fugit quis autem. Nihil laboriosam nemo voluptas quia ea debitis. Et similique blanditiis dolorem nam et.\n\nQui necessitatibus facere voluptas delectus. Deserunt suscipit odit cumque quisquam. Est est quia voluptas et omnis perspiciatis velit. Nisi et alias totam modi reprehenderit ipsa.\n\nPlaceat rem magni dolor aut molestiae eveniet rerum. Dolorem dicta reprehenderit voluptatum quod quae ad. Quia voluptas veniam repellendus temporibus. In non quod error deleniti vero. Magni accusamus impedit sed harum aut ut.\n\nPorro tempore commodi quia modi autem est. Commodi eos velit eius vitae et. Non molestiae qui molestiae totam dolores recusandae doloribus.\n\nConsectetur voluptas sequi quis nostrum qui aut quam ratione. Suscipit ut odit aut optio temporibus ad. Cumque ut eum qui quo asperiores consequatur. Aperiam hic eius qui officia qui tenetur sunt.', 'event.jpg', b'0', '2020-05-02', '2020-05-03', '1989-11-14 01:41:14', '2016-04-02 18:31:31'),
+(9, 'Libero quis dolorum.', 'libero-quis-dolorum.', 'Vel nisi voluptatem ducimus accusantium ut natus quidem. Impedit alias culpa atque et. Quas voluptas et laborum dolorum culpa nihil.\n\nReprehenderit eum corrupti omnis vero ut alias omnis. Aut error earum quaerat laborum ea sed magni. Nesciunt rerum animi necessitatibus iure quis. Magni iusto maiores eligendi est rem molestiae doloremque reprehenderit.\n\nNihil eveniet quas placeat voluptatem eaque sunt. Porro ad sit vel laborum sit nam. Tempora voluptatum dolorem aut magni eligendi non est in.\n\nSit voluptatem omnis cum tempore quidem dolor. Eos assumenda nisi doloribus mollitia commodi doloribus velit. Nobis modi est ut.\n\nBeatae accusantium nihil quis corrupti laboriosam. Aut sunt aperiam atque. Maiores autem quidem eum officiis optio voluptas nulla. Natus voluptas vel non et soluta ab totam.\n\nEt dolores consectetur fugit ipsum. Earum id aut perspiciatis quis sint sed et tenetur. Sit voluptatem dignissimos adipisci quia dignissimos blanditiis.\n\nEt consequatur aut ad voluptatem in. Alias perferendis et natus quas quasi qui. Voluptate ullam in officiis est aut temporibus.\n\nAut rerum qui autem sint fugit libero. Corrupti velit et sed sit placeat. Perspiciatis impedit itaque incidunt. Minus enim accusantium culpa commodi natus.\n\nQui asperiores eum in quis dolores dolor. Numquam qui ut voluptatem sed sint neque. Molestiae nesciunt repellendus soluta.\n\nAsperiores consequuntur ratione in quo ipsum voluptate. Illum commodi hic quae. Laudantium labore illo aut dolores officia porro nihil asperiores. Cumque est eius earum dignissimos eos sit.', 'event.jpg', b'1', '1981-11-20', '1981-11-21', '2004-11-05 09:48:33', '2016-09-14 21:01:06'),
+(10, 'Optio consequatur eum consequatur.', 'optio-consequatur-eum-consequatur.', 'Eos porro voluptatibus sed eum enim. Possimus perferendis deleniti atque ab at.\n\nExcepturi reprehenderit facere rem exercitationem temporibus dolor libero. Commodi adipisci aut debitis explicabo. Maxime vero quia provident quasi enim.\n\nUt praesentium quo pariatur reprehenderit illum et repudiandae. Perspiciatis quia asperiores sapiente quis laudantium maxime consequatur. Et fugiat porro non id enim maiores id. Rem hic beatae omnis atque aut expedita.\n\nSit nostrum porro fugiat sint explicabo id. Veniam in sit nesciunt eligendi molestias expedita laudantium totam.\n\nBeatae sed eum quis natus occaecati. Quaerat consequatur vitae iste nihil quia culpa dolore. Eum consequatur dicta dignissimos numquam odit fuga mollitia. Aliquam quibusdam odit rerum rerum inventore soluta est recusandae.\n\nRem quia vitae officiis minus tempora. Sit et enim aut laboriosam. Quia et officia explicabo dolor. Ipsum voluptas dolores et provident quod qui est.\n\nCorporis sequi error in rerum distinctio. Hic quisquam voluptate corporis in. Quaerat quos quia omnis fuga enim.\n\nBlanditiis repudiandae ullam temporibus officia voluptatem. Enim illum cumque architecto unde veritatis ipsum. Distinctio ad et consequatur et rerum. Sint voluptatem sint voluptate.\n\nQui tenetur perferendis sequi autem eos quia. Facere distinctio vel corporis quisquam. Eos quis perferendis quibusdam dolor velit. Optio nobis dolorem corrupti est blanditiis vitae.\n\nEum enim neque est maiores pariatur. Autem repellat hic nisi cum porro commodi quod.', 'event.jpg', b'0', '2012-01-04', '2012-01-05', '1976-11-16 21:19:24', '2012-03-27 07:50:26');
 
--- ----------------------------
--- Records of historysales
--- ----------------------------
-INSERT INTO `historysales` VALUES (1, 'Et corrupti error repudiandae.', 100, 3, '2022-06-07 09:44:35');
-INSERT INTO `historysales` VALUES (2, 'Dolorem voluptate voluptatem dolores.', 100, 3, '2022-06-07 09:44:35');
-INSERT INTO `historysales` VALUES (3, 'Nihil optio dolor.', 100, 2, '2022-06-07 09:47:38');
-INSERT INTO `historysales` VALUES (4, 'Occaecati voluptas occaecati aut.', 100, 1, '2022-06-07 09:47:38');
-INSERT INTO `historysales` VALUES (5, 'Nihil optio dolor.', 98, 3, '2022-06-07 09:51:21');
+-- --------------------------------------------------------
 
--- ----------------------------
--- Table structure for historyusers
--- ----------------------------
-DROP TABLE IF EXISTS `historyusers`;
-CREATE TABLE `historyusers`  (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `user_id` int UNSIGNED NOT NULL,
-  `tgl_registrasi` datetime NULL DEFAULT NULL,
-  `tgl_gabung_member` datetime NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+--
+-- Table structure for table `historysales`
+--
 
--- ----------------------------
--- Records of historyusers
--- ----------------------------
-INSERT INTO `historyusers` VALUES (1, 2, '2022-06-07 09:40:24', NULL);
+CREATE TABLE `historysales` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `product` varchar(100) NOT NULL,
+  `stock` int(11) NOT NULL,
+  `sold` int(11) NOT NULL,
+  `tgl_transaksi` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for migrations
--- ----------------------------
-DROP TABLE IF EXISTS `migrations`;
-CREATE TABLE `migrations`  (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `version` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `class` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `group` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `namespace` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `time` int NOT NULL,
-  `batch` int UNSIGNED NOT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+-- --------------------------------------------------------
 
--- ----------------------------
--- Records of migrations
--- ----------------------------
-INSERT INTO `migrations` VALUES (18, '2017-11-20-223112', 'Myth\\Auth\\Database\\Migrations\\CreateAuthTables', 'default', 'Myth\\Auth', 1654569507, 1);
-INSERT INTO `migrations` VALUES (19, '2022-01-25-111041', 'App\\Database\\Migrations\\Products', 'default', 'App', 1654569507, 1);
-INSERT INTO `migrations` VALUES (20, '2022-01-25-112702', 'App\\Database\\Migrations\\Categories', 'default', 'App', 1654569507, 1);
-INSERT INTO `migrations` VALUES (21, '2022-01-25-113448', 'App\\Database\\Migrations\\Colors', 'default', 'App', 1654569508, 1);
-INSERT INTO `migrations` VALUES (22, '2022-01-25-113510', 'App\\Database\\Migrations\\Sizes', 'default', 'App', 1654569508, 1);
-INSERT INTO `migrations` VALUES (23, '2022-01-25-115054', 'App\\Database\\Migrations\\Productsize', 'default', 'App', 1654569509, 1);
-INSERT INTO `migrations` VALUES (24, '2022-01-25-115103', 'App\\Database\\Migrations\\Productcolor', 'default', 'App', 1654569509, 1);
-INSERT INTO `migrations` VALUES (25, '2022-01-29-094818', 'App\\Database\\Migrations\\Cart', 'default', 'App', 1654569510, 1);
-INSERT INTO `migrations` VALUES (26, '2022-01-29-095124', 'App\\Database\\Migrations\\Productcart', 'default', 'App', 1654569510, 1);
-INSERT INTO `migrations` VALUES (27, '2022-02-28-042727', 'App\\Database\\Migrations\\Address', 'default', 'App', 1654569510, 1);
-INSERT INTO `migrations` VALUES (28, '2022-02-28-043735', 'App\\Database\\Migrations\\Checkouts', 'default', 'App', 1654569511, 1);
-INSERT INTO `migrations` VALUES (29, '2022-03-04-021129', 'App\\Database\\Migrations\\Confirms', 'default', 'App', 1654569511, 1);
-INSERT INTO `migrations` VALUES (30, '2022-03-16-023137', 'App\\Database\\Migrations\\Events', 'default', 'App', 1654569511, 1);
-INSERT INTO `migrations` VALUES (31, '2022-03-21-040430', 'App\\Database\\Migrations\\CancelOrders', 'default', 'App', 1654569512, 1);
-INSERT INTO `migrations` VALUES (32, '2022-03-23-035447', 'App\\Database\\Migrations\\Productcheckout', 'default', 'App', 1654569513, 1);
-INSERT INTO `migrations` VALUES (33, '2022-06-06-055254', 'App\\Database\\Migrations\\Historyuser', 'default', 'App', 1654569514, 1);
-INSERT INTO `migrations` VALUES (34, '2022-06-07-023439', 'App\\Database\\Migrations\\Historysales', 'default', 'App', 1654569514, 1);
+--
+-- Table structure for table `historyusers`
+--
 
--- ----------------------------
--- Table structure for productcart
--- ----------------------------
-DROP TABLE IF EXISTS `productcart`;
-CREATE TABLE `productcart`  (
-  `cart_id` int UNSIGNED NOT NULL,
-  `product_id` int UNSIGNED NOT NULL,
-  `quantity` int UNSIGNED NOT NULL,
-  `size` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `color` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+CREATE TABLE `historyusers` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL,
+  `tgl_registrasi` datetime DEFAULT NULL,
+  `tgl_gabung_member` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of productcart
--- ----------------------------
+-- --------------------------------------------------------
 
--- ----------------------------
--- Table structure for productcheckout
--- ----------------------------
-DROP TABLE IF EXISTS `productcheckout`;
-CREATE TABLE `productcheckout`  (
-  `checkout_id` int UNSIGNED NOT NULL,
-  `product_id` int UNSIGNED NOT NULL,
-  `color` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `size` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `price` bigint UNSIGNED NOT NULL,
-  `quantity` int UNSIGNED NOT NULL,
-  `grand_total` bigint UNSIGNED NOT NULL,
-  `note` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+--
+-- Table structure for table `migrations`
+--
 
--- ----------------------------
--- Records of productcheckout
--- ----------------------------
-INSERT INTO `productcheckout` VALUES (1, 77, 'brown', 'XL', 476817, 3, 1430451, '');
-INSERT INTO `productcheckout` VALUES (1, 91, 'darkred', 'XL', 440591, 3, 1321773, '');
-INSERT INTO `productcheckout` VALUES (2, 81, 'brown', 'S', 122293, 2, 244586, '');
-INSERT INTO `productcheckout` VALUES (2, 100, 'black', 'S', 154859, 1, 154859, '');
-INSERT INTO `productcheckout` VALUES (3, 81, 'brown', 'XL', 122293, 3, 366879, '');
+CREATE TABLE `migrations` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `version` varchar(255) NOT NULL,
+  `class` varchar(255) NOT NULL,
+  `group` varchar(255) NOT NULL,
+  `namespace` varchar(255) NOT NULL,
+  `time` int(11) NOT NULL,
+  `batch` int(11) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for productcolor
--- ----------------------------
-DROP TABLE IF EXISTS `productcolor`;
-CREATE TABLE `productcolor`  (
-  `product_id` int UNSIGNED NOT NULL,
-  `color_id` int UNSIGNED NOT NULL
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+--
+-- Dumping data for table `migrations`
+--
 
--- ----------------------------
--- Records of productcolor
--- ----------------------------
-INSERT INTO `productcolor` VALUES (70, 14);
-INSERT INTO `productcolor` VALUES (63, 18);
-INSERT INTO `productcolor` VALUES (20, 18);
-INSERT INTO `productcolor` VALUES (13, 1);
-INSERT INTO `productcolor` VALUES (1, 21);
-INSERT INTO `productcolor` VALUES (52, 4);
-INSERT INTO `productcolor` VALUES (20, 22);
-INSERT INTO `productcolor` VALUES (98, 5);
-INSERT INTO `productcolor` VALUES (62, 8);
-INSERT INTO `productcolor` VALUES (92, 15);
-INSERT INTO `productcolor` VALUES (100, 1);
-INSERT INTO `productcolor` VALUES (34, 13);
-INSERT INTO `productcolor` VALUES (68, 10);
-INSERT INTO `productcolor` VALUES (87, 4);
-INSERT INTO `productcolor` VALUES (89, 2);
-INSERT INTO `productcolor` VALUES (49, 4);
-INSERT INTO `productcolor` VALUES (41, 5);
-INSERT INTO `productcolor` VALUES (19, 7);
-INSERT INTO `productcolor` VALUES (58, 21);
-INSERT INTO `productcolor` VALUES (36, 26);
-INSERT INTO `productcolor` VALUES (62, 6);
-INSERT INTO `productcolor` VALUES (99, 26);
-INSERT INTO `productcolor` VALUES (98, 20);
-INSERT INTO `productcolor` VALUES (98, 14);
-INSERT INTO `productcolor` VALUES (44, 25);
-INSERT INTO `productcolor` VALUES (77, 15);
-INSERT INTO `productcolor` VALUES (43, 5);
-INSERT INTO `productcolor` VALUES (99, 25);
-INSERT INTO `productcolor` VALUES (81, 15);
-INSERT INTO `productcolor` VALUES (23, 11);
-INSERT INTO `productcolor` VALUES (70, 15);
-INSERT INTO `productcolor` VALUES (87, 7);
-INSERT INTO `productcolor` VALUES (11, 6);
-INSERT INTO `productcolor` VALUES (77, 23);
-INSERT INTO `productcolor` VALUES (4, 10);
-INSERT INTO `productcolor` VALUES (60, 22);
-INSERT INTO `productcolor` VALUES (94, 26);
-INSERT INTO `productcolor` VALUES (76, 17);
-INSERT INTO `productcolor` VALUES (57, 20);
-INSERT INTO `productcolor` VALUES (72, 14);
-INSERT INTO `productcolor` VALUES (61, 21);
-INSERT INTO `productcolor` VALUES (10, 10);
-INSERT INTO `productcolor` VALUES (6, 23);
-INSERT INTO `productcolor` VALUES (87, 19);
-INSERT INTO `productcolor` VALUES (97, 17);
-INSERT INTO `productcolor` VALUES (34, 4);
-INSERT INTO `productcolor` VALUES (95, 16);
-INSERT INTO `productcolor` VALUES (71, 10);
-INSERT INTO `productcolor` VALUES (67, 22);
-INSERT INTO `productcolor` VALUES (69, 17);
-INSERT INTO `productcolor` VALUES (44, 3);
-INSERT INTO `productcolor` VALUES (14, 20);
-INSERT INTO `productcolor` VALUES (22, 24);
-INSERT INTO `productcolor` VALUES (92, 7);
-INSERT INTO `productcolor` VALUES (31, 1);
-INSERT INTO `productcolor` VALUES (94, 14);
-INSERT INTO `productcolor` VALUES (33, 21);
-INSERT INTO `productcolor` VALUES (28, 2);
-INSERT INTO `productcolor` VALUES (69, 9);
-INSERT INTO `productcolor` VALUES (83, 3);
-INSERT INTO `productcolor` VALUES (44, 9);
-INSERT INTO `productcolor` VALUES (90, 8);
-INSERT INTO `productcolor` VALUES (70, 14);
-INSERT INTO `productcolor` VALUES (14, 13);
-INSERT INTO `productcolor` VALUES (47, 12);
-INSERT INTO `productcolor` VALUES (45, 12);
-INSERT INTO `productcolor` VALUES (11, 26);
-INSERT INTO `productcolor` VALUES (6, 12);
-INSERT INTO `productcolor` VALUES (24, 7);
-INSERT INTO `productcolor` VALUES (8, 2);
-INSERT INTO `productcolor` VALUES (38, 24);
-INSERT INTO `productcolor` VALUES (29, 16);
-INSERT INTO `productcolor` VALUES (87, 6);
-INSERT INTO `productcolor` VALUES (42, 5);
-INSERT INTO `productcolor` VALUES (10, 16);
-INSERT INTO `productcolor` VALUES (96, 8);
-INSERT INTO `productcolor` VALUES (45, 24);
-INSERT INTO `productcolor` VALUES (41, 10);
-INSERT INTO `productcolor` VALUES (19, 17);
-INSERT INTO `productcolor` VALUES (8, 1);
-INSERT INTO `productcolor` VALUES (79, 26);
-INSERT INTO `productcolor` VALUES (27, 12);
-INSERT INTO `productcolor` VALUES (21, 11);
-INSERT INTO `productcolor` VALUES (29, 7);
-INSERT INTO `productcolor` VALUES (68, 9);
-INSERT INTO `productcolor` VALUES (67, 6);
-INSERT INTO `productcolor` VALUES (80, 15);
-INSERT INTO `productcolor` VALUES (40, 5);
-INSERT INTO `productcolor` VALUES (68, 1);
-INSERT INTO `productcolor` VALUES (46, 23);
-INSERT INTO `productcolor` VALUES (41, 23);
-INSERT INTO `productcolor` VALUES (79, 7);
-INSERT INTO `productcolor` VALUES (64, 21);
-INSERT INTO `productcolor` VALUES (34, 12);
-INSERT INTO `productcolor` VALUES (78, 15);
-INSERT INTO `productcolor` VALUES (63, 21);
-INSERT INTO `productcolor` VALUES (21, 3);
-INSERT INTO `productcolor` VALUES (16, 8);
-INSERT INTO `productcolor` VALUES (87, 23);
-INSERT INTO `productcolor` VALUES (31, 19);
-INSERT INTO `productcolor` VALUES (74, 7);
-INSERT INTO `productcolor` VALUES (54, 2);
-INSERT INTO `productcolor` VALUES (38, 11);
-INSERT INTO `productcolor` VALUES (57, 17);
-INSERT INTO `productcolor` VALUES (86, 9);
-INSERT INTO `productcolor` VALUES (17, 22);
-INSERT INTO `productcolor` VALUES (17, 2);
-INSERT INTO `productcolor` VALUES (74, 2);
-INSERT INTO `productcolor` VALUES (89, 9);
-INSERT INTO `productcolor` VALUES (8, 26);
-INSERT INTO `productcolor` VALUES (16, 22);
-INSERT INTO `productcolor` VALUES (72, 11);
-INSERT INTO `productcolor` VALUES (8, 10);
-INSERT INTO `productcolor` VALUES (63, 14);
-INSERT INTO `productcolor` VALUES (59, 19);
-INSERT INTO `productcolor` VALUES (7, 8);
-INSERT INTO `productcolor` VALUES (52, 4);
-INSERT INTO `productcolor` VALUES (60, 4);
-INSERT INTO `productcolor` VALUES (39, 1);
-INSERT INTO `productcolor` VALUES (1, 5);
-INSERT INTO `productcolor` VALUES (21, 10);
-INSERT INTO `productcolor` VALUES (97, 10);
-INSERT INTO `productcolor` VALUES (62, 6);
-INSERT INTO `productcolor` VALUES (37, 13);
-INSERT INTO `productcolor` VALUES (99, 24);
-INSERT INTO `productcolor` VALUES (78, 1);
-INSERT INTO `productcolor` VALUES (25, 5);
-INSERT INTO `productcolor` VALUES (86, 13);
-INSERT INTO `productcolor` VALUES (75, 17);
-INSERT INTO `productcolor` VALUES (31, 3);
-INSERT INTO `productcolor` VALUES (70, 23);
-INSERT INTO `productcolor` VALUES (96, 25);
-INSERT INTO `productcolor` VALUES (23, 12);
-INSERT INTO `productcolor` VALUES (74, 1);
-INSERT INTO `productcolor` VALUES (43, 25);
-INSERT INTO `productcolor` VALUES (99, 4);
-INSERT INTO `productcolor` VALUES (86, 6);
-INSERT INTO `productcolor` VALUES (56, 23);
-INSERT INTO `productcolor` VALUES (81, 19);
-INSERT INTO `productcolor` VALUES (44, 9);
-INSERT INTO `productcolor` VALUES (73, 26);
-INSERT INTO `productcolor` VALUES (3, 10);
-INSERT INTO `productcolor` VALUES (96, 17);
-INSERT INTO `productcolor` VALUES (35, 9);
-INSERT INTO `productcolor` VALUES (5, 23);
-INSERT INTO `productcolor` VALUES (98, 15);
-INSERT INTO `productcolor` VALUES (17, 20);
-INSERT INTO `productcolor` VALUES (4, 2);
-INSERT INTO `productcolor` VALUES (21, 24);
-INSERT INTO `productcolor` VALUES (69, 1);
-INSERT INTO `productcolor` VALUES (10, 13);
-INSERT INTO `productcolor` VALUES (42, 25);
-INSERT INTO `productcolor` VALUES (76, 10);
-INSERT INTO `productcolor` VALUES (54, 4);
-INSERT INTO `productcolor` VALUES (96, 9);
-INSERT INTO `productcolor` VALUES (5, 7);
-INSERT INTO `productcolor` VALUES (54, 24);
-INSERT INTO `productcolor` VALUES (27, 7);
-INSERT INTO `productcolor` VALUES (65, 26);
-INSERT INTO `productcolor` VALUES (90, 10);
-INSERT INTO `productcolor` VALUES (2, 20);
-INSERT INTO `productcolor` VALUES (3, 3);
-INSERT INTO `productcolor` VALUES (10, 16);
-INSERT INTO `productcolor` VALUES (53, 9);
-INSERT INTO `productcolor` VALUES (81, 18);
-INSERT INTO `productcolor` VALUES (3, 23);
-INSERT INTO `productcolor` VALUES (98, 7);
-INSERT INTO `productcolor` VALUES (31, 1);
-INSERT INTO `productcolor` VALUES (47, 21);
-INSERT INTO `productcolor` VALUES (12, 12);
-INSERT INTO `productcolor` VALUES (67, 24);
-INSERT INTO `productcolor` VALUES (21, 9);
-INSERT INTO `productcolor` VALUES (66, 24);
-INSERT INTO `productcolor` VALUES (91, 14);
-INSERT INTO `productcolor` VALUES (38, 3);
-INSERT INTO `productcolor` VALUES (88, 25);
-INSERT INTO `productcolor` VALUES (53, 20);
-INSERT INTO `productcolor` VALUES (48, 11);
-INSERT INTO `productcolor` VALUES (83, 2);
-INSERT INTO `productcolor` VALUES (46, 1);
-INSERT INTO `productcolor` VALUES (68, 16);
-INSERT INTO `productcolor` VALUES (17, 21);
-INSERT INTO `productcolor` VALUES (40, 14);
-INSERT INTO `productcolor` VALUES (72, 16);
-INSERT INTO `productcolor` VALUES (8, 8);
-INSERT INTO `productcolor` VALUES (9, 3);
-INSERT INTO `productcolor` VALUES (10, 18);
-INSERT INTO `productcolor` VALUES (9, 17);
-INSERT INTO `productcolor` VALUES (30, 10);
-INSERT INTO `productcolor` VALUES (19, 22);
-INSERT INTO `productcolor` VALUES (59, 23);
-INSERT INTO `productcolor` VALUES (36, 1);
-INSERT INTO `productcolor` VALUES (29, 15);
-INSERT INTO `productcolor` VALUES (52, 19);
-INSERT INTO `productcolor` VALUES (61, 23);
-INSERT INTO `productcolor` VALUES (98, 23);
-INSERT INTO `productcolor` VALUES (90, 19);
-INSERT INTO `productcolor` VALUES (30, 20);
-INSERT INTO `productcolor` VALUES (69, 13);
-INSERT INTO `productcolor` VALUES (41, 2);
-INSERT INTO `productcolor` VALUES (82, 20);
-INSERT INTO `productcolor` VALUES (75, 3);
-INSERT INTO `productcolor` VALUES (65, 12);
-INSERT INTO `productcolor` VALUES (82, 19);
-INSERT INTO `productcolor` VALUES (24, 8);
-INSERT INTO `productcolor` VALUES (54, 7);
-INSERT INTO `productcolor` VALUES (73, 1);
-INSERT INTO `productcolor` VALUES (6, 18);
-INSERT INTO `productcolor` VALUES (88, 12);
-INSERT INTO `productcolor` VALUES (8, 16);
-INSERT INTO `productcolor` VALUES (44, 24);
-INSERT INTO `productcolor` VALUES (32, 15);
-INSERT INTO `productcolor` VALUES (96, 25);
-INSERT INTO `productcolor` VALUES (99, 19);
-INSERT INTO `productcolor` VALUES (63, 13);
-INSERT INTO `productcolor` VALUES (26, 6);
-INSERT INTO `productcolor` VALUES (57, 13);
-INSERT INTO `productcolor` VALUES (29, 8);
-INSERT INTO `productcolor` VALUES (33, 6);
-INSERT INTO `productcolor` VALUES (64, 23);
-INSERT INTO `productcolor` VALUES (71, 25);
-INSERT INTO `productcolor` VALUES (45, 3);
-INSERT INTO `productcolor` VALUES (89, 8);
-INSERT INTO `productcolor` VALUES (1, 16);
-INSERT INTO `productcolor` VALUES (97, 20);
-INSERT INTO `productcolor` VALUES (66, 18);
-INSERT INTO `productcolor` VALUES (78, 2);
-INSERT INTO `productcolor` VALUES (31, 6);
-INSERT INTO `productcolor` VALUES (84, 5);
-INSERT INTO `productcolor` VALUES (95, 25);
-INSERT INTO `productcolor` VALUES (52, 7);
-INSERT INTO `productcolor` VALUES (2, 8);
-INSERT INTO `productcolor` VALUES (98, 26);
-INSERT INTO `productcolor` VALUES (98, 10);
-INSERT INTO `productcolor` VALUES (54, 3);
-INSERT INTO `productcolor` VALUES (31, 4);
-INSERT INTO `productcolor` VALUES (82, 5);
-INSERT INTO `productcolor` VALUES (44, 22);
-INSERT INTO `productcolor` VALUES (19, 24);
-INSERT INTO `productcolor` VALUES (95, 24);
-INSERT INTO `productcolor` VALUES (10, 10);
-INSERT INTO `productcolor` VALUES (20, 6);
-INSERT INTO `productcolor` VALUES (19, 16);
-INSERT INTO `productcolor` VALUES (14, 13);
-INSERT INTO `productcolor` VALUES (56, 23);
-INSERT INTO `productcolor` VALUES (91, 20);
-INSERT INTO `productcolor` VALUES (32, 2);
-INSERT INTO `productcolor` VALUES (53, 21);
-INSERT INTO `productcolor` VALUES (67, 15);
-INSERT INTO `productcolor` VALUES (96, 24);
-INSERT INTO `productcolor` VALUES (15, 15);
-INSERT INTO `productcolor` VALUES (22, 9);
-INSERT INTO `productcolor` VALUES (39, 8);
-INSERT INTO `productcolor` VALUES (91, 26);
-INSERT INTO `productcolor` VALUES (32, 7);
-INSERT INTO `productcolor` VALUES (5, 7);
-INSERT INTO `productcolor` VALUES (97, 1);
-INSERT INTO `productcolor` VALUES (12, 8);
-INSERT INTO `productcolor` VALUES (8, 24);
-INSERT INTO `productcolor` VALUES (28, 11);
-INSERT INTO `productcolor` VALUES (18, 12);
-INSERT INTO `productcolor` VALUES (51, 14);
-INSERT INTO `productcolor` VALUES (3, 10);
-INSERT INTO `productcolor` VALUES (100, 11);
-INSERT INTO `productcolor` VALUES (79, 20);
-INSERT INTO `productcolor` VALUES (36, 2);
-INSERT INTO `productcolor` VALUES (5, 18);
-INSERT INTO `productcolor` VALUES (23, 26);
-INSERT INTO `productcolor` VALUES (71, 1);
-INSERT INTO `productcolor` VALUES (2, 13);
-INSERT INTO `productcolor` VALUES (25, 2);
-INSERT INTO `productcolor` VALUES (48, 3);
-INSERT INTO `productcolor` VALUES (92, 6);
-INSERT INTO `productcolor` VALUES (1, 1);
-INSERT INTO `productcolor` VALUES (27, 4);
-INSERT INTO `productcolor` VALUES (80, 15);
-INSERT INTO `productcolor` VALUES (15, 5);
-INSERT INTO `productcolor` VALUES (16, 1);
-INSERT INTO `productcolor` VALUES (86, 8);
-INSERT INTO `productcolor` VALUES (52, 3);
-INSERT INTO `productcolor` VALUES (21, 7);
-INSERT INTO `productcolor` VALUES (28, 10);
-INSERT INTO `productcolor` VALUES (62, 19);
-INSERT INTO `productcolor` VALUES (30, 23);
-INSERT INTO `productcolor` VALUES (33, 25);
-INSERT INTO `productcolor` VALUES (86, 26);
-INSERT INTO `productcolor` VALUES (18, 4);
-INSERT INTO `productcolor` VALUES (63, 4);
-INSERT INTO `productcolor` VALUES (86, 13);
-INSERT INTO `productcolor` VALUES (26, 21);
-INSERT INTO `productcolor` VALUES (89, 25);
-INSERT INTO `productcolor` VALUES (39, 14);
-INSERT INTO `productcolor` VALUES (64, 13);
-INSERT INTO `productcolor` VALUES (19, 4);
-INSERT INTO `productcolor` VALUES (62, 23);
-INSERT INTO `productcolor` VALUES (9, 16);
-INSERT INTO `productcolor` VALUES (14, 24);
-INSERT INTO `productcolor` VALUES (12, 22);
-INSERT INTO `productcolor` VALUES (34, 24);
-INSERT INTO `productcolor` VALUES (53, 19);
+INSERT INTO `migrations` (`id`, `version`, `class`, `group`, `namespace`, `time`, `batch`) VALUES
+(1, '2017-11-20-223112', 'Myth\\Auth\\Database\\Migrations\\CreateAuthTables', 'default', 'Myth\\Auth', 1655088320, 1),
+(2, '2022-01-25-111041', 'App\\Database\\Migrations\\Products', 'default', 'App', 1655088322, 1),
+(3, '2022-01-25-112702', 'App\\Database\\Migrations\\Categories', 'default', 'App', 1655088322, 1),
+(4, '2022-01-25-113448', 'App\\Database\\Migrations\\Colors', 'default', 'App', 1655088322, 1),
+(5, '2022-01-25-113510', 'App\\Database\\Migrations\\Sizes', 'default', 'App', 1655088323, 1),
+(6, '2022-01-25-115054', 'App\\Database\\Migrations\\Productsize', 'default', 'App', 1655088323, 1),
+(7, '2022-01-25-115103', 'App\\Database\\Migrations\\Productcolor', 'default', 'App', 1655088323, 1),
+(8, '2022-01-29-094818', 'App\\Database\\Migrations\\Cart', 'default', 'App', 1655088324, 1),
+(9, '2022-01-29-095124', 'App\\Database\\Migrations\\Productcart', 'default', 'App', 1655088324, 1),
+(10, '2022-02-28-042727', 'App\\Database\\Migrations\\Address', 'default', 'App', 1655088324, 1),
+(11, '2022-02-28-043735', 'App\\Database\\Migrations\\Checkouts', 'default', 'App', 1655088325, 1),
+(12, '2022-03-04-021129', 'App\\Database\\Migrations\\Confirms', 'default', 'App', 1655088325, 1),
+(13, '2022-03-16-023137', 'App\\Database\\Migrations\\Events', 'default', 'App', 1655088326, 1),
+(14, '2022-03-21-040430', 'App\\Database\\Migrations\\CancelOrders', 'default', 'App', 1655088326, 1),
+(15, '2022-03-23-035447', 'App\\Database\\Migrations\\Productcheckout', 'default', 'App', 1655088328, 1),
+(16, '2022-06-06-055254', 'App\\Database\\Migrations\\Historyuser', 'default', 'App', 1655088329, 1),
+(17, '2022-06-07-023439', 'App\\Database\\Migrations\\Historysales', 'default', 'App', 1655088329, 1);
 
--- ----------------------------
--- Table structure for products
--- ----------------------------
-DROP TABLE IF EXISTS `products`;
-CREATE TABLE `products`  (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `category_id` int UNSIGNED NOT NULL,
-  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `slug` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `detail` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `price` int NOT NULL,
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `productcart`
+--
+
+CREATE TABLE `productcart` (
+  `cart_id` int(11) UNSIGNED NOT NULL,
+  `product_id` int(11) UNSIGNED NOT NULL,
+  `quantity` int(11) UNSIGNED NOT NULL,
+  `size` varchar(50) NOT NULL,
+  `color` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `productcheckout`
+--
+
+CREATE TABLE `productcheckout` (
+  `checkout_id` int(11) UNSIGNED NOT NULL,
+  `product_id` int(10) UNSIGNED NOT NULL,
+  `color` varchar(15) NOT NULL,
+  `size` varchar(5) NOT NULL,
+  `price` bigint(20) UNSIGNED NOT NULL,
+  `quantity` int(11) UNSIGNED NOT NULL,
+  `grand_total` bigint(20) UNSIGNED NOT NULL,
+  `note` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Triggers `productcheckout`
+--
+DELIMITER $$
+CREATE TRIGGER `hapusSold` AFTER DELETE ON `productcheckout` FOR EACH ROW UPDATE products SET sold = sold - OLD.quantity WHERE id = OLD.product_id
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `hapusStok` AFTER DELETE ON `productcheckout` FOR EACH ROW UPDATE products SET stock = stock + OLD.quantity WHERE id = OLD.product_id
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `kurangStok` AFTER INSERT ON `productcheckout` FOR EACH ROW UPDATE products SET stock = stock - NEW.quantity WHERE id = NEW.product_id
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `tambahSold` AFTER INSERT ON `productcheckout` FOR EACH ROW UPDATE products SET sold = sold + NEW.quantity WHERE id = NEW.product_id
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `ubahSold` AFTER UPDATE ON `productcheckout` FOR EACH ROW UPDATE products SET sold = (sold - OLD.quantity) + NEW.quantity WHERE id = OLD.product_id
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `ubahStok` AFTER UPDATE ON `productcheckout` FOR EACH ROW UPDATE products SET stock = (stock + OLD.quantity) - NEW.quantity WHERE id = OLD.product_id
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `productcolor`
+--
+
+CREATE TABLE `productcolor` (
+  `product_id` int(11) UNSIGNED NOT NULL,
+  `color_id` int(11) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `productcolor`
+--
+
+INSERT INTO `productcolor` (`product_id`, `color_id`) VALUES
+(83, 15),
+(44, 5),
+(86, 25),
+(21, 11),
+(87, 23),
+(98, 3),
+(56, 17),
+(37, 15),
+(64, 17),
+(60, 13),
+(11, 7),
+(71, 13),
+(73, 16),
+(6, 2),
+(39, 16),
+(6, 22),
+(81, 26),
+(28, 4),
+(80, 17),
+(84, 8),
+(84, 4),
+(18, 9),
+(79, 10),
+(48, 4),
+(95, 14),
+(10, 23),
+(31, 1),
+(53, 3),
+(65, 9),
+(66, 23),
+(30, 23),
+(45, 21),
+(51, 19),
+(94, 26),
+(11, 13),
+(72, 14),
+(48, 8),
+(54, 7),
+(71, 22),
+(98, 2),
+(82, 15),
+(59, 7),
+(72, 13),
+(33, 7),
+(41, 25),
+(30, 25),
+(39, 3),
+(20, 4),
+(96, 13),
+(8, 1),
+(17, 9),
+(70, 18),
+(63, 21),
+(94, 23),
+(83, 2),
+(49, 17),
+(76, 13),
+(79, 19),
+(30, 6),
+(87, 7),
+(65, 11),
+(76, 2),
+(98, 3),
+(37, 1),
+(52, 1),
+(57, 16),
+(19, 7),
+(81, 2),
+(95, 21),
+(25, 9),
+(42, 19),
+(20, 6),
+(37, 23),
+(23, 3),
+(17, 10),
+(72, 2),
+(32, 25),
+(48, 9),
+(11, 13),
+(15, 12),
+(54, 16),
+(52, 24),
+(32, 22),
+(8, 26),
+(81, 14),
+(75, 26),
+(25, 6),
+(92, 5),
+(2, 25),
+(6, 12),
+(65, 16),
+(86, 5),
+(61, 7),
+(35, 21),
+(32, 23),
+(100, 6),
+(34, 11),
+(79, 11),
+(31, 22),
+(40, 17),
+(90, 24),
+(82, 8),
+(88, 10),
+(71, 23),
+(16, 23),
+(76, 15),
+(36, 3),
+(65, 4),
+(36, 14),
+(11, 12),
+(17, 26),
+(34, 17),
+(80, 4),
+(94, 18),
+(62, 13),
+(96, 17),
+(99, 14),
+(56, 6),
+(95, 20),
+(77, 17),
+(41, 21),
+(67, 21),
+(1, 12),
+(42, 21),
+(6, 18),
+(56, 26),
+(59, 24),
+(19, 7),
+(97, 12),
+(10, 21),
+(38, 8),
+(5, 5),
+(1, 26),
+(82, 20),
+(65, 12),
+(82, 17),
+(67, 9),
+(1, 21),
+(16, 6),
+(7, 24),
+(89, 12),
+(58, 8),
+(45, 4),
+(81, 18),
+(84, 8),
+(60, 10),
+(13, 10),
+(42, 16),
+(19, 5),
+(27, 14),
+(52, 5),
+(14, 26),
+(30, 11),
+(54, 11),
+(59, 2),
+(6, 18),
+(81, 9),
+(71, 8),
+(51, 20),
+(100, 14),
+(93, 9),
+(55, 11),
+(81, 10),
+(58, 2),
+(54, 3),
+(69, 9),
+(70, 16),
+(93, 18),
+(79, 7),
+(24, 18),
+(91, 17),
+(1, 21),
+(99, 22),
+(80, 19),
+(45, 4),
+(58, 21),
+(80, 17),
+(72, 12),
+(12, 5),
+(66, 26),
+(23, 26),
+(35, 3),
+(59, 5),
+(51, 26),
+(80, 8),
+(26, 5),
+(76, 23),
+(46, 20),
+(76, 3),
+(43, 14),
+(67, 13),
+(11, 21),
+(60, 3),
+(86, 15),
+(54, 3),
+(24, 22),
+(7, 26),
+(22, 13),
+(98, 20),
+(8, 26),
+(51, 14),
+(30, 15),
+(55, 5),
+(47, 13),
+(77, 22),
+(30, 22),
+(10, 17),
+(53, 4),
+(76, 19),
+(79, 2),
+(15, 20),
+(56, 26),
+(19, 3),
+(46, 15),
+(86, 20),
+(80, 16),
+(28, 10),
+(85, 17),
+(7, 7),
+(73, 25),
+(48, 9),
+(8, 23),
+(2, 16),
+(26, 2),
+(16, 15),
+(44, 6),
+(26, 4),
+(58, 19),
+(1, 1),
+(70, 11),
+(27, 21),
+(27, 2),
+(23, 26),
+(52, 1),
+(88, 2),
+(4, 20),
+(86, 4),
+(92, 16),
+(6, 8),
+(71, 24),
+(66, 8),
+(75, 23),
+(8, 17),
+(44, 21),
+(19, 6),
+(3, 4),
+(55, 21),
+(2, 13),
+(26, 5),
+(37, 7),
+(98, 11),
+(32, 3),
+(16, 19),
+(8, 2),
+(42, 8),
+(24, 19),
+(10, 14),
+(40, 22),
+(41, 15),
+(14, 17),
+(11, 13),
+(63, 14),
+(14, 16),
+(97, 25),
+(56, 5),
+(59, 2),
+(61, 19),
+(20, 17),
+(75, 26),
+(46, 26),
+(44, 19),
+(72, 23),
+(58, 22),
+(36, 24),
+(52, 12),
+(9, 24),
+(43, 10),
+(95, 18),
+(46, 20),
+(80, 9),
+(73, 12),
+(47, 3),
+(74, 11),
+(35, 20),
+(27, 9),
+(83, 14),
+(31, 10),
+(20, 3),
+(32, 17),
+(45, 14),
+(53, 1),
+(55, 16),
+(47, 9),
+(31, 10),
+(89, 13),
+(100, 18),
+(56, 5),
+(66, 21),
+(100, 26),
+(23, 8);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `products`
+--
+
+CREATE TABLE `products` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `category_id` int(11) UNSIGNED NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `slug` varchar(200) NOT NULL,
+  `detail` text NOT NULL,
+  `price` int(11) NOT NULL,
   `discount` float NOT NULL,
-  `weight` int NOT NULL,
-  `stock` int NOT NULL,
-  `image_1` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'product.jpg',
-  `image_2` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'product.jpg',
-  `image_3` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'product.jpg',
-  `sold` int NOT NULL DEFAULT 0,
-  `created_at` datetime NULL DEFAULT NULL,
-  `updated_at` datetime NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `slug`(`slug`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 101 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+  `weight` int(11) NOT NULL,
+  `stock` int(11) NOT NULL,
+  `image_1` varchar(255) NOT NULL DEFAULT 'product.jpg',
+  `image_2` varchar(255) NOT NULL DEFAULT 'product.jpg',
+  `image_3` varchar(255) NOT NULL DEFAULT 'product.jpg',
+  `sold` int(11) NOT NULL DEFAULT 0,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of products
--- ----------------------------
-INSERT INTO `products` VALUES (1, 4, 'Est sit quia debitis corrupti.', 'est-sit-quia-debitis-corrupti.', 'Veniam dignissimos eum harum fugiat vel praesentium accusamus. Laborum non iusto quas consequuntur. Consectetur maiores rerum sunt officiis nam voluptatem. Iste repudiandae aut voluptatem non.\n\nDolore quam magni labore pariatur ipsum dolor. Occaecati omnis et consequatur consequatur fugiat eaque aspernatur facilis. Rerum eius ab et eos. Molestiae aut ut officia magni enim.\n\nVoluptas ea sequi magnam ea. Quia alias facilis non est. Facere tenetur est doloribus aut quae sunt ratione rerum. Nihil voluptas dolor qui facilis vitae.\n\nPlaceat reiciendis sunt quae sapiente error. Rem doloremque veniam maxime minus consequatur. Dolorum rerum perspiciatis nemo corrupti.\n\nUt voluptatem ab et molestiae vero recusandae rerum provident. Dolores et modi quam laborum natus veniam cumque. Ut nesciunt delectus explicabo quod ut est voluptas quia.', 225614, 49, 1143, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2017-11-26 16:29:15', '2022-06-07 09:38:47');
-INSERT INTO `products` VALUES (2, 2, 'Veniam aut ut.', 'veniam-aut-ut.', 'Iure minus aspernatur aut nam similique nostrum provident neque. Facilis quia sunt vel sit sit. Qui expedita eveniet omnis quia est quidem. Dolorum molestiae quis et voluptatum dicta suscipit.\n\nIncidunt odio et explicabo maxime. Expedita harum quia atque dolores error. Labore incidunt aliquid a occaecati et qui.\n\nOmnis voluptatem est deserunt assumenda corrupti voluptas. Quia unde accusamus magnam voluptatum aut. Iure delectus fuga voluptas vitae.\n\nQuis sit pariatur earum perferendis quisquam sunt. Ut eaque possimus vero.\n\nVoluptatum explicabo optio aspernatur quisquam. Aut nesciunt rerum atque beatae. Architecto dicta asperiores consequatur.', 628966, 2, 4902, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1992-04-07 16:29:32', '2022-06-07 09:38:47');
-INSERT INTO `products` VALUES (3, 5, 'Dolorum et et.', 'dolorum-et-et.', 'Unde voluptatem iste expedita nesciunt. Architecto explicabo dolorem vel corrupti nihil occaecati veritatis. Ut officia et non quia et ipsa. Molestias rerum ratione qui officiis saepe quia facilis.\n\nDicta reiciendis quidem facilis aut sequi. Nemo sequi odit ut et. Ex quidem inventore quo dolore. Repellat provident voluptatem velit voluptatum a. Deleniti corporis cupiditate error.\n\nFuga voluptatem dolor qui dolorem et alias commodi. Nulla enim aut reprehenderit voluptatem. Similique molestiae et et aut culpa est. Quaerat sed dolorum atque occaecati sit neque veritatis.\n\nSequi nisi in voluptas rerum vitae non fuga. Et dicta ut accusantium iste repellat dolores. Alias sequi et iusto.\n\nUnde voluptas illo sit voluptatem commodi. Vel sapiente ut inventore ipsa a. Sunt quaerat nobis voluptatem deleniti. Hic at ut voluptatem.', 666567, 5, 2654, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1992-08-14 16:21:55', '2022-06-07 09:38:47');
-INSERT INTO `products` VALUES (4, 4, 'Ipsa nam doloremque.', 'ipsa-nam-doloremque.', 'Suscipit sint delectus laboriosam magni porro illo. Ut nihil debitis ut. Ullam eum fugiat consequuntur repellendus nesciunt. Aspernatur ullam voluptatem libero aut voluptatem.\n\nVoluptatem labore consequatur quos vel sed nam. Nulla nesciunt sunt amet maxime. Reiciendis omnis aperiam facilis perspiciatis dolor fugit veniam corporis.\n\nConsectetur dolores inventore autem autem aut. Qui et saepe perspiciatis. Culpa minus repellat ea doloremque. Dicta atque ab et et sapiente quae. Deserunt vitae voluptatem molestias dolor quibusdam voluptatem praesentium officia.\n\nOdio omnis iste quis repellendus sequi. Culpa animi autem non voluptas iusto dolores. Vero ut minus hic inventore culpa aut.\n\nPerferendis qui distinctio excepturi ea quas repellendus adipisci voluptate. Esse culpa voluptates et magni eum dolorum. Vero ea nam maxime totam cupiditate est. Tempore vel maiores quasi ut illo assumenda.', 178838, 15, 1343, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1983-06-27 22:59:23', '2022-06-07 09:38:47');
-INSERT INTO `products` VALUES (5, 5, 'Quaerat ex itaque harum.', 'quaerat-ex-itaque-harum.', 'Vero excepturi recusandae vel impedit nostrum magnam. Perferendis cupiditate eaque voluptate et consequatur nam. Dolor qui ratione tempore nam qui tempore velit. Eveniet eius ut tenetur ipsam.\n\nDebitis quam est praesentium non ipsam id est. Excepturi laboriosam et enim expedita et necessitatibus qui. Cumque fuga eligendi consequuntur quo qui ea maxime quaerat. Assumenda dolorem quisquam debitis enim dignissimos deserunt.\n\nOmnis porro ut mollitia porro voluptate. Nam aspernatur maiores cupiditate sed et. Facere molestiae ipsa vel est accusamus ea recusandae. Dolor harum nihil non iure atque. Eos eum consequatur ipsa harum.\n\nRepellendus beatae nobis vero. Velit perferendis exercitationem et laboriosam labore laborum voluptatem illo. Distinctio dolor expedita eum id libero distinctio nam.\n\nFacilis magni quod itaque cumque porro iure laboriosam. Minus nihil fugiat minus ut soluta temporibus eum quod. Maxime deserunt maxime voluptas.', 767878, 23, 1156, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2007-04-07 00:01:42', '2022-06-07 09:38:47');
-INSERT INTO `products` VALUES (6, 1, 'Quam dolorem delectus.', 'quam-dolorem-delectus.', 'Doloremque odio suscipit sint accusantium quisquam sint at. Atque est deserunt consectetur deserunt necessitatibus ab impedit tempore. Rem odio quo laborum et. Rerum dolorum itaque eveniet tenetur voluptate aut repudiandae.\n\nEveniet dolor voluptates quisquam sed qui. Et est aut itaque. Et ut et qui ratione eum aut.\n\nNumquam magni at aut deleniti distinctio voluptatem neque. Sed sit nisi eos est sint. Dolorum quia eligendi unde aliquam et veritatis fugiat dolores.\n\nEt odit rerum labore est sunt magni. Tempore voluptatum at perferendis cum non harum officiis. Commodi id quasi quia repellat omnis sint ratione dolor.\n\nConsequuntur non aperiam aut ut. Est cupiditate quae ea ducimus.', 341195, 42, 3944, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1974-06-15 01:49:26', '2022-06-07 09:38:47');
-INSERT INTO `products` VALUES (7, 2, 'Ratione laborum qui.', 'ratione-laborum-qui.', 'Praesentium enim id porro quo ratione. In error enim hic et earum.\n\nRerum porro nemo consequatur sit eum. Et sit repellendus et modi repellendus numquam. Qui et et temporibus ut quo corrupti provident.\n\nDolore eos debitis earum id. Facere eius fugiat nobis iste magni voluptatibus cumque. Corporis voluptatem id mollitia fugit consequatur ut ex. Impedit amet eos quia numquam cum.\n\nSunt quasi qui omnis magni. Minus nemo nesciunt beatae nesciunt voluptatem ea et. Cumque neque et culpa repellat accusantium est sed.\n\nEt fuga molestiae quo voluptatum dicta aperiam occaecati. Quia odio veritatis ullam ipsum. Laudantium voluptate necessitatibus enim sed tempora.', 744675, 61, 2528, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1987-02-08 16:05:25', '2022-06-07 09:38:47');
-INSERT INTO `products` VALUES (8, 4, 'Suscipit voluptates magnam numquam.', 'suscipit-voluptates-magnam-numquam.', 'Dolor temporibus amet voluptatem id consectetur vitae. Qui sit aliquam eos est facere illum sed et. Porro id dolorem cum dolorum doloremque incidunt. Et id dolore id voluptatibus rerum. Sunt voluptates est voluptas assumenda.\n\nDolor corrupti similique aliquam et harum. Debitis sapiente sint dolorum distinctio voluptatem aspernatur. Impedit aperiam fugit officiis quae placeat. Et ab rerum aliquid exercitationem cupiditate consectetur nam aut.\n\nEst fuga ducimus quo vel at voluptatibus voluptate. Numquam esse eum nobis molestias quia fugiat deleniti. Ut quae nam et praesentium. Iste et dolor excepturi iusto qui.\n\nMolestiae sed autem esse et qui sint. Exercitationem consequatur aliquam cum consectetur quo. Tenetur quibusdam eaque et dolorem omnis. Eos est tempora qui.\n\nAmet in architecto libero. Minima id quaerat est quae iste. Provident dolores facere illum corporis. Autem molestiae sint qui voluptas dolor asperiores.', 906078, 5, 4244, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2006-09-26 16:32:18', '2022-06-07 09:38:47');
-INSERT INTO `products` VALUES (9, 5, 'Quas veniam ipsum vel beatae.', 'quas-veniam-ipsum-vel-beatae.', 'Sed est autem vero id incidunt iure. Magnam id praesentium et natus eligendi. Voluptatem magni doloremque quam incidunt sunt blanditiis possimus.\n\nAtque vel eveniet omnis inventore veniam beatae qui. Facilis praesentium dicta in fugit voluptatibus doloremque suscipit. Sed nihil exercitationem magnam non odit consequatur quasi dolores.\n\nUt voluptate aut vitae quidem. Commodi quae non qui cupiditate. Eos dolores qui blanditiis.\n\nEst deserunt quisquam cumque consectetur ipsam quibusdam assumenda pariatur. Nihil suscipit rerum explicabo quidem. Ipsum magnam dolor quisquam iste optio alias dolore.\n\nDoloremque alias iste expedita et sit. Fugit dignissimos sunt similique. At ut omnis consequatur laborum neque ut.', 666278, 16, 4577, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1984-08-20 05:58:33', '2022-06-07 09:38:47');
-INSERT INTO `products` VALUES (10, 1, 'Repellendus eos dolor quidem consectetur.', 'repellendus-eos-dolor-quidem-consectetur.', 'Sed nam esse repudiandae nulla quis. Voluptatum facere reprehenderit nulla accusantium dolores omnis sit saepe. Sed culpa consequatur reprehenderit quam laudantium consequatur quisquam. Sint velit a illo est impedit esse asperiores. Omnis rerum iure natus voluptatum minus.\n\nMagnam voluptatibus quo ratione sint. Ut id deserunt aut dicta suscipit aliquid.\n\nEt nostrum consequatur et saepe minima aut et. Enim quia quo soluta explicabo quaerat. Numquam excepturi corporis aut non. Tempora esse dolores et et velit molestiae officiis.\n\nIncidunt deserunt tempora eius excepturi ad voluptatibus. Aut dolor quas earum non. Nemo sapiente soluta eos numquam quaerat. Recusandae nostrum asperiores at voluptas.\n\nNihil culpa placeat ullam illo quis voluptatum. Excepturi ratione officia porro possimus rem ut vitae. Dolor ab voluptas excepturi quaerat facilis voluptatibus deserunt. Et cumque nulla impedit.', 642720, 68, 3392, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2009-12-25 22:39:22', '2022-06-07 09:38:48');
-INSERT INTO `products` VALUES (11, 4, 'Rerum voluptatibus aut.', 'rerum-voluptatibus-aut.', 'Non eligendi et et dolore incidunt natus. Dolor voluptate incidunt atque eveniet facilis. Necessitatibus atque voluptas animi rerum. Distinctio ipsam nobis et quia.\n\nUt eius soluta pariatur dolores reiciendis voluptate. Non delectus velit architecto enim libero aut. Ut nesciunt a animi maiores necessitatibus tenetur. Voluptatem ea eum et incidunt aut.\n\nId aperiam nihil pariatur omnis incidunt omnis excepturi. Dolore ipsa deserunt a tenetur. Eos quaerat reprehenderit porro.\n\nUt est facilis tempore veniam maiores repellat ab. Animi iste et ipsam voluptas non dolorum adipisci rerum. Molestiae facilis hic accusamus ab.\n\nAut magni debitis optio doloribus deserunt qui. Placeat dicta sit qui et rem ad. Deserunt voluptate ipsa numquam quia quo accusantium ad. Sint maiores exercitationem sunt unde voluptatibus. Aut quod non et ipsum.', 266000, 49, 2485, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2013-08-01 12:46:48', '2022-06-07 09:38:48');
-INSERT INTO `products` VALUES (12, 4, 'Impedit velit est voluptates.', 'impedit-velit-est-voluptates.', 'Nesciunt sapiente consequatur dignissimos molestiae aspernatur dolorum magnam. Enim illo delectus tempora incidunt quis rerum pariatur. Beatae perspiciatis voluptatem sed et itaque ad aperiam. Nihil ut voluptatem corporis aut et necessitatibus.\n\nNatus incidunt aut dolores fuga ut rerum. Nulla enim similique velit est molestiae doloremque est. Velit sed mollitia dolorem.\n\nNobis atque quia ex qui. Placeat blanditiis quaerat ea vel labore sint maiores praesentium. Ea sit voluptas est.\n\nVoluptas facere facere autem natus dolores qui ut sapiente. Est eveniet aut deleniti veniam. Similique perferendis amet qui quis.\n\nEa dolorem at qui. Eligendi aut qui vitae aut et asperiores autem. Esse aut veritatis non magnam necessitatibus ducimus voluptatem. Earum consequatur sint ducimus aspernatur ab. Vero ullam culpa et autem.', 807496, 41, 3990, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2002-09-28 18:44:59', '2022-06-07 09:38:48');
-INSERT INTO `products` VALUES (13, 2, 'Debitis ipsum officia consequuntur.', 'debitis-ipsum-officia-consequuntur.', 'Et in odio fugiat. Molestiae consequuntur et officia quia omnis voluptates. Odio soluta perspiciatis architecto quae possimus.\n\nEsse soluta hic aut ipsam non sint aspernatur. Modi laboriosam quae in consectetur nemo nam. Officia aut enim perspiciatis labore.\n\nQuam distinctio corporis dolorum. Doloremque id vero deleniti neque praesentium. Iure odio saepe aspernatur distinctio possimus alias.\n\nMinus consequatur autem voluptatem praesentium aliquid neque consequatur ut. Ea voluptatem ut impedit facilis. Sint facilis perferendis quam sit rerum quod.\n\nPariatur vel eveniet porro ipsum. Explicabo quo voluptas animi aliquam corrupti nobis. Voluptatum dolorum facilis ipsum eaque. Nihil voluptates ipsam libero sit in voluptates praesentium.', 319787, 60, 2992, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1996-01-09 11:30:23', '2022-06-07 09:38:48');
-INSERT INTO `products` VALUES (14, 4, 'Sit tempore quia eum.', 'sit-tempore-quia-eum.', 'Qui omnis ullam qui commodi non quaerat debitis. Laboriosam doloribus provident aut ad sed. Commodi aut doloremque non aperiam impedit distinctio unde. Optio odio quis eaque ipsa doloremque similique. Sit similique alias sint soluta ut adipisci quia.\n\nSunt aspernatur hic quia nam quia. Vel ut corporis quaerat quas unde pariatur libero. Sed fugiat fugiat eum autem aut quasi et. Qui laudantium doloremque earum commodi sit veniam non.\n\nNatus laborum aut quae cupiditate qui blanditiis. Culpa sed explicabo sint reiciendis ipsum impedit. Iste nihil aut aut id quasi reprehenderit et.\n\nLaborum accusantium inventore architecto. Ratione deserunt soluta facilis autem. Temporibus sint delectus perspiciatis.\n\nDolor sequi quaerat odit ducimus et quia. Nobis quod mollitia voluptatem consequatur. Dolor eum aliquid quis voluptas ad quis culpa. Ut quod vitae sit qui praesentium.', 720658, 32, 2785, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1977-07-03 19:37:10', '2022-06-07 09:38:48');
-INSERT INTO `products` VALUES (15, 4, 'Aliquid inventore et nobis.', 'aliquid-inventore-et-nobis.', 'Quo ab quo eveniet rerum illo. Magni dolor sit corporis alias explicabo. Voluptatem omnis enim consequuntur quae doloremque in natus quas.\n\nDolorum sint velit doloribus et possimus nihil. Et molestias doloribus quisquam a sint repudiandae natus nihil. Neque ut modi quam nisi est vel provident eligendi.\n\nSaepe vel exercitationem et velit vitae non id. Consequatur minima ut adipisci adipisci. Alias repellendus animi et sapiente vero aut eos.\n\nIpsa ad nulla quod. Molestias optio numquam consequatur vel molestiae. Non rerum enim consequatur cum numquam.\n\nFacilis rem fuga consequatur qui quae quia provident. Laboriosam cupiditate facilis labore et ut. Molestiae asperiores sunt quasi voluptatibus reiciendis est corrupti.', 682265, 40, 4296, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2007-04-23 03:36:41', '2022-06-07 09:38:48');
-INSERT INTO `products` VALUES (16, 1, 'Doloremque dolorem consectetur aliquid.', 'doloremque-dolorem-consectetur-aliquid.', 'Et ab non quod iste quasi cum possimus. Ut ut impedit dignissimos et tenetur nesciunt. Iste totam culpa numquam voluptatem.\n\nAt rerum aut aut itaque temporibus officia. Quis sunt et rerum molestiae qui consectetur. Quis velit ab et nam. Odio et voluptatem quisquam fuga corrupti iure doloremque id.\n\nSed facilis eum dolorem natus modi. Vitae fugiat aspernatur expedita libero rem nihil omnis nisi. Tenetur rerum ducimus labore eius quasi modi accusantium fuga.\n\nFacilis ipsam omnis est aut sit. Autem tenetur rerum quos aut. Et voluptates quos unde ab voluptate tempore.\n\nDicta iste occaecati est eum cupiditate nemo consequatur. Hic ipsa sequi rerum possimus accusantium voluptas quas. Itaque quia id fugiat impedit magni quasi consequuntur alias.', 707226, 41, 1655, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1994-06-24 15:12:55', '2022-06-07 09:38:48');
-INSERT INTO `products` VALUES (17, 4, 'Maxime officiis voluptatibus.', 'maxime-officiis-voluptatibus.', 'Illum id delectus sint in. Repellat cumque quia est dolor. Nam tenetur necessitatibus magnam ratione modi nostrum commodi. Voluptatem quisquam possimus aut qui eum accusantium quaerat.\n\nEum architecto quia quis alias delectus. Omnis et ratione reprehenderit assumenda. Dolor ullam itaque ab. Laudantium distinctio nulla quas excepturi aut facere dolores. Quia molestiae et praesentium ipsam reprehenderit ab pariatur.\n\nEt in tempora sed optio excepturi rem non. Adipisci est alias quo. Ut totam reiciendis dolorum vero nobis. Hic quaerat assumenda sit voluptatem incidunt et.\n\nQuibusdam blanditiis harum in accusantium autem sapiente. Nobis ea accusamus impedit ut mollitia minus. Beatae quae rerum et rerum. Eaque aliquid alias qui qui architecto.\n\nQuia et tempora veritatis temporibus eligendi consequatur rem. Voluptas perspiciatis nostrum suscipit veritatis ducimus qui.', 355710, 20, 1638, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2005-06-18 13:05:44', '2022-06-07 09:38:48');
-INSERT INTO `products` VALUES (18, 3, 'Illum voluptas incidunt.', 'illum-voluptas-incidunt.', 'Asperiores repellat porro sunt expedita harum quasi. Qui ratione doloribus id est ut eligendi.\n\nDelectus rerum ullam nihil facilis aut asperiores iure. Et iusto aut amet ut qui corrupti. Optio sint eveniet doloribus autem sit.\n\nPariatur corporis vero et esse nam. Ut in doloribus sed id voluptatem consequatur. Aut ipsam eius ipsam quia quis et magni. Quia similique exercitationem blanditiis porro.\n\nAut quasi dignissimos aut eos. Ea est quos et quam tenetur. Voluptas qui et aliquam molestiae deleniti ad omnis vero. Dolor odio dicta at cupiditate consequatur voluptas voluptate.\n\nQuidem eum dignissimos ducimus. Ut dicta occaecati excepturi quos reiciendis atque nesciunt. Consectetur occaecati voluptatem voluptatem rerum vero est quibusdam. Voluptatem consequatur aut nisi neque dolor.', 546479, 28, 2092, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1974-05-24 08:27:39', '2022-06-07 09:38:48');
-INSERT INTO `products` VALUES (19, 2, 'Molestiae magnam non delectus est.', 'molestiae-magnam-non-delectus-est.', 'Vitae nemo fugiat voluptatem voluptatibus. Aliquid ipsa voluptatem possimus esse praesentium in labore.\n\nEt qui rerum eum ducimus sed ut accusamus. Voluptatem nihil veniam sed natus qui. Maiores aut ut corporis voluptas soluta quis. Illo autem sed quasi commodi.\n\nMagnam voluptas qui autem ducimus eum dolores libero. Laudantium autem ut et. Facere assumenda nobis est deserunt autem ut porro.\n\nVelit ad sint voluptas. Quibusdam sequi dolorem et porro. Dolorum sed quis officiis consectetur tenetur.\n\nEst inventore commodi qui quo at neque molestias error. Quisquam tenetur nostrum debitis similique vel. Fuga veritatis cupiditate vero sapiente delectus facilis.', 408992, 51, 1863, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1976-11-29 18:45:50', '2022-06-07 09:38:48');
-INSERT INTO `products` VALUES (20, 1, 'Laboriosam officiis magni rerum.', 'laboriosam-officiis-magni-rerum.', 'Est et nam inventore ut. Doloribus est sed nihil voluptate odit. Id quia perferendis quo. Et eum voluptates consequatur.\n\nSaepe ea magnam qui dolore et rerum voluptatem. Est reprehenderit nemo placeat est. Accusantium amet quia eum ut ut tempore et qui. Ullam omnis delectus fuga qui rerum aut perferendis quos. Perspiciatis mollitia quas numquam et voluptate.\n\nVoluptas incidunt temporibus voluptas voluptas eum voluptates. Sed hic magni temporibus quibusdam. Quia velit debitis eum incidunt quae. Aspernatur fuga minima optio rerum a hic sit quasi.\n\nEnim esse sapiente distinctio aliquid. Expedita tenetur fugit nobis nihil provident ex sunt. Reiciendis fuga reiciendis aliquid doloribus ut dolor magnam. Qui odio et et nisi.\n\nEum libero consequatur fuga recusandae similique suscipit quis. Veniam dolorum quam illo odit rem. Quia pariatur ea ut aut repudiandae voluptas. Laborum rerum quas et quibusdam dignissimos.', 783432, 32, 3284, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1975-02-08 02:41:09', '2022-06-07 09:38:48');
-INSERT INTO `products` VALUES (21, 5, 'Mollitia pariatur sit.', 'mollitia-pariatur-sit.', 'Asperiores tempora reiciendis id non. Rerum minus assumenda accusamus et. Aperiam et sit facilis minus mollitia ad.\n\nRem modi ea distinctio aliquam quae tempora. Qui reprehenderit eum consequatur consequatur quam autem ab. Minima minus consectetur alias incidunt corporis at.\n\nCorrupti eligendi aliquam magnam saepe non. Nemo aperiam harum et dolorem. Eos voluptatem alias quibusdam et amet optio. Repellat corrupti laborum et velit voluptas quis.\n\nEt voluptatum inventore id et. Enim aut enim necessitatibus in error. Beatae qui quibusdam sint tempore a qui quibusdam. Sunt et vel voluptas.\n\nDicta beatae expedita aspernatur earum voluptatem. Fuga quae officia repellat porro aut voluptas ex. Dolorem voluptatum doloribus dolore aperiam iste non. Praesentium voluptas in dolore maxime placeat et.', 716908, 4, 3666, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2009-04-15 23:31:17', '2022-06-07 09:38:48');
-INSERT INTO `products` VALUES (22, 2, 'Enim aliquid explicabo earum.', 'enim-aliquid-explicabo-earum.', 'Id quibusdam velit blanditiis quasi temporibus fuga dolores ratione. Aut doloribus porro est qui tempora beatae. Nihil magni beatae et iste. Non laboriosam sint repudiandae est rerum voluptatum.\n\nNisi aliquid impedit quam corrupti commodi. Quis temporibus tempora explicabo similique nisi impedit maxime qui. Quia error voluptatem qui esse dolore consequuntur nam dolores.\n\nMinima nisi culpa enim. Autem corrupti fugiat vel.\n\nMagnam ratione incidunt quia eos veritatis dolorum. Est voluptas repellat ipsum autem corporis architecto. Autem delectus amet reprehenderit aut deleniti animi.\n\nIpsum alias assumenda assumenda neque et illum. Quam itaque quis et autem et inventore. Voluptatem fuga et asperiores vel quia rerum autem. Et repellendus distinctio ut enim.', 619407, 46, 3248, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1970-05-31 08:17:07', '2022-06-07 09:38:48');
-INSERT INTO `products` VALUES (23, 1, 'Quis praesentium aut.', 'quis-praesentium-aut.', 'Omnis amet alias omnis. Expedita delectus excepturi ullam est. Nihil ut vitae voluptas ad.\n\nNam veritatis sint ea rem id. Nam pariatur qui et quis praesentium.\n\nAd ipsa ut sed ullam voluptatem. Repellat repellendus blanditiis error dolores cumque rerum porro. Ea nesciunt quas omnis. Suscipit et architecto nihil.\n\nAsperiores voluptatem dolor alias itaque sint quia necessitatibus quisquam. Sapiente itaque vel ut officiis nisi ducimus exercitationem dolorum. Ut quas voluptatem unde sint nihil illo.\n\nAutem soluta vitae reiciendis et exercitationem. Minus reprehenderit voluptatem quasi quia vel dolorem. Explicabo rerum sint nesciunt ullam. Fugit aut blanditiis dolores aperiam quia.', 600039, 45, 4159, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1989-04-03 19:03:31', '2022-06-07 09:38:49');
-INSERT INTO `products` VALUES (24, 5, 'Dolores quibusdam sunt accusantium nobis.', 'dolores-quibusdam-sunt-accusantium-nobis.', 'Minima nam et totam et assumenda. Eaque quo necessitatibus consequatur et odio deleniti in. Occaecati explicabo quo est aliquid ut est dolor. Modi dolorum distinctio dicta recusandae expedita soluta velit.\n\nNeque sed itaque iste aut fuga exercitationem aut. Aut velit occaecati quae deleniti aut. Iste omnis voluptatum repellendus ratione et.\n\nQuasi veritatis expedita et voluptates. Voluptate qui possimus omnis. Dicta qui rerum dolor. Aut aut aliquid cum eveniet est quia natus.\n\nReprehenderit eum sit deserunt et voluptatem sunt reiciendis. Animi molestias repudiandae qui sequi possimus inventore illum.\n\nEt qui non placeat iure sapiente dolores distinctio. Natus molestiae tenetur et asperiores. Omnis officiis voluptatem placeat voluptas.', 543763, 20, 4439, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1970-11-16 18:28:25', '2022-06-07 09:38:49');
-INSERT INTO `products` VALUES (25, 5, 'Ad ipsum aut.', 'ad-ipsum-aut.', 'Sapiente nobis esse inventore molestiae voluptas eos. Et voluptate quaerat ipsum. Ex libero vero tempora autem. Animi debitis in aliquam placeat explicabo sunt.\n\nTemporibus excepturi accusamus et quia dicta. Ratione assumenda ab sapiente. Tempore voluptatum ut aut.\n\nAspernatur expedita hic sunt maxime. Facilis et pariatur eaque dicta non totam voluptatem eligendi. Aut sapiente et sit. Voluptatum ea iure rerum consectetur magnam dolorem.\n\nMinima quia labore ut aut excepturi id est dolores. Ut cumque iusto provident ea. Ullam totam dolor similique neque odit enim dolorem.\n\nDolorum tempore in nemo. Voluptatem sint aliquid ut in nihil cupiditate dolore. Molestias dolores voluptates repellendus adipisci omnis architecto voluptatem.', 614730, 25, 2148, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1983-02-19 13:28:29', '2022-06-07 09:38:49');
-INSERT INTO `products` VALUES (26, 2, 'Omnis numquam.', 'omnis-numquam.', 'Hic fugit minima sunt animi. Sunt animi autem quos sunt sit vel expedita. Et blanditiis voluptatem eum atque exercitationem facere.\n\nUt est in et quia. Minus quis enim cum vel totam quia tenetur. Repellendus quis cumque eos eaque.\n\nUt quaerat et eum voluptatem vero minima. Quidem excepturi labore quo qui molestiae. Vel est optio fugit pariatur vel repudiandae.\n\nBeatae mollitia voluptas illum alias ut qui. Ducimus ipsum dolorem ab voluptatibus. Aut iste pariatur tenetur beatae nemo explicabo aut. Explicabo et qui expedita est.\n\nVelit sint sequi quo necessitatibus. Aspernatur eum quisquam neque vel minus dolor. Vero quis aut quia mollitia laboriosam illo nisi.', 432739, 56, 4997, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1988-12-08 10:33:37', '2022-06-07 09:38:49');
-INSERT INTO `products` VALUES (27, 1, 'Sint beatae labore.', 'sint-beatae-labore.', 'Modi nisi asperiores est non rem ad. Blanditiis vel eum quo ut omnis et placeat. Vel voluptas nemo dolorem quia eos.\n\nQui nihil suscipit voluptatem nihil et adipisci non. Rerum cumque cumque possimus iusto occaecati molestiae.\n\nEt nobis minus corrupti omnis nihil. Reiciendis sed in est voluptate eius sed voluptatibus sed. Nisi non sed voluptatem.\n\nUnde ut nulla suscipit nesciunt et quasi fuga. Nesciunt ducimus et sunt rem. Dolores numquam quis sed itaque. Aperiam commodi et iste et sapiente veritatis. Saepe quasi et distinctio dolor atque quia.\n\nQuos sequi tenetur cum doloremque. Qui ex nisi dolores qui qui eum. Enim repudiandae dolorem vitae voluptas tenetur id.', 386378, 38, 3015, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2007-01-05 04:14:10', '2022-06-07 09:38:49');
-INSERT INTO `products` VALUES (28, 5, 'Quasi sed expedita.', 'quasi-sed-expedita.', 'Molestiae quia tenetur eos sunt commodi. Sint aut nisi voluptas. Quidem est maiores qui omnis non. Rerum ipsam ut dolorum aliquam et nesciunt qui necessitatibus.\n\nExpedita modi et aspernatur earum aut harum consequatur. Occaecati magnam et et. Officia velit aut laborum sed et et.\n\nSit necessitatibus explicabo culpa. Delectus occaecati voluptate illo consequatur. Consequatur dolorem eum non iure fugit assumenda eos. Ut eveniet est minima ex aut qui.\n\nVel necessitatibus dolor voluptatem fuga voluptatibus nulla. Ea fuga ullam facilis quia. Hic debitis porro sequi vel ratione natus. Soluta rerum voluptatem laborum nihil nihil fugiat ad.\n\nAut ratione magnam soluta et nihil minima non. Sit consectetur fugit vel odio ad optio. Et optio sed vel esse. Dignissimos autem voluptas dolor quo.', 779834, 5, 4603, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1972-05-27 13:42:13', '2022-06-07 09:38:49');
-INSERT INTO `products` VALUES (29, 1, 'Ut et explicabo.', 'ut-et-explicabo.', 'Et enim dicta similique veniam iure et officiis et. Voluptatum aut ducimus laborum reiciendis eveniet consequatur voluptatem voluptatum. Alias odit corrupti nesciunt. Excepturi sed quam numquam quia voluptatum in.\n\nVelit ex occaecati consequatur eveniet velit. Rem et sunt quia. Aspernatur illo non nulla ex quia. Et inventore necessitatibus voluptatum veniam natus fugiat eum. Distinctio ea aut qui sit.\n\nUt nulla quo qui eos odio odit culpa. Ea quidem sunt deleniti iste sunt et dolorum. Consectetur cum autem perspiciatis illum et.\n\nNihil recusandae corporis quo velit. Illo aliquid aut numquam ea debitis porro quo velit. Odio et eum sequi culpa.\n\nSimilique sit qui eum nam sunt voluptas quibusdam. Ut id nam voluptate. Qui qui debitis consectetur deserunt. Ab ab sed quaerat delectus occaecati.', 40877, 48, 4560, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2008-08-22 21:12:28', '2022-06-07 09:38:49');
-INSERT INTO `products` VALUES (30, 4, 'Et vel reprehenderit est.', 'et-vel-reprehenderit-est.', 'Facere tempore nihil non quidem. Est deleniti dolor ut tempora ipsam accusantium. Sint dolor voluptatem est similique incidunt.\n\nItaque et adipisci animi earum amet optio. Ut qui consequatur voluptatem sed nulla qui. In voluptatem adipisci dolores magnam sunt.\n\nQui delectus quos iste corporis dolorem qui. Qui molestias voluptatem enim nam voluptate nesciunt animi. Ut rerum magni laborum sint repudiandae facilis. Possimus dolor tenetur perferendis neque. Quis dolore corporis molestiae.\n\nEt ut ipsam dicta et quos. Doloribus maiores omnis sunt. Ut ex sit sapiente maxime. Quae autem debitis voluptatibus in laboriosam qui animi.\n\nVoluptatem amet eaque est quam accusamus vel rem. Et reiciendis omnis asperiores doloremque cupiditate placeat. Fugit corporis magnam numquam ipsum qui. Dolorem labore deleniti facere labore dolore quo. Et mollitia eos consequatur.', 668000, 61, 2049, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1982-07-02 15:48:39', '2022-06-07 09:38:49');
-INSERT INTO `products` VALUES (31, 1, 'Neque tempora amet neque.', 'neque-tempora-amet-neque.', 'Minus soluta maiores aut repudiandae aliquam est. Dolorem consequatur repudiandae nulla ut ipsa. Voluptatem rerum dignissimos nesciunt dicta dolores dignissimos.\n\nHarum non dicta error doloribus. Dolores debitis voluptate voluptatem.\n\nNeque rem dolores natus quidem reprehenderit. Sapiente sint labore doloremque omnis.\n\nDoloremque repellat qui unde et quaerat. Occaecati explicabo est debitis est. Aut soluta sequi ut dolores dignissimos ipsam voluptas impedit.\n\nTempora dolor dicta laudantium sed qui beatae provident. Facere doloremque ea quod repellat. Omnis distinctio fuga facilis unde consequatur.', 988218, 72, 1653, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2009-09-23 22:33:51', '2022-06-07 09:38:49');
-INSERT INTO `products` VALUES (32, 1, 'Officia quam tempora et.', 'officia-quam-tempora-et.', 'Laboriosam blanditiis repellendus odit. Quam debitis et beatae alias numquam consequatur commodi in.\n\nMolestiae repellendus repellendus odio minus omnis enim rerum. Debitis fugiat cupiditate aspernatur voluptate reprehenderit qui explicabo. Sit vel voluptatibus omnis perferendis. Esse nam nulla magni quia rerum.\n\nUt fugit accusamus in ut ut aperiam accusantium. Eaque fugiat voluptas est consequatur quis. Harum esse consequuntur perferendis voluptas modi corporis.\n\nEos sapiente quaerat aut aut aut molestiae et et. Maxime deleniti incidunt aut facilis sequi ducimus commodi. Nulla aut et dicta reiciendis ducimus. Nisi esse aut vel quasi. Quis non aut pariatur corrupti doloribus incidunt est.\n\nConsectetur vel sint optio nostrum. Aperiam vel et laboriosam quia. Hic ea maxime ipsa quos quia numquam. Totam itaque ipsum ut aspernatur.', 407904, 43, 1120, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1971-04-08 16:11:23', '2022-06-07 09:38:49');
-INSERT INTO `products` VALUES (33, 3, 'Cumque voluptatem et laboriosam.', 'cumque-voluptatem-et-laboriosam.', 'Numquam est similique dolorum non voluptatem atque. Sit sint ut incidunt omnis deserunt sit totam. Saepe non dolorem recusandae facere maiores autem qui earum. Maxime sapiente voluptatibus similique voluptas aut magni.\n\nEt ea velit omnis quia ut eum saepe. Consequuntur perferendis blanditiis tempora cumque perferendis adipisci qui. Earum id suscipit id esse et. Architecto repudiandae animi nam neque voluptatem dolores.\n\nEst ullam nulla asperiores quibusdam dolor. Aut iusto voluptatem commodi. Iusto voluptas eius ut reprehenderit accusamus et vitae.\n\nEsse et quos exercitationem fuga. Temporibus laboriosam sed maxime et amet eos. Unde exercitationem voluptas qui sit id.\n\nVelit aliquid hic quis enim consequatur est accusamus. Qui culpa et unde sunt possimus perspiciatis soluta.', 263828, 63, 3801, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2004-12-24 08:22:20', '2022-06-07 09:38:49');
-INSERT INTO `products` VALUES (34, 5, 'Soluta dolore.', 'soluta-dolore.', 'Dolor veritatis explicabo veniam blanditiis saepe dolores in consequatur. Doloremque porro est a sed et praesentium velit ut.\n\nUnde ipsam et quasi deserunt. Rerum nemo in optio doloremque. Et a quia autem eius.\n\nAlias enim et illum cupiditate. Dolorem quis rerum labore voluptatem omnis. Aut suscipit itaque inventore. Sed quod est eum dolorum debitis explicabo.\n\nSoluta molestiae totam numquam. Magnam nobis id ratione sed hic labore voluptatem aspernatur. Ex quia rerum repudiandae perspiciatis delectus iusto temporibus.\n\nPraesentium est ipsa suscipit enim eius debitis officia. Facere doloribus quod consequuntur voluptate rerum est ad ipsum. Libero in est harum quae expedita. Consequatur quae consequuntur dolor modi et et.', 35500, 57, 2182, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1980-08-20 11:01:52', '2022-06-07 09:38:49');
-INSERT INTO `products` VALUES (35, 5, 'Eligendi eligendi quisquam sed.', 'eligendi-eligendi-quisquam-sed.', 'Assumenda nesciunt nihil nihil necessitatibus architecto. Ut voluptatum explicabo sed. Ipsum mollitia labore velit consequuntur quia.\n\nSuscipit perferendis aperiam voluptas et itaque ratione. Eum esse earum et aut inventore debitis sed. Aut eum necessitatibus non ratione. Eum quo reiciendis corrupti delectus voluptate qui. Dolorem est architecto nemo ullam pariatur.\n\nFugit est placeat praesentium laborum et reiciendis. Error quia repudiandae adipisci suscipit provident iste officiis. Ratione laboriosam excepturi sit quo ad. Atque sint quos assumenda nobis.\n\nEt consequatur impedit aliquid eum harum ipsum voluptatem. Quis aut sit aspernatur et illo eveniet. Sit nam temporibus doloremque eligendi quam ut ducimus. Consequatur voluptatem ipsam atque quas natus possimus pariatur.\n\nPariatur neque omnis culpa illo sit. Eveniet quod vero aut neque voluptatem doloribus minus. Aut velit incidunt ut. Quia quia est necessitatibus tenetur possimus repudiandae.', 563564, 74, 4942, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1999-04-10 06:10:28', '2022-06-07 09:38:49');
-INSERT INTO `products` VALUES (36, 2, 'Tempore voluptatum.', 'tempore-voluptatum.', 'Adipisci accusamus quis repudiandae earum et praesentium optio. Autem reprehenderit quis nobis praesentium et maiores natus. Et ullam quis possimus consectetur omnis cupiditate molestiae tempora.\n\nRepudiandae dolorem praesentium tempora reiciendis qui et non. Voluptas omnis iusto neque rerum. Rerum placeat est autem odit aspernatur earum omnis.\n\nFugiat rerum quis velit tempore. Eum provident rerum ut perferendis praesentium et hic.\n\nSequi totam eveniet doloremque repellat. Blanditiis quam sint natus aperiam quod consequatur ad. Porro sint laboriosam a qui consectetur tempore eligendi voluptatum. Est expedita dicta rerum et numquam doloremque consequatur.\n\nQui omnis adipisci magnam recusandae et perspiciatis sit. Culpa ut voluptatem quibusdam. Ipsum soluta temporibus nihil quasi vero et.', 885480, 29, 4980, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2003-09-15 19:16:11', '2022-06-07 09:38:49');
-INSERT INTO `products` VALUES (37, 2, 'Ratione ipsum quos animi possimus.', 'ratione-ipsum-quos-animi-possimus.', 'Commodi mollitia rerum ut ut quos. Ipsam velit dolore quod dignissimos sed. Voluptate deserunt eos quis repellendus earum. Dolore ut eaque et quaerat est.\n\nHarum quasi voluptatem beatae et nobis vel. Sint accusantium fugit quidem maxime. Est iusto omnis quasi voluptatem ut.\n\nOdit voluptatem dolorum quo animi et facilis omnis. Corrupti quo dignissimos qui ipsam. Sed voluptatibus quidem aut voluptas reprehenderit asperiores fuga. Architecto debitis voluptas velit vero omnis quia incidunt.\n\nDolorem quam et quia voluptatibus. Sint et nostrum quod pariatur. Quibusdam et est magni qui neque. Voluptatum porro ullam eum voluptatem.\n\nEaque quia aut ut quis est quia ea. Corporis quod autem est ipsum. Molestiae inventore enim doloribus nisi temporibus qui.', 875153, 66, 2782, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1988-01-29 12:33:42', '2022-06-07 09:38:49');
-INSERT INTO `products` VALUES (38, 5, 'Facilis explicabo aut.', 'facilis-explicabo-aut.', 'Qui ad nemo voluptatem nobis. Itaque quia rerum quia voluptas. Quas aut et facilis officiis quas. Cupiditate aut nihil corporis in et voluptatem.\n\nEligendi consequatur veritatis veritatis laborum excepturi. Rerum debitis inventore expedita quisquam laudantium minima. Sit quia ipsa excepturi ea velit.\n\nMolestiae voluptas delectus quia iure sit saepe. Occaecati fugiat doloremque impedit sed delectus illo sit. Ut autem voluptatibus placeat velit. Quia vero quia aut quo ducimus ipsam.\n\nSint quo et autem accusamus et ut. Voluptas ut dolor ab autem neque. Sequi temporibus tempore ut eaque dicta qui autem. Animi debitis et hic inventore soluta saepe quam velit.\n\nFugit dignissimos nulla autem repellendus dolorem. Magni voluptatum esse facilis voluptas eum. Dignissimos tempora et odit qui repellat quae.', 368037, 68, 3468, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1995-01-11 22:45:15', '2022-06-07 09:38:49');
-INSERT INTO `products` VALUES (39, 5, 'Odit in neque.', 'odit-in-neque.', 'Soluta dolores possimus asperiores quod vero facere natus. Error et ipsum necessitatibus nemo modi qui harum. Autem non quos eligendi unde.\n\nFacilis aut consectetur eos adipisci. Non expedita ullam accusantium sint repellat accusamus non omnis. Delectus facere quidem totam qui accusantium placeat illum.\n\nMolestiae amet aut nihil culpa fugiat. Voluptate deserunt molestias deserunt ut numquam ea dolores temporibus. Esse quo eos doloremque. Dolor sit dignissimos libero nihil aliquid porro.\n\nFuga temporibus ut consectetur in quis. A voluptas sint consequatur quia. Tenetur voluptatum quo quidem recusandae fuga ipsum consequatur minus. Dolores quisquam nostrum quod repudiandae illo vitae. Vel non hic sapiente molestiae.\n\nOdit ab fugiat praesentium. Fuga nobis rerum occaecati similique a modi suscipit. Delectus sint porro unde reiciendis sapiente velit dolore.', 245579, 30, 3091, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2010-11-26 22:29:55', '2022-06-07 09:38:50');
-INSERT INTO `products` VALUES (40, 4, 'Et architecto aut magnam.', 'et-architecto-aut-magnam.', 'Cum rem voluptatem sint dolorem fugit. Odit optio est et vitae qui consectetur quasi. Illum ut provident ipsam facilis ipsum voluptas dolorem. Est numquam incidunt mollitia quia sed et.\n\nIllum non adipisci voluptatibus esse. Et minima a eligendi incidunt nostrum.\n\nBlanditiis quis dolore id cum. Assumenda magnam laboriosam dignissimos. Similique maiores sint vel iste voluptatem. Voluptatibus voluptatem amet enim harum sit et voluptas.\n\nAdipisci et dolorem nisi enim aut voluptas recusandae. Molestiae iure nihil inventore vitae enim sapiente nihil. Dolores consequatur facere esse inventore.\n\nQuo maiores temporibus fugiat modi. Non mollitia et facilis reiciendis occaecati et voluptatibus. Est quidem rerum vel atque cumque.', 15228, 47, 3709, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2019-03-25 01:46:50', '2022-06-07 09:38:50');
-INSERT INTO `products` VALUES (41, 5, 'Eaque consectetur.', 'eaque-consectetur.', 'Dolorem amet dolores alias. Voluptatem consequuntur ratione aut excepturi earum corporis. Et maiores dolor rerum molestiae autem.\n\nAnimi accusamus quis dolores eius facere. Iste recusandae sint vel deleniti perferendis dicta. Est officiis sit sunt nulla et eaque est.\n\nNesciunt expedita qui nihil ad voluptas. Quo praesentium eum nulla amet dolor esse cumque vero. Est id maiores rem quia id est. Minima soluta quas est nesciunt odit omnis eum.\n\nReiciendis a magnam est neque cum nulla illum autem. Aperiam vel odio distinctio vitae unde et molestias nisi. Ut maiores ratione eos quas ut enim error. Dignissimos beatae quos in qui.\n\nEligendi quis amet vel. Autem itaque enim a.', 808658, 36, 2302, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2007-05-30 03:50:06', '2022-06-07 09:38:50');
-INSERT INTO `products` VALUES (42, 4, 'Quia neque ut eius.', 'quia-neque-ut-eius.', 'Sed explicabo soluta id dolores ut. Blanditiis dolor debitis saepe eveniet. Aspernatur provident maxime aperiam aut aliquam.\n\nVoluptas voluptates nostrum veritatis non voluptatem. Adipisci non laborum mollitia a.\n\nEt possimus ipsa itaque laborum. Architecto numquam aut voluptatem possimus eius aut. Ea hic id recusandae enim sed dolorem veniam.\n\nEos quo in est sed consequatur. Ullam architecto quia quia. Et commodi omnis dolores voluptatem.\n\nDeserunt nihil sit in nam ipsum. Dolor nesciunt repellendus sit enim. Et reiciendis tenetur et asperiores doloribus.', 283401, 24, 2416, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1995-04-21 03:33:50', '2022-06-07 09:38:50');
-INSERT INTO `products` VALUES (43, 1, 'Magnam voluptatibus officia.', 'magnam-voluptatibus-officia.', 'Quo rerum totam ut molestiae ipsa consequatur. Porro aliquam ab nisi architecto dolorem. Minus nulla quidem quos praesentium.\n\nAutem dolorem ut ratione sit voluptatem dicta. Porro eligendi aut quia ducimus impedit. Excepturi est hic aut iure. Explicabo nihil dolore ut cupiditate. Fugiat eaque id sit ipsam eligendi quibusdam modi.\n\nEveniet perspiciatis deserunt fugiat consectetur sit quos sed. Minus neque minima quas rem. Rerum laudantium et quaerat placeat totam qui et. Numquam hic dolores quam ut in quia.\n\nDelectus laboriosam maiores modi similique nihil ut eum. Eum odit in iure cum eius.\n\nNihil vel ipsam mollitia. Consequuntur nesciunt et tenetur vero enim. Neque quia quam quia ut. Dolorem enim quod sed quis molestiae amet ut consequuntur.', 962384, 73, 3005, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1993-09-20 06:26:37', '2022-06-07 09:38:50');
-INSERT INTO `products` VALUES (44, 2, 'Aut voluptas ea qui.', 'aut-voluptas-ea-qui.', 'Voluptatem adipisci non velit deserunt ea. Animi a labore et ut sequi totam suscipit. Ea harum excepturi accusamus eos. Itaque quia ab tenetur velit in quo laborum in. Ad voluptatem id consequatur placeat est expedita.\n\nIpsam et excepturi nihil quia. Est perferendis beatae deserunt aspernatur dolore placeat quos. Excepturi asperiores porro et nostrum quam.\n\nIllo laboriosam praesentium doloribus molestias sed tempora dicta. Aut vel eligendi magni et. Occaecati et quasi libero quia exercitationem et.\n\nEst non inventore culpa libero corporis non. Dolorem alias suscipit cumque. Ipsum dolor consequatur repellendus aperiam iure.\n\nOptio unde commodi quia veritatis sed rerum. Aliquam dignissimos qui officia quam. Quisquam sed officiis ut adipisci suscipit. Nostrum nam dolore voluptate.', 962800, 22, 3592, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2006-01-03 03:31:35', '2022-06-07 09:38:50');
-INSERT INTO `products` VALUES (45, 4, 'Repellendus et reprehenderit impedit.', 'repellendus-et-reprehenderit-impedit.', 'Odit excepturi aut aut eos sunt. Aliquam quisquam itaque tempore id qui nulla est. Molestiae debitis quos ipsam unde ipsum dolorum. Alias fugit ipsa similique labore sunt officiis.\n\nVoluptas molestiae ut asperiores ut enim quis. Et nulla ex velit repellendus neque sint quibusdam. Ut rerum sint ut soluta molestias dolorum enim.\n\nCommodi ea voluptatem atque ullam vero reprehenderit repellat amet. Sequi voluptas non omnis natus voluptatem laborum. Voluptatem pariatur eius officiis ex nihil non. Et nihil libero mollitia distinctio vel voluptatem voluptate optio.\n\nEx repudiandae quod sit deserunt. Fugit assumenda vel sequi a odit molestiae. Aliquam ut laboriosam vero eaque voluptatem nulla minus. Ullam eligendi accusantium nobis itaque.\n\nUllam sed nihil numquam et repudiandae dolorem. Et at ut commodi dolores in qui vero maxime. Est sunt voluptatem assumenda sunt. Autem facere cum voluptatem voluptas aut.', 329660, 37, 2317, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1990-11-10 20:51:52', '2022-06-07 09:38:50');
-INSERT INTO `products` VALUES (46, 1, 'Voluptatem qui voluptatem voluptas.', 'voluptatem-qui-voluptatem-voluptas.', 'Ut sapiente nihil voluptates nihil ea omnis. Magni voluptatum sed omnis in. Officiis est aut rerum quaerat possimus qui officiis.\n\nEt facilis libero consequatur ut vel quis non. Et ut atque dicta. Modi debitis repellat unde beatae laborum.\n\nError ipsum quas praesentium fuga quia. Blanditiis rerum numquam praesentium quis eos id corrupti. At atque ut sed animi soluta ullam ipsum. Sint aut suscipit dolorum voluptatem sit.\n\nQuae dignissimos praesentium quia soluta enim. Ex non eligendi qui voluptas nesciunt et. Et molestiae et sint rerum tempore. Eaque et pariatur qui quo et eaque aperiam. In sunt fugiat hic earum recusandae.\n\nLibero ut ipsum cumque ipsa ut earum. Culpa dolore sit impedit quos. Ut quia quam consequatur. Similique quidem ad rem officiis.', 407609, 17, 1703, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1999-10-02 08:26:29', '2022-06-07 09:38:50');
-INSERT INTO `products` VALUES (47, 4, 'Dolore sed quibusdam aperiam quo.', 'dolore-sed-quibusdam-aperiam-quo.', 'Est voluptas at qui deserunt nulla. Quod quia modi placeat ipsa consequatur illum est. Fugiat rerum voluptatem labore excepturi unde. Aspernatur corporis illo sed ea eveniet accusantium et et.\n\nDolores asperiores cum qui illum quisquam vero. Pariatur hic nihil id hic dolor eaque sunt. Quibusdam aspernatur earum odio vel qui libero hic. Tempore repellat quisquam nam harum. Recusandae suscipit voluptate saepe magnam molestias.\n\nOptio illum recusandae aliquam aspernatur. Eius quibusdam quis corrupti ipsum. Quasi modi culpa autem eos saepe aut. Unde natus reiciendis ut voluptatum atque dolorum.\n\nEt in rerum nihil repellendus aperiam. Rem quibusdam ad odio ea. Voluptatem veritatis quam atque vel non.\n\nVoluptatum officia repudiandae sit ipsum id aperiam. Ut rerum quidem harum eligendi beatae. Voluptas eveniet inventore et porro quis.', 934453, 21, 2662, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2007-02-14 19:50:41', '2022-06-07 09:38:50');
-INSERT INTO `products` VALUES (48, 2, 'Consectetur quod.', 'consectetur-quod.', 'Voluptas est consequatur ullam officiis cumque eum. Dolor placeat quod illum. Qui sed et voluptatibus at laudantium accusamus sequi. Nihil nihil aliquam vel sed id voluptates.\n\nAutem non quia harum quis. Quasi quam facere necessitatibus ducimus commodi rerum. Ullam qui sed maxime voluptatem nesciunt excepturi sunt.\n\nAutem cum sunt mollitia numquam. Nihil sit incidunt quo totam harum et. Quae magni ea consequatur debitis perferendis ex quis. Reiciendis et minima illo aut ut. Qui quos illo sapiente omnis qui in.\n\nTemporibus alias magnam voluptas perspiciatis vitae. Ea omnis quae in velit. Exercitationem est quasi blanditiis harum.\n\nLaborum aut debitis ullam libero. Amet quo voluptatem temporibus ut ratione. Eos quia dolor accusamus assumenda expedita.', 980757, 0, 2846, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1988-05-07 09:30:55', '2022-06-07 09:38:50');
-INSERT INTO `products` VALUES (49, 1, 'Numquam reprehenderit similique.', 'numquam-reprehenderit-similique.', 'Veritatis ullam fuga saepe delectus. Aliquam quo molestiae illo repellat aut velit. Dolor mollitia dolores dicta ut et ut iste.\n\nSit sapiente blanditiis ut. Facilis corporis aspernatur ratione provident quas libero. Consectetur incidunt et aut. Soluta esse sunt esse sed assumenda quisquam cupiditate. A maxime rerum voluptatem soluta.\n\nConsectetur nemo porro quisquam consectetur aliquam dolorem consectetur vel. Laboriosam sunt commodi repellat corrupti et. Maxime nisi omnis recusandae illo doloribus excepturi quis. Facere iste similique quo non deleniti aut quia.\n\nAperiam ea animi atque minima architecto fugit natus. Ut voluptas cum eum ducimus nisi provident. Explicabo dolor ut doloremque nostrum ut rerum. Perspiciatis deleniti quia officiis maiores molestiae possimus enim quae. Perspiciatis provident tempore dolorem ut aut qui explicabo consequuntur.\n\nSit quia autem quo velit sequi. Vel nisi placeat tempore sit voluptatum ad ipsum perferendis. Eligendi illo et voluptatem. Sit illum sed est mollitia.', 709746, 74, 2421, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1971-12-22 11:04:06', '2022-06-07 09:38:50');
-INSERT INTO `products` VALUES (50, 4, 'Iusto quo omnis temporibus delectus.', 'iusto-quo-omnis-temporibus-delectus.', 'Rerum reprehenderit quis cum voluptatum et facere. Aspernatur vero et ea in. Sapiente dolor nihil illo sed.\n\nEt soluta eos rerum voluptatem non quis. Molestias doloremque nemo nisi quos modi voluptas. Quis odit dolores reprehenderit aut dolores. Omnis sequi sit tempore est aut rerum ipsam.\n\nDolore impedit est et occaecati aut neque. Sit dolor iste qui quia sed quia vel officia. Suscipit qui alias dolorem debitis voluptatibus dolores. Vitae et corrupti dolorem corporis.\n\nDolorem velit et tenetur iste rerum. Quibusdam maiores laboriosam natus autem molestias. Aliquam odio aspernatur recusandae aut vero minus consequatur.\n\nVelit consequatur doloremque eius maxime dicta quidem. Incidunt aut doloribus reiciendis enim autem doloremque non voluptatum.', 332496, 57, 2470, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2005-03-19 02:56:00', '2022-06-07 09:38:50');
-INSERT INTO `products` VALUES (51, 3, 'Dicta error rem.', 'dicta-error-rem.', 'Minus et dolore non ducimus sint. Itaque provident dolor qui. Consequatur consectetur fugiat et ea eaque mollitia necessitatibus occaecati.\n\nUt temporibus earum magnam aut. Ut fugiat beatae occaecati expedita nihil atque dolore. Ea eligendi dignissimos voluptate fugit provident. Unde tempore eius vel ipsum assumenda omnis. Cupiditate voluptatem perferendis eos.\n\nAd aut ex modi dicta. Omnis voluptas est a repellendus cumque veritatis sed. Est dolores laborum omnis ipsa qui et qui.\n\nTempore eveniet sed tempora neque assumenda harum. At aut perferendis ex autem repellendus. Et nobis autem qui eos. Sunt ducimus ipsa quo ducimus earum.\n\nEos nam quibusdam vitae vel sit. Dolor voluptas magnam dolor accusamus dolor. Qui corrupti vitae tempore voluptas aut dicta facere. Enim vero enim doloremque quae.', 763918, 49, 2581, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1980-04-27 23:57:47', '2022-06-07 09:38:50');
-INSERT INTO `products` VALUES (52, 1, 'Voluptatem voluptatem eum nemo.', 'voluptatem-voluptatem-eum-nemo.', 'Hic soluta nesciunt et quia atque itaque mollitia. Illum consectetur non omnis consequatur magnam placeat. Tempore minima odio ut. Enim et qui in porro impedit beatae. Expedita dolorum totam sed qui.\n\nIpsum voluptate rerum sequi ut neque ab. Sapiente quidem quibusdam sequi consequatur. Id id quidem cumque molestiae. Id rerum aut omnis qui repellat quisquam voluptatem. Consectetur quae incidunt quia repellendus esse quaerat animi deserunt.\n\nVoluptatem corporis est et magni. Voluptas sit sed qui nobis et dolore libero.\n\nEsse id sunt velit voluptatem nemo et. Ut inventore aperiam ut cum rerum ducimus recusandae. Cupiditate est quas cumque tempore dolores ut.\n\nDeserunt eveniet quas libero amet itaque. Dolore saepe dolorem ratione quis odit. Facere voluptates rerum odio voluptates ut cum esse.', 276628, 13, 3582, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1988-01-18 14:19:21', '2022-06-07 09:38:50');
-INSERT INTO `products` VALUES (53, 1, 'Vitae et.', 'vitae-et.', 'Dicta tempora maiores iusto nam consectetur. Omnis quia assumenda inventore odio quasi hic quia. Dolor id officia est aut expedita beatae.\n\nAut et maiores laudantium distinctio qui adipisci laudantium. Qui ut voluptatum molestias asperiores non sit. Ipsam excepturi rerum dignissimos sapiente veritatis qui ratione neque.\n\nHarum blanditiis dolor perferendis asperiores asperiores. Dolor accusamus non autem voluptatem eos ut perspiciatis. Quis quisquam sit aspernatur maiores. Voluptatem consequatur et atque qui quae iusto commodi.\n\nIncidunt est omnis eum. Laboriosam ipsa est doloremque iusto cumque sapiente. Quis nisi veritatis quam beatae incidunt odio.\n\nVitae voluptas molestiae occaecati. Voluptatibus nam molestias nobis debitis. Unde consequatur quas similique rem qui quos voluptate qui. Similique beatae placeat odit veritatis dolor ipsam error.', 229420, 7, 3133, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1984-08-09 05:22:56', '2022-06-07 09:38:50');
-INSERT INTO `products` VALUES (54, 4, 'Est quia saepe.', 'est-quia-saepe.', 'Odit quia consectetur dolorem velit. Iste tenetur veritatis ea voluptas asperiores saepe. Quas voluptatem inventore magnam voluptas incidunt aut aut. Qui voluptatem sit laboriosam maiores.\n\nDolor nesciunt fugit dignissimos unde mollitia. Vel est debitis voluptas similique.\n\nSequi libero aspernatur odit et. Consequuntur vel impedit quod et eum est. Dignissimos quasi sit nulla rerum.\n\nAccusantium eveniet laborum dicta voluptatibus repudiandae. Modi quaerat quod at repudiandae sint earum. Nihil nobis quas nemo fugiat est ut.\n\nUllam reprehenderit dolore ab temporibus blanditiis. Dolore animi magni illo sint. Aspernatur optio suscipit aut magni ullam placeat praesentium.', 217297, 44, 4639, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1971-12-18 20:15:40', '2022-06-07 09:38:50');
-INSERT INTO `products` VALUES (55, 2, 'Quo quisquam illo voluptas.', 'quo-quisquam-illo-voluptas.', 'Illo qui est id impedit cumque. Et quis ea at qui. Nihil at voluptate nostrum molestias cum.\n\nLaudantium voluptatem ex alias quo soluta minus neque. Velit facilis non sit sed dolorem est. Sed et rerum aut eius accusamus blanditiis voluptatum.\n\nDolorem tempore aspernatur enim vitae. In sunt molestiae tempore quae numquam. Et necessitatibus expedita molestiae est. Iusto pariatur qui in commodi est.\n\nEt deserunt et quaerat quod. Sed sit modi vero doloribus neque autem. Fugiat dolorem saepe expedita id voluptatum qui excepturi. Consequatur illo vitae non odit. Placeat quis in ut atque reiciendis.\n\nBeatae reiciendis nesciunt rerum eaque fugiat ut quo. Debitis odit qui autem fuga nostrum tenetur ut. Asperiores omnis beatae ut libero suscipit earum. Sed est nesciunt voluptatem qui.', 426886, 26, 2861, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2000-06-12 22:01:10', '2022-06-07 09:38:50');
-INSERT INTO `products` VALUES (56, 3, 'Optio tempora sapiente.', 'optio-tempora-sapiente.', 'Magni nostrum accusamus ut qui eos. Corporis quos soluta delectus explicabo temporibus iusto vero. Numquam vel aut officia cum unde.\n\nLibero consequuntur voluptas dolores commodi beatae et qui ab. Ut et minima quis aspernatur. Quis quia nihil quam.\n\nEarum ut tempore et fugit officia consequatur. Laboriosam aut a nemo et quia similique qui.\n\nAspernatur unde aut perspiciatis repellat omnis. Sit sit voluptatem suscipit consequatur ratione consequuntur doloremque minus. Est ipsam dolore doloremque consequatur commodi modi et nulla. Magnam pariatur et vel velit enim aut consectetur.\n\nA ab id veniam ullam enim id. Fugit velit dolorem minima omnis maxime inventore. Inventore dolores at dolore eligendi. Officia omnis ut nobis dolorum voluptatibus.', 305630, 12, 3334, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1985-03-07 08:41:42', '2022-06-07 09:38:51');
-INSERT INTO `products` VALUES (57, 3, 'Voluptas voluptatem ullam dignissimos.', 'voluptas-voluptatem-ullam-dignissimos.', 'Asperiores non incidunt dolorem rerum rem rerum. Vel officiis possimus rerum numquam in est. Numquam eum eligendi vel optio maiores. Possimus consequuntur consequatur aut et at.\n\nVoluptas laboriosam autem esse similique. Numquam alias accusamus mollitia ipsa.\n\nNon quos aut dolores odio dolor ullam temporibus. Rerum voluptas et earum incidunt repellat unde dolor. Quibusdam sunt maiores nulla ut.\n\nVero fugit necessitatibus occaecati illo quod. Voluptatem est perferendis fuga debitis rerum. Praesentium laudantium sit nemo corporis explicabo aliquam.\n\nArchitecto qui aspernatur beatae. Repellendus quia neque ut recusandae.', 438077, 75, 3243, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2009-02-01 13:48:36', '2022-06-07 09:38:51');
-INSERT INTO `products` VALUES (58, 4, 'Enim omnis.', 'enim-omnis.', 'Consequuntur unde aut modi consequatur delectus. Sunt omnis id illo quos ipsum odio deserunt. Odit nulla id dolores ut quae fugit tenetur. Reiciendis earum possimus quaerat eaque officia totam ea dolor.\n\nRepudiandae nostrum saepe commodi nihil qui. Saepe rerum ipsam optio. Qui voluptatem corrupti vel sed iusto. Commodi cumque odit autem non.\n\nLaborum fugit vitae vitae ipsa velit. Dolores ut ut dicta delectus et reprehenderit error. Dolor amet maxime est nisi vero ea. Animi consequuntur cupiditate omnis earum laborum. Velit voluptates nobis qui beatae.\n\nNon saepe nemo corrupti mollitia. Sed sint quaerat vitae ad numquam est eius voluptas. Est necessitatibus animi deleniti et quis omnis et voluptas. Numquam delectus id quibusdam ratione ipsam ratione.\n\nIusto velit assumenda ab repellendus. Dignissimos maxime et voluptates maiores aut. Soluta sapiente minima iure ut tempora.', 648209, 27, 1409, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2001-05-01 20:35:55', '2022-06-07 09:38:51');
-INSERT INTO `products` VALUES (59, 2, 'Ullam aliquam vel iure.', 'ullam-aliquam-vel-iure.', 'Aut ab voluptatibus velit. Doloribus odit eum quis qui minus rerum. Ab consequuntur aliquam aliquam.\n\nEt est totam eveniet perspiciatis. Et mollitia qui est. Ea quo velit molestias autem consequatur. Ipsam maxime sit ut.\n\nDistinctio est similique alias. Ab est nisi quis expedita maiores. Facilis eius deleniti unde consequuntur molestiae ducimus. Voluptate aut iste quis rerum voluptatem.\n\nCum assumenda aliquid iure quibusdam sunt. Beatae mollitia odio rerum esse exercitationem sunt rerum. Aut sapiente aspernatur qui et.\n\nAut officiis maiores et natus vel. Deleniti inventore magni eos iure. Voluptas est harum neque rem.', 617523, 43, 1729, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2000-05-11 02:24:48', '2022-06-07 09:38:51');
-INSERT INTO `products` VALUES (60, 5, 'Quasi laudantium explicabo ea.', 'quasi-laudantium-explicabo-ea.', 'Autem enim cumque aut sed ipsum. Autem similique occaecati qui nesciunt voluptas voluptate et quo. Quia sed quidem quis iure non.\n\nNon in molestias illum. Non ipsam qui repellendus enim. Perferendis aut a eum omnis sed.\n\nAut voluptatum suscipit sit labore quam praesentium. Officia placeat nostrum possimus corrupti sequi quia. A aut ab quisquam nihil minus doloribus. Sapiente sit occaecati ducimus ut omnis totam quisquam.\n\nAtque officia labore itaque repellat voluptas est minima. Nihil optio tenetur voluptatibus id est. Temporibus et et voluptas a.\n\nDoloremque provident qui quibusdam non non et maiores. Est officia esse accusamus illo eos aliquam ad voluptate. Ratione aperiam esse consequatur soluta. Blanditiis iste provident aut ut vel. Vitae voluptatibus recusandae iste illo.', 193146, 21, 4874, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1976-04-16 06:21:01', '2022-06-07 09:38:51');
-INSERT INTO `products` VALUES (61, 2, 'Assumenda voluptatem hic magni.', 'assumenda-voluptatem-hic-magni.', 'Commodi sed non eaque consectetur voluptas. Libero animi aperiam sed neque. Sequi occaecati eum enim omnis. Vitae aut excepturi incidunt iusto aspernatur saepe soluta doloribus.\n\nQuisquam pariatur deleniti qui omnis voluptatem est explicabo. Amet sapiente ut nobis quo. Sunt dignissimos beatae saepe quod.\n\nMolestiae est sequi ipsum ut maxime tenetur quis. Molestiae sed aut architecto. Incidunt et corrupti quis quia.\n\nOccaecati ipsam quibusdam voluptatibus distinctio enim consectetur. Beatae magni molestiae quos hic vero praesentium quos. Sit rem mollitia sed beatae. Magnam nihil sit excepturi.\n\nVoluptas facere sit perferendis accusantium commodi. Aut est quaerat repudiandae odit fugiat quo. Itaque tempore dolore et ipsum. Tempora porro quia et omnis.', 759463, 48, 2109, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1991-03-27 12:36:21', '2022-06-07 09:38:51');
-INSERT INTO `products` VALUES (62, 1, 'Qui ea qui doloremque.', 'qui-ea-qui-doloremque.', 'Voluptatem tempore et aut optio maiores eius eum. Illum dignissimos odit adipisci aliquid suscipit fuga. Nihil atque libero exercitationem.\n\nTenetur cupiditate et reprehenderit itaque officiis sunt. Ipsa et numquam aut consequatur non sit tenetur.\n\nIn quae rem animi sed ut omnis qui maiores. In dolorem aliquid veritatis dolorem suscipit et ut. Corrupti illum tempora vel porro non alias quidem nisi.\n\nVoluptatem veritatis molestias neque nisi. Omnis et iste libero veniam. Est laborum accusantium nam et.\n\nIste suscipit repellendus et dolorem et blanditiis distinctio. Error voluptas voluptates et molestiae non. Magni beatae aut enim eos soluta eum.', 604969, 68, 4673, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1975-10-07 15:24:57', '2022-06-07 09:38:51');
-INSERT INTO `products` VALUES (63, 3, 'Quas voluptate.', 'quas-voluptate.', 'Rem sit eaque accusantium possimus. Blanditiis ipsam voluptatem quia qui minus et reiciendis. Id quod accusamus accusantium ipsa optio ullam.\n\nOfficiis excepturi quasi hic labore sint. Laborum dolor quis sit nihil iste delectus.\n\nAt et tempora fugiat unde. Et tempore officia voluptas voluptatem sed et deserunt est. Officia recusandae quam ut. Nihil assumenda vel aperiam totam optio qui.\n\nCorrupti voluptas et recusandae inventore rerum. Iusto inventore dolor repudiandae quia quisquam sunt. Voluptas ex voluptatem fuga in doloribus qui.\n\nCulpa cum accusantium dolor voluptatibus. Doloribus illum sed voluptatem sit. Quas et voluptatem nisi quod expedita et accusantium. Voluptatibus quia ut eum dicta laboriosam porro quam.', 980301, 72, 2256, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2007-04-17 18:55:06', '2022-06-07 09:38:51');
-INSERT INTO `products` VALUES (64, 4, 'Sint soluta eos.', 'sint-soluta-eos.', 'Nam qui explicabo praesentium officiis nam vero sint occaecati. Consectetur sit quae vel quo quibusdam et. Possimus eum consequatur neque voluptatem.\n\nUt explicabo accusamus maiores dolorem et blanditiis adipisci. Vero minima quo ea ut non aut dolores molestias. Ut sed ullam atque eum. Quasi nihil facilis ratione culpa et.\n\nExercitationem nesciunt in rerum ipsa iure dolore iure. Cumque enim necessitatibus nostrum dolores unde similique. Animi reprehenderit dolorem enim quisquam labore est.\n\nEos ducimus veritatis rem excepturi odit facere ut voluptates. Error minima cumque facere explicabo atque itaque.\n\nDelectus id qui voluptates mollitia et. Reprehenderit omnis soluta commodi occaecati. Suscipit quasi nihil modi corporis adipisci. Qui iusto aut rem.', 440394, 67, 1660, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1987-05-30 05:03:54', '2022-06-07 09:38:51');
-INSERT INTO `products` VALUES (65, 3, 'Et dolore atque.', 'et-dolore-atque.', 'Voluptatum et quia vel sit in. Modi perferendis reiciendis voluptatem aliquam libero. Non qui ut recusandae.\n\nCumque id culpa non aliquid sed aut. Voluptatem labore commodi sequi voluptatem. In vel fuga ipsam vel quibusdam modi. Assumenda et culpa aut est.\n\nVeritatis commodi voluptatem quis similique nostrum. Ut autem aut possimus omnis rerum saepe. Hic modi ipsum deserunt voluptatem. Blanditiis aliquid quas rem quis voluptas enim.\n\nUt libero qui quaerat quia perferendis ipsa repellat. Incidunt aut velit id et. Nostrum quas voluptatem ipsa cupiditate voluptate.\n\nAd rerum aut ut ullam voluptates neque cupiditate ipsam. Ex provident voluptatem consequatur sit et. In ut neque quo magnam.', 264033, 71, 4031, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2006-12-12 23:28:19', '2022-06-07 09:38:51');
-INSERT INTO `products` VALUES (66, 2, 'Eveniet officia velit.', 'eveniet-officia-velit.', 'Voluptates non minima a. Iure sed ex non est quia. Necessitatibus consequatur iure praesentium facere. Corrupti soluta error velit et ad dolores enim.\n\nCupiditate expedita et iste labore voluptas corporis. Nihil quibusdam ut et rerum adipisci ad suscipit. Porro ducimus perspiciatis quia necessitatibus doloremque odio eligendi non.\n\nOptio sit quia nisi tempora qui rem. At harum deserunt rerum delectus cum et iure non. Dolorem maxime quod qui est dolorum pariatur. Alias vel in veniam ipsum explicabo ex.\n\nPerferendis ea optio quia quis totam iusto aut necessitatibus. Omnis voluptas aut non quis modi et qui. Voluptatum amet illo eos praesentium eum quo veniam provident. Amet sunt quae aut optio ut. Neque quos saepe ipsa cupiditate quis optio qui sit.\n\nOmnis ducimus et eaque reiciendis. Fuga tempora iure illo et sed dignissimos iusto. Veniam aliquid distinctio in est cumque. Officia nemo voluptatem minus ut blanditiis accusantium qui. Eum velit nihil hic aut aut porro.', 723396, 34, 4552, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1981-01-09 18:48:54', '2022-06-07 09:38:51');
-INSERT INTO `products` VALUES (67, 1, 'Consequatur omnis ratione officiis.', 'consequatur-omnis-ratione-officiis.', 'Necessitatibus atque consectetur unde id magni cumque. Repudiandae sunt ex ut excepturi. Facere unde voluptas aut illum perspiciatis.\n\nVeritatis quaerat eos et eveniet praesentium. Dignissimos et provident maxime rerum mollitia ab. Ad fuga assumenda et perspiciatis architecto commodi dicta.\n\nAut ad et et facere ut velit molestiae. Non non quisquam culpa. Excepturi iste aperiam esse et ut eveniet occaecati.\n\nExpedita tenetur ducimus iste sapiente omnis. Aut mollitia ducimus id perspiciatis dolorum qui. Repudiandae a quis et quasi. Facere mollitia perspiciatis et commodi aut.\n\nEnim quis sit ut deleniti. Sed molestias dicta dolore eos harum dolorem non. Eaque cupiditate iure culpa repudiandae.', 503962, 25, 1247, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1995-11-02 03:37:25', '2022-06-07 09:38:51');
-INSERT INTO `products` VALUES (68, 4, 'Voluptatibus ipsum voluptatem explicabo.', 'voluptatibus-ipsum-voluptatem-explicabo.', 'Voluptate ad totam vel quidem. Nisi accusantium quos optio qui totam. Illo itaque aut inventore. Unde voluptatum similique voluptatem soluta cupiditate voluptatum magni.\n\nDolores voluptates eos officiis alias consequatur maiores. Quidem aperiam dolorem ab placeat quis. Ut voluptas quam occaecati dolor veritatis.\n\nAliquid dolores repellat hic est voluptatum. Et quod rerum aut voluptatem quos aut adipisci. Deserunt esse eum nesciunt quae.\n\nDignissimos perferendis ab repudiandae vitae pariatur. At quidem et ducimus enim enim et. Id id quis ipsam voluptate veniam.\n\nEt voluptatibus corporis quia qui consequatur assumenda. Quas recusandae fugiat et quis enim voluptate. Facilis consequatur est et veniam iure eius nulla quibusdam.', 198995, 25, 1777, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2018-07-16 04:49:56', '2022-06-07 09:38:51');
-INSERT INTO `products` VALUES (69, 2, 'Quia quis nostrum.', 'quia-quis-nostrum.', 'Nihil maxime ea a. Quam ut culpa nulla neque nam. Est accusantium aut dolore voluptas quo.\n\nNobis recusandae illum autem vel. Eos reprehenderit voluptates rem tenetur voluptatem distinctio ea. Eum accusantium nobis repudiandae voluptatem. Repellat sunt eligendi odit qui eius atque. Sit aut occaecati qui quo doloremque perferendis sint.\n\nFacere mollitia facilis vero. Mollitia necessitatibus et aut ut tenetur non. Aliquid aut ut nemo doloremque nihil et quis.\n\nSunt a alias corporis non consequatur rerum. Consequatur odio aut nihil iure et. Architecto doloribus aut excepturi.\n\nPerspiciatis vitae libero autem. Doloremque ducimus ut et. Rerum quia corporis sapiente. Quam quis recusandae quisquam incidunt perferendis qui blanditiis dolore.', 624214, 62, 4842, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2007-11-25 01:39:07', '2022-06-07 09:38:51');
-INSERT INTO `products` VALUES (70, 3, 'Est maxime omnis.', 'est-maxime-omnis.', 'Distinctio laborum doloremque similique et sapiente. Ullam veniam et laborum et. Dolorem dolores deleniti atque voluptatem.\n\nQuo quae aut qui suscipit veniam iure aut et. Velit similique praesentium quibusdam autem ut quis. Quod harum esse aut corrupti ut nulla dolores. Distinctio eum nihil tempore commodi tempora consequatur corrupti.\n\nUllam ut expedita voluptas aut totam sit. Et distinctio ex repudiandae sed. Doloremque exercitationem deserunt omnis maxime. Dicta quaerat dolores ipsa dolor fuga.\n\nLabore magnam dolores et aut. Vel deserunt qui accusantium voluptatum. In officia sit doloremque ea veritatis.\n\nCommodi odio veniam iusto ut nam. Ad quis cupiditate omnis omnis ipsum. Aperiam aut ullam ut adipisci eaque aut numquam.', 258835, 62, 1946, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1999-12-06 13:30:06', '2022-06-07 09:38:51');
-INSERT INTO `products` VALUES (71, 3, 'Deleniti suscipit eum unde asperiores.', 'deleniti-suscipit-eum-unde-asperiores.', 'Vero minus ea ut minima. Fuga eos consequatur dolores quia. Assumenda perspiciatis sit amet est. Unde sed quas explicabo eum iure.\n\nQuia ipsam alias velit alias aut dolores. Cupiditate dolorum suscipit qui quaerat quia dolor aut neque. Dolorem doloremque voluptatem rerum at aut deleniti fugit.\n\nExercitationem sunt non eos totam. Laborum aut ea quidem accusamus laboriosam. Officia aperiam voluptatibus aut. Magni qui rerum architecto omnis culpa ea.\n\nQuia quas dignissimos laudantium accusamus. Rerum tenetur dolores dolores voluptas. Quia nihil enim aut et autem laboriosam. Nesciunt beatae ut voluptate unde nesciunt nihil expedita. Quaerat cumque necessitatibus possimus sed qui et.\n\nCum omnis ratione rerum nulla mollitia voluptates provident. Excepturi incidunt fugiat vitae deleniti reiciendis qui omnis. Eveniet et animi dolorem officia velit qui. Ipsam qui molestiae assumenda rerum repellat voluptatem impedit aut.', 52244, 40, 2337, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1995-04-13 13:38:42', '2022-06-07 09:38:51');
-INSERT INTO `products` VALUES (72, 3, 'Illo temporibus distinctio et.', 'illo-temporibus-distinctio-et.', 'Repudiandae id repudiandae similique quam dolorem. Eaque voluptatem ab qui sequi optio ipsum accusamus. Id aperiam sed dolor ea quas. Optio qui et qui ut et iste. Quia voluptatibus molestiae et eum.\n\nAd impedit ut autem sit saepe. Voluptatem vel iusto est reiciendis. Tempora unde illum fugit eius omnis quibusdam similique.\n\nVoluptatum recusandae dolor reprehenderit temporibus eveniet. Debitis voluptatem saepe voluptatibus praesentium qui. Corrupti iure cum numquam.\n\nEos rerum aliquam aspernatur dolorem voluptatem. Ut est optio illum voluptas consequatur blanditiis fugiat ipsam. Odio molestiae necessitatibus ut sed id adipisci expedita.\n\nSint voluptas ut fugit. Sed accusantium qui nobis quod. Rerum quam expedita in et excepturi earum necessitatibus et. Adipisci eos id itaque accusamus reprehenderit non.', 934960, 24, 1064, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2017-05-22 20:34:29', '2022-06-07 09:38:51');
-INSERT INTO `products` VALUES (73, 5, 'Et harum omnis.', 'et-harum-omnis.', 'Repellendus fugiat consectetur aperiam qui qui tenetur. Praesentium natus tenetur consequatur numquam beatae pariatur. Beatae odio optio molestias eius. Velit odio qui doloribus eum repellat amet corporis.\n\nTemporibus explicabo ipsa aut non. A fuga natus commodi sapiente iure. Consequuntur neque commodi excepturi quisquam provident aliquid exercitationem. Voluptatibus et in quia ut ipsam incidunt.\n\nQuasi sit vel veniam suscipit. Temporibus qui consequatur maxime earum velit aut. Est et perferendis nam sint.\n\nAut corrupti sequi blanditiis molestiae. Aspernatur quidem nostrum quia tempora asperiores est eveniet. Veniam quaerat velit earum quibusdam sequi voluptatem enim voluptatem.\n\nAsperiores aut sit sed et nobis qui nihil. Nam odit in ut nobis voluptas quo quasi explicabo. Vel et ducimus sit velit optio iste. Minus harum amet culpa qui.', 850937, 54, 2380, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2019-01-09 17:22:27', '2022-06-07 09:38:51');
-INSERT INTO `products` VALUES (74, 5, 'In quod consectetur rerum.', 'in-quod-consectetur-rerum.', 'Quasi voluptatem molestias debitis debitis soluta esse est. Dolorem aut quasi voluptas corrupti consequuntur vel id. Culpa quo autem nihil laborum. Ipsa iure dolor eum alias.\n\nQuaerat sit inventore ea labore. Ullam dolor sunt ducimus nihil unde quo.\n\nDolores voluptatem et voluptatibus voluptas iure non. Qui sint laborum deserunt eos expedita expedita odio repellendus. Deserunt qui quibusdam non possimus rem rerum eaque. Libero rerum est vitae omnis.\n\nQuidem consectetur non odio quis sed assumenda. Vel ut impedit aliquam error nesciunt ut.\n\nInventore et inventore dolore inventore eius corrupti at. Asperiores fugit sint et ea recusandae beatae placeat aut. In in debitis at ut. Et eos molestiae sed iste.', 104817, 36, 2177, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2019-03-16 00:54:24', '2022-06-07 09:38:51');
-INSERT INTO `products` VALUES (75, 1, 'Voluptate consequatur eius natus.', 'voluptate-consequatur-eius-natus.', 'Molestiae consequatur qui excepturi quam eligendi alias. Porro sunt non saepe eum.\n\nIure et praesentium dignissimos. Cupiditate deserunt alias voluptatem fugit. Quia ea ex mollitia veritatis.\n\nOdio qui unde quos at deleniti est aut. Dolor magni numquam praesentium ex accusantium. Dolorem eius placeat earum ut ad.\n\nMolestiae vel doloribus ex maxime. Consequatur culpa eum quas numquam. Aliquid nam molestiae corrupti dignissimos praesentium fuga enim id. Est nihil expedita quis dolor aut.\n\nDolores sunt cum similique neque. Omnis enim sequi doloribus sint. Quasi omnis rerum est et repudiandae. Et occaecati consectetur illum totam et quis culpa.', 363975, 10, 4048, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1989-12-21 13:58:59', '2022-06-07 09:38:51');
-INSERT INTO `products` VALUES (76, 1, 'Dolorem eum repellendus.', 'dolorem-eum-repellendus.', 'Enim occaecati et rerum enim error. Sequi dolore quisquam possimus tempora et sequi aperiam. Aspernatur repellendus ea numquam molestiae. Maiores aspernatur natus facilis debitis eius quis assumenda. Cumque cupiditate sit quia architecto laboriosam deserunt culpa.\n\nA et fugit praesentium vel officia consequatur qui. Tenetur porro ipsa aut consequatur aspernatur qui. Minima odit non numquam maiores ipsam pariatur vel.\n\nAtque magni temporibus perferendis molestiae. Nesciunt velit expedita aliquam nihil quod illum. Accusamus sunt perspiciatis tenetur quod quod est dolor. Accusamus non rerum aut ut pariatur.\n\nConsequuntur dolor est quaerat esse fuga quia voluptas. Provident ea voluptate rerum dicta sed atque. Enim et aspernatur vel consequatur libero molestias eum. Aut cupiditate non eligendi numquam repellendus recusandae fugiat.\n\nEt praesentium eaque aliquam sit voluptatibus aut delectus. Fuga aut suscipit aut. Quod adipisci praesentium ut et commodi.', 695697, 20, 2132, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1970-04-22 06:53:48', '2022-06-07 09:38:51');
-INSERT INTO `products` VALUES (77, 2, 'Et corrupti error repudiandae.', 'et-corrupti-error-repudiandae.', 'Ipsam et neque perferendis. Nemo aperiam ex illum rem omnis delectus.\n\nNobis est expedita nihil sed possimus aut. Asperiores natus dolorem deleniti non. Accusantium libero quidem ad quia quia molestias voluptatem et. Asperiores sint molestiae asperiores cupiditate et.\n\nBlanditiis sunt nihil possimus recusandae unde architecto libero. Mollitia sit perspiciatis non porro autem in reprehenderit. Nihil sed ipsam aut. Distinctio odit sed fugit magni dignissimos molestias laboriosam.\n\nSimilique commodi assumenda impedit est eum rerum ut. Debitis nam eligendi modi perferendis dolor quae dolores. Commodi repudiandae veritatis aut ratione sint possimus. Sint iure ducimus aut modi dolorem quidem amet.\n\nAsperiores culpa perspiciatis est mollitia. Et tempore aut voluptas eius optio. Nesciunt ex omnis sed. Est nostrum in nam quasi ut aut.', 476817, 69, 1401, 97, 'product.jpg', 'product.jpg', 'product.jpg', 3, '2020-01-14 03:43:17', '2022-06-07 09:38:52');
-INSERT INTO `products` VALUES (78, 4, 'Officia aut fuga natus aut.', 'officia-aut-fuga-natus-aut.', 'Distinctio dignissimos aut vel. Sint voluptatibus facilis ipsa aut autem vel ut. Qui et ut cumque officia blanditiis. Vel ut fugiat hic consequatur. Repellendus assumenda beatae itaque ratione libero.\n\nAccusantium nostrum quo laboriosam omnis hic nihil. Velit similique esse et voluptatibus. A commodi necessitatibus quibusdam dolor commodi nemo quas molestiae.\n\nOdio quia itaque autem. Expedita consequatur enim veniam eveniet sunt suscipit possimus. Consequatur delectus voluptatibus consequatur blanditiis dolorum qui est. Mollitia doloremque odio et qui quasi qui quidem.\n\nMolestiae nam et est aut. Fuga corporis libero numquam omnis. Quasi quae doloribus voluptatum debitis eos facilis quis. Excepturi nesciunt soluta et.\n\nBlanditiis explicabo laborum facere laboriosam recusandae autem ducimus. Et fugit praesentium quas veniam. Tempore nam sed assumenda odit voluptatum. Voluptatibus voluptatem perspiciatis asperiores dolorem ut dignissimos commodi.', 85529, 68, 3926, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2008-04-30 06:52:37', '2022-06-07 09:38:52');
-INSERT INTO `products` VALUES (79, 4, 'Rerum illo aliquam ut.', 'rerum-illo-aliquam-ut.', 'Repellat consequuntur sit provident inventore harum nulla. Voluptatem minus nemo debitis nihil. Minima fuga omnis et voluptatem.\n\nNatus eum consequatur beatae. Magnam et quibusdam libero amet ipsa porro beatae. Quis voluptatem assumenda nemo commodi.\n\nUt fuga nesciunt ullam non. Explicabo optio dolore molestias similique. Voluptas aut eum est ducimus.\n\nUt quis rerum iste qui nihil ad est. Est saepe quisquam eligendi beatae libero inventore dolor doloremque.\n\nSapiente et suscipit architecto accusamus. Ut unde voluptates earum veniam quo. Ipsam odit optio maiores ut nisi qui. Est magni sed unde voluptas.', 174310, 6, 2494, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1981-09-18 06:41:25', '2022-06-07 09:38:52');
-INSERT INTO `products` VALUES (80, 2, 'Veritatis rem nihil.', 'veritatis-rem-nihil.', 'Nam quos facilis libero quae aliquid dolorem. Culpa omnis in voluptates non quis. Est nulla sunt aut eveniet.\n\nEt perferendis et sunt laboriosam dolorem sint. Qui maiores neque odit. Natus harum voluptas placeat et voluptas.\n\nNon ab inventore eligendi fugit qui. Rerum impedit vel quos iusto natus. Qui itaque et eius. Accusantium et excepturi quos nihil.\n\nUt cumque minus in rerum. Fugit quibusdam corporis impedit sunt. Sint sed hic adipisci expedita nemo voluptatum sed. Rerum cumque magni accusantium. Perspiciatis quod eveniet saepe et ut voluptas.\n\nExplicabo nostrum voluptatem quo cum. Laboriosam modi nihil et a libero. Necessitatibus repudiandae provident eos est sapiente sint qui.', 39137, 70, 2910, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2010-02-17 00:43:13', '2022-06-07 09:38:52');
-INSERT INTO `products` VALUES (81, 1, 'Nihil optio dolor.', 'nihil-optio-dolor.', 'Dolor ex qui qui quia vel dolores at. Culpa veniam expedita ut. Voluptatem ea numquam ut rerum atque debitis vitae voluptatibus. Iste quo voluptas non qui beatae quibusdam est.\n\nRem ad sed non deserunt veritatis. Et non consequatur molestiae nobis ullam ullam sed eveniet. Nostrum qui nostrum adipisci rem accusamus. Architecto reprehenderit porro inventore tempora numquam eos aut.\n\nDicta aliquam eum nemo est. Dolores magni et et. Et tempora est quasi vitae fuga. Ab et dolores at neque a eaque.\n\nExcepturi et consequatur ullam id. Dolore et tempore placeat. Reiciendis sit nam voluptatem adipisci hic.\n\nUt maxime nemo in vel laborum a dolore aut. Exercitationem et nostrum quibusdam. Quia nam quo non et explicabo perferendis. Inventore sapiente id quis quis dolores optio.', 122293, 70, 4667, 95, 'product.jpg', 'product.jpg', 'product.jpg', 5, '2017-07-24 10:51:57', '2022-06-07 09:38:52');
-INSERT INTO `products` VALUES (82, 5, 'Asperiores perspiciatis in.', 'asperiores-perspiciatis-in.', 'Quis eius voluptas dolorem at. Sapiente sed quod aut dolor dolores voluptatum perferendis. Praesentium at aut vel optio.\n\nEos qui quod illo est ea. Perspiciatis numquam velit et unde distinctio. Architecto voluptates quo rerum cum autem. Aut qui consequatur consequuntur ducimus.\n\nQui voluptatem optio autem labore laudantium aut aut. Autem sed et vel qui. Libero occaecati aspernatur in autem ut qui.\n\nOmnis voluptas quidem et rerum sed. Autem id quo omnis magnam. A at doloremque eos. Quibusdam aut consequatur sunt similique ratione velit autem. Vel voluptatem est odit quaerat hic.\n\nRerum eum magni expedita accusamus quis dolores ut dicta. Aut consequatur ab enim est. Accusantium placeat quia soluta enim magni a.', 188277, 39, 2142, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2013-12-15 23:55:16', '2022-06-07 09:38:52');
-INSERT INTO `products` VALUES (83, 2, 'Corrupti sit eum qui.', 'corrupti-sit-eum-qui.', 'Corrupti veniam voluptates voluptates sit quia quisquam. Est non veniam quo numquam inventore. Quas et corrupti dolor rerum possimus. Voluptatem sint voluptatem consequatur.\n\nOdit reiciendis laudantium quo autem. Consequatur praesentium a veniam. Ut velit recusandae quam quas quam ut velit.\n\nMagni est rerum sapiente. Blanditiis non accusamus numquam molestiae. Ea iste dolorem eaque. Pariatur sint consequatur eum.\n\nEum dolorem totam ullam. Quasi sit sit eaque quia debitis rerum labore. Vitae ut deserunt dignissimos deserunt.\n\nAut laborum natus odio voluptatem. Labore tenetur possimus consequatur sed. Voluptate qui natus ab temporibus facere vel.', 776645, 20, 1432, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2004-05-11 16:16:59', '2022-06-07 09:38:52');
-INSERT INTO `products` VALUES (84, 2, 'Est quibusdam aspernatur consectetur.', 'est-quibusdam-aspernatur-consectetur.', 'Recusandae sit aliquid ut ullam quisquam ipsum. Repellendus explicabo molestiae odit natus dicta voluptatibus. Non accusantium dolor quia quia qui odio qui.\n\nVoluptatum quis natus repellendus harum. Itaque architecto deserunt fugiat. Dolores dolor ab deserunt repellat quo debitis velit incidunt.\n\nSapiente nemo non in laborum laudantium illo. Vel omnis aliquid hic aut. Suscipit sed et dolores dolorem incidunt amet eius. Aut dolore accusantium accusantium et hic cumque atque.\n\nVel accusamus libero ut voluptatem minima praesentium. Aliquid nostrum enim commodi iusto et.\n\nDolorem corrupti deserunt ea ut eaque officia nostrum. Omnis rem ipsam omnis minima et explicabo quis. Ipsum et omnis magnam voluptate blanditiis.', 78652, 18, 4396, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2006-10-31 14:36:34', '2022-06-07 09:38:52');
-INSERT INTO `products` VALUES (85, 5, 'Impedit dolores sint laboriosam.', 'impedit-dolores-sint-laboriosam.', 'Provident saepe quo consectetur veritatis vero maxime illo. Voluptates quod qui nihil voluptatem ut cum. Nostrum dolorum doloremque est quis in voluptas aut. Praesentium qui sit dolores iusto.\n\nDoloremque autem eveniet qui ullam voluptates unde qui. Odit ullam consequatur natus ea veritatis modi. Quis aut est quia odit. Sed quia at ut veniam.\n\nDolores atque voluptatibus eos aut. Ea natus totam eius ea autem. Qui omnis non magni eaque.\n\nProvident magnam sit laudantium ad molestiae quo voluptate incidunt. Neque voluptas nihil et labore. A earum hic aut. Eos maiores laudantium voluptatem dolorem molestias occaecati dignissimos.\n\nNihil est dolorum veritatis sapiente impedit temporibus vitae. Et amet perferendis magni nesciunt saepe illo. Accusantium a nesciunt sed ab numquam dolorem. Qui suscipit voluptatem commodi ipsum. Dolor eaque inventore id repellat omnis.', 931158, 74, 1364, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2019-04-16 10:57:31', '2022-06-07 09:38:52');
-INSERT INTO `products` VALUES (86, 3, 'Est minus.', 'est-minus.', 'Qui nostrum voluptatum non ea. Id optio qui nihil distinctio iusto quia dolorem voluptas. Beatae deserunt atque cumque praesentium aut commodi sunt saepe.\n\nUt doloremque temporibus fuga odit architecto ut. Illo ut commodi voluptatem aliquid. Voluptas quod praesentium expedita omnis.\n\nEos qui voluptas eum assumenda odio. Autem nihil culpa doloremque voluptatum reprehenderit reprehenderit et. Et aut in explicabo quaerat ipsam et. Adipisci ad libero assumenda.\n\nIncidunt quasi unde consequuntur sequi molestiae est veritatis quis. Eum accusamus nisi rerum enim nam. Est quisquam tempora deserunt est doloribus. Perferendis repellendus quis commodi amet reprehenderit fugit.\n\nDolores possimus rem qui quia consectetur ea excepturi. Ullam voluptatem est repellendus amet. Ullam earum quo et ea necessitatibus. Voluptatem dolorem accusamus repellendus iure.', 678409, 45, 4256, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2014-05-12 23:53:59', '2022-06-07 09:38:52');
-INSERT INTO `products` VALUES (87, 3, 'Et quo et est.', 'et-quo-et-est.', 'Debitis et voluptatem eum ea deserunt est qui. Velit iste sint libero et officia nihil fuga. Quis necessitatibus minima perspiciatis et molestiae cumque itaque. Ut et facilis atque quo rem.\n\nDeleniti aut voluptatum in nesciunt vel. Necessitatibus ut mollitia adipisci omnis eius. Ad voluptas voluptatem rerum doloribus.\n\nMaiores enim ut voluptatem inventore. Neque asperiores distinctio est adipisci pariatur aliquid earum. Sit incidunt reprehenderit repudiandae rerum quia nostrum. Deleniti repudiandae est sunt hic quia enim dignissimos.\n\nAut sed numquam dignissimos ut voluptatibus. Molestiae rerum quibusdam et dolorem id sed enim ipsam. Eveniet qui repellendus harum nihil rem.\n\nNostrum ut consequuntur rem sed. Reprehenderit ad et molestias vel quaerat. Cumque rerum dolor sit temporibus est enim eius. In sunt fugiat quasi cum quaerat.', 957003, 17, 3103, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1980-09-23 08:25:26', '2022-06-07 09:38:52');
-INSERT INTO `products` VALUES (88, 1, 'Amet et.', 'amet-et.', 'Non nisi rem voluptates iure in aut. Laborum deleniti animi itaque neque. Sed velit nostrum recusandae adipisci et et. Officia iste porro occaecati recusandae. Ipsam rerum aut distinctio.\n\nFacere impedit non deleniti et corporis eos velit. Sunt quo culpa cum. Consequatur voluptatem laboriosam nulla aut quam.\n\nVoluptate quisquam ea asperiores quibusdam est corrupti. Vel qui et ratione eius repudiandae deserunt quidem autem. Vel corporis enim enim accusantium illum et. Ab ea molestiae deserunt et magnam.\n\nCulpa dolor mollitia optio. Consequatur repellat quam nostrum et nobis necessitatibus. Itaque laborum esse labore voluptatem et et magni. Rem a ex consequatur accusamus quaerat sit iste.\n\nQuasi eum aliquam quam odio. Asperiores atque fuga est in dolorem quam. Harum molestiae in quia omnis asperiores. Sint qui ipsam vel veritatis nemo.', 106284, 70, 3961, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1973-01-18 13:10:36', '2022-06-07 09:38:52');
-INSERT INTO `products` VALUES (89, 3, 'Voluptates asperiores impedit.', 'voluptates-asperiores-impedit.', 'Qui ea et voluptas sunt dolor pariatur ducimus. Ratione tenetur nesciunt molestiae quas et quia. Et iusto et voluptas sint non.\n\nQuia sint aut recusandae aperiam sit ducimus sed. Adipisci nihil molestiae dolor fugit autem debitis sed. Neque ex eum ex sint fuga.\n\nEst est voluptatem cumque ipsam. Vitae repellat modi ab aliquam. Maxime exercitationem quasi consectetur eligendi esse dolorum sit. Est earum et enim temporibus.\n\nAut enim sunt distinctio amet perspiciatis amet. Nesciunt aut dolorum vel aut saepe. Mollitia dolores doloremque quas commodi.\n\nReiciendis nulla sit natus dolore ut ut blanditiis. Quae ut in rerum autem qui libero molestiae. Omnis occaecati asperiores odit recusandae ut qui repellat. Ratione porro eaque culpa mollitia dicta dolorem est.', 397270, 3, 3890, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1971-07-09 13:27:43', '2022-06-07 09:38:52');
-INSERT INTO `products` VALUES (90, 2, 'Et et neque repellendus.', 'et-et-neque-repellendus.', 'Qui eligendi quam animi praesentium. Provident quidem reprehenderit dicta nesciunt ut sunt repellat. Aut nulla fugiat harum possimus.\n\nUt autem expedita ut rem quis ut. Quo ipsam eius animi nihil quam voluptates qui doloremque. Est consequatur iure dolore quae aliquam dolores corrupti. Rerum eum inventore officia ut voluptas et omnis.\n\nEt voluptatem placeat similique atque rem provident et. Vel eum sed voluptas omnis omnis quia. Non sapiente dolorem qui et. Quia pariatur hic velit esse.\n\nVelit nostrum voluptates vel magni est. Rem aut veritatis aut voluptas voluptatem blanditiis rerum. Delectus quo libero consequatur distinctio quis autem omnis porro.\n\nMolestias est et natus ut laudantium quidem. Asperiores voluptatem qui officia dolorem. Quas at aperiam qui facilis. Quaerat debitis doloremque in vel omnis doloribus.', 457295, 24, 4030, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2005-02-04 14:46:15', '2022-06-07 09:38:52');
-INSERT INTO `products` VALUES (91, 1, 'Dolorem voluptate voluptatem dolores.', 'dolorem-voluptate-voluptatem-dolores.', 'Rerum voluptatem totam dolorum quia necessitatibus. Facilis consequuntur sed ea asperiores. Sit ipsum ratione assumenda unde.\n\nDolor corrupti ea in accusantium suscipit quia voluptate. Aut officia ut numquam eligendi eligendi cum voluptas voluptatem. Libero in fugit optio consequatur blanditiis similique. Quia quisquam voluptas qui facere sunt.\n\nDolores aut quis qui qui sit. Ratione eveniet soluta dolorem. Eius at molestias impedit ut non libero.\n\nNemo neque dolores maiores et fugiat laudantium et non. Dolorem tempore delectus est in est. Doloribus rerum doloribus consequatur.\n\nQuibusdam libero sint molestiae illo nihil aliquam. Incidunt delectus eaque harum consectetur eum. Fugit officiis pariatur fuga quibusdam dolorem et voluptatum.', 440591, 68, 1439, 97, 'product.jpg', 'product.jpg', 'product.jpg', 3, '2018-03-19 06:03:33', '2022-06-07 09:38:52');
-INSERT INTO `products` VALUES (92, 5, 'Tempora porro rerum.', 'tempora-porro-rerum.', 'Voluptatem voluptatum amet voluptas dicta distinctio id aut. Non amet enim quis quo dolorem unde officia. Eius natus veniam neque temporibus a. Dolorem at quas consequatur ea qui id.\n\nQuo totam repudiandae consectetur commodi minima quidem quia. Voluptas corporis voluptas expedita eveniet amet sunt laboriosam. Consequatur sint tempore animi magnam est. Illum velit odio doloremque dignissimos quis quis.\n\nSed quis consequatur et quod exercitationem. Alias voluptatem illo sit autem explicabo eum facere. Minus illum sunt praesentium rem reiciendis id voluptas. Quis omnis quaerat tempora expedita accusantium sit.\n\nError molestiae delectus magnam perspiciatis. Et sequi quas aliquam rerum quae vero vitae et. Voluptates est maxime id rerum sint accusamus ut. Eos nulla est quia ut sit.\n\nNemo distinctio dolorem quis quia eveniet voluptatem veniam. Praesentium dolor exercitationem id dolorem quas. Fugiat aut quia corrupti voluptatum totam. Dolore non dolorem sequi voluptas fuga rem repellat facere.', 333096, 31, 1451, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1989-06-17 12:51:55', '2022-06-07 09:38:52');
-INSERT INTO `products` VALUES (93, 4, 'Aut harum cum.', 'aut-harum-cum.', 'Non et sint qui illum. Praesentium rem perspiciatis minima et tenetur voluptates vel. Velit ut ad adipisci mollitia.\n\nA fuga eligendi qui in sit soluta. Deleniti officiis nihil culpa impedit ratione. Omnis rerum voluptatem quo. Consequuntur et voluptatum eaque ut.\n\nAut dolor unde sit quam non. Vel et id voluptatem adipisci omnis iste. Nulla et dolorum ratione. Enim esse pariatur fuga illo laborum exercitationem.\n\nDolores quae blanditiis ut hic pariatur. Vero est officia qui maxime adipisci eum qui. In quisquam est nihil. Architecto dolores aut earum eos ut nihil. Minima natus vel nemo non.\n\nPerferendis amet numquam mollitia quas vero provident temporibus. Non autem et sunt quos.', 118229, 51, 1315, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1998-04-21 18:22:12', '2022-06-07 09:38:52');
-INSERT INTO `products` VALUES (94, 3, 'Totam quo voluptate.', 'totam-quo-voluptate.', 'Sapiente nesciunt id repellendus et facere porro. Et est ipsa quo ipsum. Illum accusantium accusamus quas facere non id in.\n\nAut magnam quia soluta recusandae sit. Est vero rerum optio maxime ducimus ipsam accusantium. Ipsam ipsum iure et hic magni reprehenderit rerum aut. Voluptas doloremque culpa fugiat placeat quis maiores autem labore.\n\nEum quos dolore ex adipisci quaerat. Maxime ullam eius dolores expedita voluptatem pariatur voluptatem.\n\nImpedit in tenetur iure non. Quia eum incidunt aliquid recusandae corrupti eum.\n\nRem error consequatur earum sint porro. Explicabo animi eaque et eius consequatur. Est voluptas voluptas distinctio doloribus saepe dolorem. Minus quia rerum mollitia.', 973072, 31, 1059, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2004-10-12 03:32:55', '2022-06-07 09:38:52');
-INSERT INTO `products` VALUES (95, 1, 'Odio quia quia id.', 'odio-quia-quia-id.', 'Fugiat neque natus est asperiores. Et earum voluptatibus necessitatibus quas quasi ipsum. Aut quis aliquam qui ut est iste.\n\nImpedit ab facere libero distinctio. Eaque vel adipisci in. Tempora doloribus corporis temporibus aliquid quis.\n\nEligendi aut nostrum et assumenda totam. Ea sed autem aut doloribus asperiores. Voluptatibus accusamus vel iusto perspiciatis exercitationem ut consequuntur. Possimus aliquid maxime dolorum suscipit laudantium. Magni sed nihil eveniet corporis officia labore necessitatibus.\n\nOdio doloribus iure alias molestias labore deleniti. Beatae aut in quae eos id et inventore. Rerum voluptatem veritatis iusto.\n\nHic alias doloribus accusamus laudantium quisquam voluptates cupiditate. Qui ut eveniet numquam voluptate odit enim aut. Expedita molestias rerum voluptates quaerat.', 962457, 10, 2064, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2003-03-08 10:00:29', '2022-06-07 09:38:52');
-INSERT INTO `products` VALUES (96, 4, 'Quaerat occaecati harum quia ratione.', 'quaerat-occaecati-harum-quia-ratione.', 'Culpa voluptatem sit aut aut. Odit debitis cum non consectetur veniam. Modi incidunt aut ut et porro est. Consequatur dignissimos corrupti et doloribus numquam.\n\nUt magni placeat dolorem sed sunt. Quae sit nemo eos sed ut quas. Aliquid sint ut distinctio consequuntur et quod tempore. Explicabo nihil rem praesentium consectetur quo nisi qui. Optio dolores perferendis magni repellendus et illum reiciendis.\n\nItaque tenetur est eos sapiente nulla est. Praesentium expedita velit ut molestias. Illo rerum inventore voluptatem officiis laborum et cumque tempora. Repellendus ut nihil laboriosam nisi ducimus.\n\nNemo facere est modi est et mollitia ut. Recusandae qui consequuntur quo distinctio totam est qui. Quidem laudantium illo qui ratione debitis fugiat. Ut eum impedit voluptatem perspiciatis.\n\nSint deserunt totam dolorem animi laborum eaque vel. Tempore quia tempore ratione quisquam. Molestiae debitis repellat beatae qui ratione similique dolorum. Excepturi et natus enim numquam fuga nihil.', 933135, 33, 1039, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1999-12-02 08:22:39', '2022-06-07 09:38:52');
-INSERT INTO `products` VALUES (97, 3, 'Neque inventore sunt.', 'neque-inventore-sunt.', 'Quam placeat illum ab ratione consequatur velit vel. Repellendus quis consequatur et quisquam sed unde sed. Adipisci eveniet porro voluptatem perferendis.\n\nQui voluptatem minima ea natus eum vel. Nostrum enim aspernatur quia incidunt. Blanditiis eum voluptatum nulla repudiandae. Ipsum ea possimus accusamus est.\n\nNumquam cum culpa omnis eos voluptatem eaque. Necessitatibus ad vitae doloremque quis voluptas. Accusantium temporibus dignissimos nihil. Quia quae dolor quis.\n\nEst sunt quidem ipsum eius vel qui. Laborum eos ullam quis ex vel maxime. Sequi natus laboriosam itaque magni ducimus nostrum iusto.\n\nTotam illo rerum velit ratione quia deserunt tempore dolorem. Modi animi itaque accusantium possimus molestiae. Expedita sunt voluptates aut facilis.', 115854, 7, 3189, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1996-01-25 04:43:41', '2022-06-07 09:38:52');
-INSERT INTO `products` VALUES (98, 2, 'Ex sit quas beatae.', 'ex-sit-quas-beatae.', 'Eius quos est quia consectetur aut dignissimos est. Est cupiditate non architecto eos. Minima unde adipisci et non sit quaerat.\n\nIn quaerat non vel neque. Rem aliquam vel sit cum sed velit quis. Quia nihil fugiat impedit molestias consequatur similique. Eligendi sit doloribus qui in.\n\nAssumenda qui eos dolor. Voluptas minus autem voluptas eum. Et aspernatur deleniti veritatis cupiditate in at. Esse accusamus quo magnam laudantium et ut sed.\n\nId qui sunt exercitationem rem. Molestias eligendi veritatis voluptate sed suscipit. Unde sapiente dolor laudantium ut quae alias. Et quaerat voluptas ipsa sunt similique et. Rerum et adipisci aliquam nam aut deleniti.\n\nCulpa accusantium est sed. Soluta repellendus doloribus sapiente perferendis sunt sit numquam. Laborum animi sint rerum excepturi.', 830849, 7, 2685, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1987-11-07 03:56:01', '2022-06-07 09:38:52');
-INSERT INTO `products` VALUES (99, 2, 'Voluptas totam omnis.', 'voluptas-totam-omnis.', 'Accusamus illum esse nam consequatur earum quam ut. Voluptatem perferendis adipisci occaecati voluptatem qui consequatur qui.\n\nDolor dignissimos fuga distinctio consequatur explicabo. Aliquam ab voluptatibus esse nihil officiis. Corrupti qui ipsum saepe atque minima expedita.\n\nQui qui temporibus repellendus. Animi modi exercitationem repellat autem nihil voluptate veritatis nulla. Aliquid possimus hic totam vero odit quia minima.\n\nMagnam commodi magnam voluptate dolorum similique sit. Magnam quasi eum sint praesentium rerum qui. Praesentium assumenda sint dolor quisquam dolor nihil. Sint id aspernatur quaerat error accusamus.\n\nMaxime quod ipsa velit. Nesciunt magni eos dolores voluptates fugiat.', 814135, 25, 2191, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1977-02-03 08:44:29', '2022-06-07 09:38:52');
-INSERT INTO `products` VALUES (100, 3, 'Occaecati voluptas occaecati aut.', 'occaecati-voluptas-occaecati-aut.', 'Id alias et quae. Inventore et delectus itaque ut maxime praesentium. Ut id asperiores sequi voluptatem libero delectus distinctio. Aut doloremque a dolorem et molestias eos.\n\nVoluptate dolores quo et voluptatem sunt impedit. Dolorum quae excepturi quam voluptatem aut. Dolor incidunt numquam est corporis amet. Dolor quod sed odio consequatur odit dolorem sed.\n\nEnim facilis et repudiandae nostrum omnis illum et. Pariatur itaque consequuntur vel eligendi magni. Incidunt maxime sint vel atque dolor. Eum sint consectetur voluptas qui ducimus. Doloremque tenetur ipsum officia non suscipit.\n\nVoluptatem velit deserunt labore unde. Incidunt in nisi qui voluptatem nemo a. Enim autem alias et voluptas veniam. Commodi rerum sunt nostrum.\n\nAd quae et repellat pariatur quidem reiciendis sed dolorem. Et et unde tempore labore consequuntur nihil. Consequatur doloribus vero voluptatem et maiores. Ipsa enim quasi consequatur voluptatem qui dolorem et.', 154859, 74, 4554, 99, 'product.jpg', 'product.jpg', 'product.jpg', 1, '2017-03-05 04:19:03', '2022-06-07 09:38:52');
+--
+-- Dumping data for table `products`
+--
 
--- ----------------------------
--- Table structure for productsize
--- ----------------------------
-DROP TABLE IF EXISTS `productsize`;
-CREATE TABLE `productsize`  (
-  `product_id` int UNSIGNED NOT NULL,
-  `size_id` int UNSIGNED NOT NULL
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+INSERT INTO `products` (`id`, `category_id`, `name`, `slug`, `detail`, `price`, `discount`, `weight`, `stock`, `image_1`, `image_2`, `image_3`, `sold`, `created_at`, `updated_at`) VALUES
+(1, 5, 'Et reiciendis qui error.', 'et-reiciendis-qui-error.', 'Eligendi qui temporibus suscipit qui eum illo. Eaque et eaque sed et. Eum veritatis aut sit accusantium eligendi itaque ex quia. Earum dolor odit necessitatibus hic sapiente.\n\nFacilis mollitia debitis ipsum voluptas ut possimus. Sit ipsam sint dolor dolorem ipsam dolor repellendus. Aut placeat aut nesciunt non. Dolores mollitia et voluptatibus sapiente eum labore.\n\nEst dolorum unde molestias non sed totam. Veritatis qui ea repellat aliquam eveniet. Aut quisquam aut sed iusto rerum et. Sit quibusdam illo numquam.\n\nAtque sed vel sit natus. Cumque optio nobis voluptate iste natus totam. Quae et et qui pariatur et. Sint nemo sapiente id recusandae aliquid ea.\n\nOccaecati reprehenderit unde rerum nisi. Doloribus illum molestiae provident et commodi nisi. Autem architecto similique repudiandae est nulla. Suscipit quasi corrupti natus aut esse quia ducimus.', 658883, 27, 1137, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1993-11-05 00:00:00', '2022-06-13 09:45:46'),
+(2, 3, 'Eveniet sapiente non.', 'eveniet-sapiente-non.', 'Exercitationem veniam ullam molestiae rerum quia. Et aut fuga quam sit. Expedita rerum veritatis voluptate rerum.\n\nEt rerum eius voluptatem ut adipisci doloremque. Dolor ut a ut quasi omnis ad inventore. Autem et quo saepe optio voluptas explicabo.\n\nVelit ipsa iure dolore amet molestias quia. Id provident quo consequatur exercitationem nisi voluptatum enim sint. Esse illo sequi velit asperiores dolorem numquam ut.\n\nConsectetur sunt autem quas eligendi. Tenetur voluptate quasi sed molestias. Reprehenderit id amet quis ut.\n\nNecessitatibus totam ut in quasi. Rerum sed totam et enim quibusdam eos. Aliquid unde magni ut quis suscipit rem ullam. Voluptas doloremque iste iure quos voluptas quam non. At accusantium commodi commodi atque hic excepturi.', 496487, 13, 2330, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2015-01-06 13:12:23', '2022-06-13 09:45:46'),
+(3, 2, 'Magnam explicabo culpa.', 'magnam-explicabo-culpa.', 'Consectetur error fugiat nihil molestiae laborum ratione. Vel dolores culpa modi qui tenetur ex minima explicabo. Cumque voluptatem sed deserunt ea qui nam voluptates.\n\nReprehenderit illo necessitatibus quasi aut id eius id. Est nostrum doloremque qui iste culpa. Magni minima aliquid sequi laboriosam placeat. Molestias quae ipsa asperiores mollitia et ducimus.\n\nRepellat ut et quae. Odio consequuntur asperiores nesciunt expedita sed. Consectetur voluptas qui aut possimus omnis hic.\n\nDistinctio veritatis enim ut quia aut impedit. Eum qui magni pariatur dignissimos officiis animi non. Enim id natus nulla non hic.\n\nVoluptatibus quidem nisi ut ut nesciunt. Quia rerum dignissimos aliquam nam non repudiandae. Voluptas non sint qui. Sit porro quo et eaque. Officiis quod quam sunt molestiae ad.', 320060, 2, 1080, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2008-05-14 06:48:22', '2022-06-13 09:45:46'),
+(4, 4, 'Libero autem minus est assumenda.', 'libero-autem-minus-est-assumenda.', 'Ut odio debitis magni. Atque quia fugit veniam aut. Doloribus quia et molestias facilis sit eius et.\n\nIn voluptas fugiat fugiat adipisci cupiditate numquam sit doloribus. Voluptatum assumenda ut sed quas totam alias. Non dolor nam ipsa quasi. Temporibus quis mollitia nihil quos et.\n\nDolor quo aut aut sunt ut. Officia voluptate laboriosam autem dolorem reprehenderit porro placeat corporis.\n\nQuo et laboriosam ex inventore consectetur provident est nihil. Deleniti culpa neque maxime optio sapiente vel quos. Voluptatem dolorum et corporis non quos ut facere.\n\nMaiores possimus et nisi tempora aut eaque doloremque. In nam ut dignissimos maiores animi quasi natus. Aut unde temporibus qui natus sit nihil. Qui cum adipisci omnis velit itaque consequatur quae. Omnis in sed rem et omnis.', 503902, 43, 3156, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2014-06-23 19:33:16', '2022-06-13 09:45:46'),
+(5, 1, 'Vitae quasi natus.', 'vitae-quasi-natus.', 'Assumenda numquam tempore culpa ut maxime. Et autem ducimus cupiditate et. Voluptas mollitia ipsa itaque saepe vel. Nostrum eaque enim optio sequi quas.\n\nVoluptas cupiditate sint in quisquam non soluta. Ut repellendus occaecati quo est error. Quia porro deleniti a itaque est. Esse reprehenderit quaerat minus qui mollitia.\n\nDolorem ipsa vel blanditiis voluptates sapiente sunt veniam pariatur. Ea ipsa deserunt sit non facere. Nesciunt recusandae assumenda est doloribus nihil.\n\nDebitis nisi cumque facilis consectetur omnis quae. Sapiente harum quia cupiditate autem est omnis. Assumenda voluptatem tenetur adipisci totam voluptatem. Dolores neque odit ducimus expedita.\n\nVoluptatum nam iure dolores. Excepturi tempora magni saepe nemo. Maiores expedita eos corrupti et error provident. Sapiente neque et sit blanditiis eveniet possimus.', 559775, 62, 4931, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1992-11-07 13:29:27', '2022-06-13 09:45:46'),
+(6, 4, 'Ratione aut vel reiciendis.', 'ratione-aut-vel-reiciendis.', 'Harum nulla ex dolor ducimus at consequatur qui. Et molestiae sed eos. Accusantium nisi et ut qui reprehenderit assumenda sed. Dolores voluptate quisquam aut eos velit nam ut nam.\n\nVoluptatem perspiciatis velit rerum in nam repellendus. Dignissimos ipsam est voluptas dolor velit. Quia temporibus saepe laborum reprehenderit repudiandae animi. Sint qui voluptates aut. Sed veritatis iure delectus voluptas autem dicta.\n\nEaque commodi maiores aut. Ducimus beatae recusandae maxime asperiores debitis. Voluptatibus a inventore labore dolore.\n\nSapiente sint qui reprehenderit sunt soluta delectus. Labore optio voluptatem asperiores reprehenderit culpa. Quia et numquam inventore ad corrupti. Rerum soluta enim est nisi.\n\nDelectus perspiciatis voluptatem labore non exercitationem rerum odio. Facere id tempore enim iusto velit quaerat. Dolores assumenda illum sed.', 490536, 69, 1069, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2011-07-01 21:39:08', '2022-06-13 09:45:46'),
+(7, 1, 'Ducimus nemo totam temporibus.', 'ducimus-nemo-totam-temporibus.', 'Et minus et consequatur placeat recusandae. Iste velit fuga aut dolores iusto voluptatum.\n\nAtque qui asperiores odio repellat totam molestiae. Alias sapiente et illum. Aut voluptas in saepe. Enim dolorem hic dolorem harum inventore.\n\nRepellat eum modi explicabo vel sunt laboriosam nemo. Deserunt odio est dolores et rerum officiis sed. Non autem voluptatem qui incidunt tempora et. Consequatur odit adipisci excepturi error. Natus eveniet incidunt consequatur.\n\nCorporis porro quos odit maxime impedit repudiandae. Eaque facere laborum impedit ea. Quidem neque minus fugiat natus veritatis nemo sunt. Reprehenderit laboriosam tempora quaerat in voluptas.\n\nRecusandae illo perspiciatis ut voluptatem dolorum unde sed. Optio amet doloremque voluptas sit. Recusandae deleniti repellat vero earum. Harum cum officiis porro dicta veniam.', 772438, 72, 2177, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1993-03-05 08:30:55', '2022-06-13 09:45:47'),
+(8, 2, 'Reprehenderit laboriosam ut labore.', 'reprehenderit-laboriosam-ut-labore.', 'Ratione qui dignissimos quidem aliquid deleniti. Sunt et dolorem modi dolorem. Non eveniet aspernatur animi blanditiis et.\n\nIn atque accusamus molestias ab provident. Earum dolores est consequatur id ea voluptatem aliquam. Dolorum rerum sapiente officiis eveniet.\n\nConsectetur et ullam corrupti doloribus. Voluptate sint qui laudantium fuga modi consequatur inventore. Animi rem labore et quasi eaque ut pariatur. Accusantium aut aut autem debitis necessitatibus.\n\nDoloribus facilis ut magnam quia et mollitia. Et voluptatum aut molestiae tempore. Quia voluptatem odit reiciendis magni excepturi sint quasi dignissimos. Occaecati eum autem consequatur totam.\n\nReprehenderit optio eum consequatur dolores voluptas placeat eaque. Odit aut suscipit reprehenderit velit qui. Ipsum deserunt temporibus quia et. Laborum iure ut voluptatibus iure dolore sit dolore.', 426898, 75, 2035, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1985-09-10 19:25:50', '2022-06-13 09:45:47'),
+(9, 2, 'Adipisci occaecati est reprehenderit.', 'adipisci-occaecati-est-reprehenderit.', 'Doloremque praesentium voluptatem aut molestiae repellendus a sed. Temporibus voluptatum non consequatur nesciunt quia esse atque. Eum et iure nulla totam saepe aliquid eligendi nulla. Rerum cum culpa autem non minima officiis architecto aperiam.\n\nQuis distinctio laudantium delectus quaerat cupiditate ex consequatur. At illum ut eos aut. Sed totam in iste sapiente. Dolorem vitae dolore provident sapiente quod repellendus illum.\n\nProvident itaque ut mollitia soluta dignissimos excepturi laboriosam veniam. Quia incidunt ab quibusdam corporis molestiae distinctio.\n\nMagni molestiae et quis ipsam. At magnam numquam eos vel et at repudiandae. Quia deserunt fugit eum facere.\n\nAtque pariatur consectetur odit nobis rem velit. Est numquam eum ad iusto aut qui et. Illo minus similique ab ut labore.', 118609, 43, 2933, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2002-11-19 20:52:47', '2022-06-13 09:45:47'),
+(10, 4, 'Error sit ducimus ipsam aut.', 'error-sit-ducimus-ipsam-aut.', 'Adipisci quia provident similique voluptatum deleniti sapiente sint sapiente. Quas consequatur nisi accusamus iure recusandae quasi. Perferendis iusto sit ullam vel.\n\nEt sit nam sunt inventore corrupti. Omnis molestias suscipit repudiandae ea. Placeat dolor quia saepe dolores ipsa laborum sunt.\n\nQuo praesentium unde porro et. Sit velit excepturi molestiae est voluptas. Ipsum quos dolorem iure dolores dolor et illo excepturi. Dicta ad fugit aut sint harum sint quisquam rerum.\n\nDicta ipsum nihil autem dolor. Tempore quasi sed ipsa soluta. Architecto eaque laboriosam deserunt fugiat. Qui quos ducimus placeat.\n\nAd fugiat minus ipsa vitae corporis. Qui debitis numquam voluptatum ex ullam. Ducimus sunt nulla accusamus laborum.', 147092, 53, 3594, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1999-03-27 17:32:26', '2022-06-13 09:45:47'),
+(11, 1, 'Molestiae laborum eligendi.', 'molestiae-laborum-eligendi.', 'Eius nisi eveniet earum quas et nostrum. Laborum et totam quia harum aut eos. Facilis optio amet illo.\n\nEt aut eius et quibusdam ex expedita officiis. Dicta molestiae alias vel et. Et tempore eos sequi qui non nostrum sed. Nulla reiciendis et magnam non dolores omnis.\n\nIpsa non ut earum id totam hic. Quisquam delectus quia quis harum unde alias. Ea accusamus culpa dolor. Et consequatur facere quo deserunt.\n\nCulpa provident necessitatibus ut qui voluptatem. Commodi culpa et neque voluptatibus temporibus ipsum et. Voluptatem voluptates et aut deleniti repudiandae pariatur.\n\nVoluptas cum debitis sed beatae. Vero blanditiis aspernatur exercitationem laboriosam nam. Hic et hic ut eos aliquam id officiis.', 164301, 61, 2369, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1983-05-26 10:52:44', '2022-06-13 09:45:47'),
+(12, 4, 'Dolore aliquid blanditiis.', 'dolore-aliquid-blanditiis.', 'Quos nihil voluptatum officiis ut nemo veniam. Accusantium laborum doloremque nihil nihil et minima velit. Mollitia eum rerum sit alias modi voluptas. Neque numquam rerum eum cupiditate sapiente ut asperiores ab.\n\nEos ex omnis quia autem. Fugit exercitationem voluptatem architecto dolorum omnis expedita praesentium. Eaque quo natus repellat.\n\nSint excepturi aut dolorem excepturi excepturi sunt. Maxime ut ut quasi vero consectetur delectus ipsa. Et vero impedit porro officiis libero.\n\nNecessitatibus qui illum exercitationem. Eum illum sit aspernatur. Doloremque aut odit voluptas consectetur. Et id vel perferendis ea quisquam numquam commodi.\n\nUt dolore iure et sunt. Aperiam minima quia ea fuga est et quos. Non autem voluptatem provident est aperiam minus et. Eaque et fugiat maxime voluptatum. Rerum temporibus maxime quia.', 405812, 2, 2993, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2018-01-11 13:58:54', '2022-06-13 09:45:47'),
+(13, 5, 'Atque dolorem suscipit at.', 'atque-dolorem-suscipit-at.', 'Est inventore est nihil sed impedit quos facilis doloremque. Deleniti amet labore ut voluptatem numquam. Voluptatum officiis voluptatem rerum nesciunt similique consequuntur. Enim reprehenderit placeat quia qui.\n\nAliquid cumque architecto possimus blanditiis sunt natus et sit. Fuga a vel aut amet voluptatibus. Rerum quae possimus itaque expedita fugit modi. Sunt repellendus tempore fugiat.\n\nPerspiciatis modi commodi magnam consectetur necessitatibus. Dignissimos sunt qui quia. Libero excepturi vel quia earum. Dolorum similique perferendis deserunt.\n\nFacilis doloribus laudantium assumenda. Nostrum animi exercitationem perspiciatis explicabo et quia. Quas dolorem qui cumque repudiandae nesciunt officia.\n\nVoluptatem est expedita veritatis perspiciatis earum nisi repellendus. Magni dignissimos temporibus quibusdam molestiae dolor. Distinctio officia ut hic non. Et aspernatur delectus ex possimus rerum praesentium.', 495449, 58, 4961, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1998-04-11 19:50:22', '2022-06-13 09:45:47'),
+(14, 1, 'Dolorem enim doloremque delectus voluptas.', 'dolorem-enim-doloremque-delectus-voluptas.', 'Exercitationem sint itaque molestias in. Praesentium dicta autem dolores fuga. Doloremque suscipit delectus nihil inventore beatae voluptatem dolorum sit. Eum quo unde sed voluptas ut vel aut. Culpa et sapiente consequatur voluptatem architecto.\n\nRerum veritatis iure quam ea rerum voluptates ad. Voluptatem quo odit a enim. Aperiam doloribus aliquid quo dolore. Eum sed ut omnis.\n\nRerum consequuntur impedit aut quidem nam accusamus. Consequatur quo voluptatem id magni inventore amet ad dicta. Dolor et possimus doloremque quo facilis.\n\nVelit non eaque et et animi sit blanditiis officiis. Dolore praesentium et deleniti voluptate dolor illum.\n\nQuia error numquam aut aut numquam aut vel. Facere veniam sit cum illum veniam ut. Deleniti provident mollitia dolore qui perferendis vero qui ipsum. Illo expedita enim nostrum asperiores neque quidem magni.', 870089, 20, 2230, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1990-12-27 20:00:36', '2022-06-13 09:45:47'),
+(15, 5, 'Possimus beatae.', 'possimus-beatae.', 'Alias nulla repellat voluptate non voluptas et. Pariatur rerum autem quos quo voluptatem iusto est. Dolorem ipsam blanditiis itaque amet. Iure est magnam qui dolorem ut quae.\n\nEt qui voluptatem qui quis. Labore quis qui ad omnis quo. Porro unde vitae et ut.\n\nUt consequatur nostrum molestias minima nobis iste nesciunt. Labore ullam ducimus nostrum sit non omnis qui provident. Voluptas quidem dolore sunt sit expedita accusamus.\n\nVoluptas saepe ea sed repudiandae nesciunt voluptatum. Sit consequatur rerum corrupti dignissimos sapiente esse. Officiis eum et odit sint eum.\n\nEx ut pariatur ipsa rerum. Sint magni fugit quia magni. Eum ipsum enim doloremque optio voluptatem debitis nobis accusantium. Consequatur quo officia eius eveniet.', 694702, 66, 4495, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2006-07-20 13:54:39', '2022-06-13 09:45:47'),
+(16, 4, 'Enim odio sed.', 'enim-odio-sed.', 'Sequi optio nulla quidem. Sint est et dolores et nihil laudantium placeat voluptas. Voluptatem quia occaecati dolorem. Eum et qui omnis excepturi iste.\n\nAut tempora libero sed aliquam. Omnis id magnam aliquam voluptatem. Harum in ut aperiam rem facilis expedita cum. Dolor aperiam autem dicta repellendus.\n\nRerum dignissimos odio quo et. Beatae rerum aut non quidem sit sunt quisquam. Consequatur dolor sed et harum.\n\nQui aut amet repellat ducimus debitis recusandae. Qui architecto perferendis iure enim. Dolorum incidunt qui ex qui. Et neque accusantium saepe.\n\nDucimus sit laboriosam dolorem consequuntur aut. Consectetur consequatur commodi porro et. Enim aliquam quae qui maiores consequatur.', 169310, 0, 1697, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1989-12-26 19:20:24', '2022-06-13 09:45:47'),
+(17, 1, 'Alias dolore qui reprehenderit.', 'alias-dolore-qui-reprehenderit.', 'Aut aut eos molestiae nulla omnis nostrum nam. Sunt aut ut est consectetur. Voluptates officiis placeat et consequuntur voluptatem quasi autem.\n\nSequi iure et dignissimos assumenda. Id ducimus libero enim odio. Molestias illo a ducimus id. Cum soluta reiciendis similique blanditiis et.\n\nMolestiae ipsam totam quaerat distinctio repudiandae iusto qui tempore. Qui quod facilis exercitationem reiciendis fuga officia officia. Impedit et ut vel qui labore repudiandae qui. Sed modi ipsa quos.\n\nSint sed quidem voluptatibus velit. Expedita aperiam iste et assumenda. Fuga soluta necessitatibus tempore ipsa quis illum. Velit aut sit repellat dolores voluptate praesentium est quia.\n\nFugit in quidem dolorem aliquam. Non aut quibusdam voluptatem laborum et assumenda. Ullam optio non impedit qui consectetur. Molestiae libero perspiciatis tenetur.', 820680, 9, 1875, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2015-06-28 15:44:03', '2022-06-13 09:45:47'),
+(18, 5, 'Tempora et.', 'tempora-et.', 'Tempore aut aperiam doloremque consequatur odit. Ex eaque ut nostrum possimus et quaerat mollitia. Repellendus vel repudiandae ipsa. Sit ipsam modi officiis est. In consequatur neque sint ipsa consequuntur sunt consequatur sapiente.\n\nOfficiis totam et laboriosam sit optio repellat quidem. Sint sint perferendis non sed deserunt aut eos. Similique ut aut et sunt.\n\nAut ut corporis et qui. Aspernatur unde consequatur sit ducimus sit suscipit. Culpa unde tempora dicta est eum ratione. Voluptas officiis non nisi perspiciatis non non. Eos debitis hic pariatur ducimus.\n\nVero qui nihil ducimus delectus et. Labore dolores sit facilis possimus beatae repellat. Voluptatibus nulla dolor natus voluptas velit. Minus adipisci numquam occaecati sapiente molestiae veniam a. Atque autem pariatur voluptatem eum voluptatum aliquid ut voluptatem.\n\nNeque perspiciatis non nesciunt laboriosam sapiente minima qui. Quod quisquam voluptatem recusandae quia. Iste dolorem officiis quidem accusantium provident ab ut voluptates.', 25704, 34, 1610, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2009-01-20 02:11:54', '2022-06-13 09:45:47'),
+(19, 1, 'Quo minus cumque.', 'quo-minus-cumque.', 'Et perspiciatis sequi sapiente voluptates harum optio sit ut. Ea error dicta vero neque dolores temporibus est. Ut quia at in. Modi fugiat unde repudiandae odio. Natus quas rerum qui qui deserunt eum corrupti.\n\nExcepturi sed saepe et. Pariatur dolor corporis qui itaque. Quibusdam itaque facere aut. Enim unde quod et minus perspiciatis non aut. Eius voluptas nihil repellat fugiat consectetur corrupti tempora.\n\nPorro voluptate ipsam laboriosam dolorem facilis. Ex voluptatum aut rerum amet quis facilis.\n\nLaudantium blanditiis ea eos et. Ab aperiam molestiae et omnis. Consequatur numquam explicabo dolores at. Quasi autem debitis veritatis aperiam sed.\n\nReiciendis ipsum voluptas rem quos perferendis voluptates mollitia. Vero magni aspernatur ad vel sit ea accusamus repudiandae. Qui minima ipsum aperiam voluptas et dolor.', 865033, 22, 3016, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1995-01-15 21:43:16', '2022-06-13 09:45:47'),
+(20, 1, 'Non inventore qui facilis.', 'non-inventore-qui-facilis.', 'Laudantium ea et aut voluptate. Consequatur sed asperiores quod exercitationem. Qui itaque veniam cumque occaecati ipsa voluptates.\n\nQui ad qui expedita voluptas quae quos officia eaque. Odio id amet amet velit illo. Eveniet magnam iusto sit quia dolorem iure. Eaque reiciendis quia facilis fuga minima.\n\nAtque cumque pariatur commodi consequatur repellat. Non consectetur voluptatem et ut eum. Illo et animi corporis mollitia.\n\nNihil officia ad enim quibusdam expedita. Qui ex dolorem animi consequatur vel rerum et. Nam eligendi aut eligendi aut ipsum aut sed saepe.\n\nAut et expedita et voluptas doloribus. Magnam sint molestias nesciunt perferendis quod corporis libero at. Deleniti molestias aperiam ut ut non quis. Harum nulla beatae tempora fuga qui.', 59203, 33, 4724, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1999-02-01 07:47:23', '2022-06-13 09:45:48'),
+(21, 4, 'Officiis dolores suscipit quos.', 'officiis-dolores-suscipit-quos.', 'Et ea et vero. Aut tenetur neque quibusdam distinctio necessitatibus numquam. Ab deserunt eos laborum quo.\n\nRerum ex cum dolorem iure quis. Distinctio iste magni doloribus tempora ut. Omnis minima sunt non accusantium unde.\n\nEt enim magnam quia accusamus alias. Unde ratione tenetur laboriosam ab voluptas sint qui. Sit repellendus at porro tenetur ducimus qui est est. Ea distinctio minus sunt ducimus velit architecto ipsa voluptates.\n\nEt quidem dolor ad amet nostrum suscipit asperiores. Provident eaque nam rerum nulla iure. Dolor laborum consequatur quisquam aut. Molestias hic quam odit eum esse. Consequatur culpa corrupti nostrum labore sapiente.\n\nEt qui at eos magnam similique id. Eligendi doloremque praesentium ipsam velit consequuntur voluptate. Voluptatem itaque dolore veritatis aspernatur vitae. Ut quia debitis officia est.', 39397, 72, 1641, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1983-07-25 15:16:58', '2022-06-13 09:45:48'),
+(22, 3, 'Ullam iste qui.', 'ullam-iste-qui.', 'Voluptatem iure et cum eum dolores ex corrupti. Velit ut saepe nam perferendis ea. Quia sapiente delectus non voluptatem explicabo laudantium.\n\nVoluptatem alias adipisci tenetur voluptatem sint et. Ea laboriosam veniam dicta delectus. Qui dolores quaerat culpa id voluptatem.\n\nIpsum provident accusamus magnam iure eveniet eveniet. Vel nobis eos occaecati a et suscipit. Mollitia consequatur in et culpa vel consequatur. Voluptatem qui enim neque id nisi est.\n\nEarum quia ullam vel aliquid. Facilis et rerum maiores porro rerum. Est sapiente et aut sed cupiditate repellat labore ea.\n\nMolestias facere ducimus harum sunt ipsum nisi. Temporibus facilis ut aperiam dignissimos doloremque. Maxime et aut quae ab sunt vel et. Temporibus omnis veritatis totam eos tempore.', 18496, 20, 3187, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1970-09-09 22:39:38', '2022-06-13 09:45:48'),
+(23, 1, 'Et saepe maiores aut.', 'et-saepe-maiores-aut.', 'Ex dolorum ut est cumque. Nihil delectus et pariatur dolorem quo. In nostrum asperiores iste deleniti. Ipsa dignissimos ea doloribus tempora omnis.\n\nQuisquam doloremque modi in placeat incidunt consequuntur nihil. Rem qui non expedita eius. Molestiae at natus et est.\n\nPerferendis aperiam qui est ab a error cupiditate. Provident enim architecto iste necessitatibus maxime est numquam. Consequatur quia eum quam. Maiores esse eligendi quod cupiditate corrupti aut aut. Quisquam est velit rerum nihil.\n\nQuidem est molestiae eligendi esse sequi nemo. Qui voluptatem sequi itaque tempora. Soluta esse excepturi aliquam.\n\nEt amet quo quia et dolores cupiditate. Facere atque necessitatibus et dolores consectetur consequuntur doloribus. Voluptatum voluptatem at eius minima neque sint consequatur.', 622531, 66, 1143, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1972-07-04 00:27:21', '2022-06-13 09:45:48'),
+(24, 5, 'Eaque odio et adipisci.', 'eaque-odio-et-adipisci.', 'Sed perferendis quia dignissimos culpa quo quia. Esse et enim omnis omnis aperiam voluptas eum. Eos id et omnis et possimus recusandae. Aut placeat sed eos voluptate.\n\nVelit magnam vitae sed velit eaque. Dolorem quo temporibus nemo voluptates incidunt sint dicta. Et consectetur qui voluptas eligendi aut deleniti.\n\nAutem necessitatibus corrupti beatae quam quaerat. Dicta officia reiciendis ad est alias totam. Unde dolorem reprehenderit temporibus est.\n\nSint fugit tempore totam quo asperiores eaque odio. Non quo natus officia. Modi exercitationem velit et cupiditate molestiae est ex nostrum.\n\nRepudiandae illum ipsum ullam ipsam velit aut fugit. Qui rem modi nihil non. Ut eius illo occaecati ut eius et sed. Qui quia quaerat rem adipisci.', 281658, 7, 1350, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1978-09-25 14:07:36', '2022-06-13 09:45:48'),
+(25, 4, 'Vel sit corporis.', 'vel-sit-corporis.', 'Tenetur in rerum molestiae asperiores aut. Doloremque explicabo voluptatum et ea odio. Et ut voluptas velit.\n\nPariatur blanditiis vitae possimus commodi nostrum nihil possimus. Veritatis hic maxime eaque. Et qui eius est nobis nemo molestias aut. Distinctio a qui vero quae velit.\n\nMolestiae alias aut laborum iusto earum. Ut illum maxime quae. Quas ratione aut quas minima aliquid cupiditate debitis. Omnis delectus vel occaecati eaque ab.\n\nVeniam atque illo enim consequuntur unde. Tempore quidem et adipisci porro eos illo. Sed tenetur et praesentium dicta nesciunt rerum. Reiciendis reprehenderit eos architecto corporis.\n\nFacere in maiores maxime autem. Voluptatibus beatae eos itaque est aut quis. Nam aut non ad perspiciatis. Magnam quos vel adipisci non mollitia cumque.', 886960, 18, 2977, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2019-11-27 21:58:08', '2022-06-13 09:45:48'),
+(26, 3, 'Facilis quia sapiente sint.', 'facilis-quia-sapiente-sint.', 'Et sint sunt iste modi dicta sint dolorum qui. Ipsa assumenda quas suscipit ut qui quo. Dolores consequatur autem deleniti quod. Maxime suscipit facilis possimus soluta sint.\n\nNumquam ducimus fugiat consectetur recusandae non illo et magni. Exercitationem vel asperiores qui sed ut. Eum enim corporis sunt aliquid qui. Ratione et autem odit. Eveniet ab eligendi ad voluptatem neque labore.\n\nAut quia non ipsam in asperiores dolor aut. Doloremque sequi qui voluptates est. Explicabo ratione omnis harum dolores magnam magni. Nihil atque est enim quasi quas beatae.\n\nEst sed blanditiis expedita eveniet natus sapiente. Accusantium voluptatem quasi ut non exercitationem odio. Nulla dolore impedit nihil voluptatibus soluta facilis.\n\nSed molestiae rerum dicta. Et dicta minima dolorum consequatur alias et tenetur ipsam. Dolores facilis natus eveniet laboriosam.', 687732, 34, 2563, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1992-03-12 07:30:45', '2022-06-13 09:45:48'),
+(27, 1, 'Asperiores molestiae eaque.', 'asperiores-molestiae-eaque.', 'Neque quis omnis placeat facilis. Cupiditate dolor fugit voluptatem cumque ab sed aut. Itaque voluptatem non consectetur veritatis. Ipsa ab omnis similique veritatis doloribus.\n\nNostrum molestias culpa quidem dicta. Facilis perspiciatis ratione dicta illum. Esse tenetur ut laudantium et.\n\nTenetur non odio veritatis non. Molestiae cupiditate et quod voluptas illum sint quasi quam.\n\nEt nesciunt consequatur quam eos ipsam id. Doloremque dolor neque odit voluptates aliquam aut qui nulla. Aut nostrum ea ut officia.\n\nAsperiores modi quo ratione quod qui earum ut quam. Dicta debitis aut totam est. Nisi tempore expedita recusandae velit optio numquam doloribus. Quaerat qui et nisi est sequi temporibus.', 385925, 72, 3320, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2001-08-19 11:00:39', '2022-06-13 09:45:48'),
+(28, 3, 'Assumenda possimus inventore reiciendis.', 'assumenda-possimus-inventore-reiciendis.', 'Atque qui et nostrum id doloremque ut. Velit at tempore quisquam omnis molestiae porro. Qui maxime aliquid qui vero aut aliquid eos. Ad iusto ducimus omnis ipsa.\n\nPariatur perspiciatis itaque at totam saepe enim aut dolores. Reiciendis quia accusantium ipsa soluta sed. Blanditiis veritatis omnis odio molestiae at corporis ad. Quis nostrum omnis at consequatur sed. Et modi dicta sit sed exercitationem pariatur soluta.\n\nAut est at nulla doloribus vel. Dolor dolorem ipsa exercitationem non. Dignissimos iure aut quasi beatae repudiandae repellat tempora suscipit. A officiis ad velit earum exercitationem.\n\nPossimus ducimus velit quia quos ut blanditiis. Aliquid enim explicabo quisquam ut rerum id est. Officiis pariatur earum ab voluptas illo hic amet. Consequatur ducimus quasi ut eius praesentium.\n\nDolorem est eius nobis tempore dolores nobis blanditiis. Repellendus molestiae odio rerum reprehenderit voluptas officiis. Assumenda voluptatibus adipisci explicabo ut mollitia. Qui ad ut minima molestiae quas quibusdam dolor. Repellendus et aut et voluptatibus enim minus earum.', 894875, 21, 1680, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1984-03-30 23:13:34', '2022-06-13 09:45:48'),
+(29, 4, 'Et iure et.', 'et-iure-et.', 'Porro et quia est itaque tempora. Voluptatem ut consequuntur dicta doloribus dolorem.\n\nMagnam quae vel amet asperiores. Sint tempore ex odio enim. Qui voluptatem qui velit. Possimus esse quia non dicta sed a.\n\nEius nam facilis optio provident vero. Et deserunt explicabo officiis est alias non. At veniam consequatur eligendi quia consectetur consectetur.\n\nTempora excepturi iusto esse optio voluptatum id. Deleniti odit ipsam tenetur unde sint nihil. Est aliquid culpa doloremque nesciunt qui expedita repellendus. Nostrum ex consequatur laborum sunt qui voluptas iusto.\n\nUt ea beatae nisi eaque. Omnis maiores enim molestiae adipisci veritatis. Doloremque et et voluptatem in reprehenderit tempora. Voluptatem sit aliquam repellat et adipisci.', 151597, 49, 4147, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2003-11-29 17:08:48', '2022-06-13 09:45:48'),
+(30, 1, 'Veniam est ab et qui.', 'veniam-est-ab-et-qui.', 'Nostrum iste ad repellendus maxime eligendi. Quia nam perspiciatis voluptatem eveniet tempora culpa. Beatae recusandae aliquid cupiditate velit illo. Autem aliquam eum dolorum.\n\nHic animi laudantium accusantium quaerat. Cum distinctio aliquid iure harum qui sit. Enim dolor nemo quia voluptas dolores minima.\n\nEos totam est illo non adipisci dolorem. Dolores necessitatibus dolorum consequatur aliquam quia quia. Dignissimos nostrum alias nam. Dolorem praesentium libero esse corrupti ut quia est illum.\n\nVoluptatem sed distinctio adipisci adipisci. Cumque blanditiis nulla optio ullam et ut. Nisi commodi natus non harum.\n\nLaudantium et reprehenderit et mollitia consequatur minus omnis et. Repudiandae consequuntur quas praesentium voluptatem est quia cum. Magni expedita omnis ducimus. Quo fugit explicabo aliquam eius sit officiis.', 253847, 12, 1799, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1995-07-25 19:52:30', '2022-06-13 09:45:48'),
+(31, 1, 'Veniam animi dolor.', 'veniam-animi-dolor.', 'Dolores aut suscipit cupiditate a voluptas. Suscipit hic tempora sapiente non. Quos qui dolorem et quasi deserunt velit rem optio. Magnam voluptatem quia voluptatibus repudiandae animi facilis eius.\n\nEt tenetur dolore sapiente aut. Quia dolore molestiae autem. Nobis assumenda est ipsa maxime. Voluptatem modi et sunt est enim ad incidunt.\n\nSunt facilis distinctio sint omnis explicabo animi quia sint. Animi minus qui id quia. Eius illum reprehenderit quisquam qui ducimus nihil.\n\nSint vitae et aut provident sapiente. Quaerat vitae molestiae ad eum quod sed. Aut perferendis quo excepturi enim accusamus doloribus deserunt. Reiciendis quae aut sit et ullam at.\n\nEum consectetur dolor nulla beatae exercitationem dolorem qui quia. Veniam porro cum suscipit sed.', 38178, 13, 1029, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1994-09-03 03:00:38', '2022-06-13 09:45:48'),
+(32, 5, 'Impedit et vel itaque.', 'impedit-et-vel-itaque.', 'Error quis quia vero. Neque praesentium explicabo sunt ea voluptate necessitatibus eos. Quisquam et voluptatem fuga. Architecto itaque voluptatum non hic nemo natus itaque. Esse ut non laboriosam voluptatem tempora ut quae.\n\nSunt sint dolores quasi eum. Eligendi aliquam illum dolor ut sapiente. Pariatur autem quia harum illum iste nostrum. Incidunt eveniet numquam nulla pariatur sed qui voluptatem. Doloremque ea ipsa in aut reiciendis.\n\nAmet perspiciatis rem voluptatibus officiis. Nisi molestiae dolore ipsa atque dolores provident omnis. Et consequuntur sit distinctio qui rem.\n\nEius velit eos nostrum eligendi ut eum vel. Reprehenderit temporibus consequuntur qui eum. Fugit soluta est autem asperiores. Nostrum alias illum et et vero necessitatibus.\n\nDoloremque fugiat porro ab explicabo eum. Tempora odit nulla rerum et ipsam consequuntur consequuntur eligendi. Eum ut vitae voluptatem eius. Quis ducimus nisi veritatis qui quibusdam.', 325571, 52, 4305, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2018-06-11 20:45:45', '2022-06-13 09:45:48'),
+(33, 4, 'Repudiandae vero soluta velit.', 'repudiandae-vero-soluta-velit.', 'Sed dolor sequi deleniti sed voluptatum. Aut veniam dolorum cupiditate debitis. Libero eius dicta commodi sequi et.\n\nVoluptatum cupiditate eaque et. Voluptatum animi omnis nihil qui porro repudiandae. Incidunt et ullam dolore delectus aspernatur. Sed maiores est qui corrupti inventore ipsam qui.\n\nDolorem ipsa consequatur et sequi nisi debitis deserunt officiis. Et vero laudantium explicabo voluptas a quidem voluptatem. Id eligendi voluptatem et cupiditate voluptatem distinctio. Sit voluptas totam autem aliquid et rerum ducimus. Ab illum a et voluptatem.\n\nNatus quo aut molestias placeat. Accusantium iusto qui itaque qui sed natus dolorum. Exercitationem esse dignissimos ut rerum fugiat.\n\nInventore voluptatem quia in blanditiis vel. Ipsa nihil non quis est in cumque qui. Ut cupiditate eum maxime fugiat ut laboriosam odit. Cupiditate est quis molestiae.', 43906, 16, 4151, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1972-10-14 18:41:17', '2022-06-13 09:45:48'),
+(34, 2, 'Ab quibusdam distinctio voluptas.', 'ab-quibusdam-distinctio-voluptas.', 'Aspernatur necessitatibus dolor accusantium totam sapiente ut molestias. Ea repellendus amet sit consequatur rerum porro qui. Laborum sapiente omnis animi qui. Aut quis error recusandae qui praesentium nemo tempora.\n\nId et qui aut omnis hic omnis. Fuga explicabo adipisci quae nemo. Ut inventore distinctio sit sit sint. Harum id aliquam pariatur provident cumque voluptas.\n\nOmnis ut quisquam et sit necessitatibus aut. Architecto accusamus numquam dicta quia fugit consequatur sunt accusantium. Eum natus laudantium qui reiciendis sunt quis adipisci. Reiciendis quae eligendi est ad nulla quis non. Soluta officiis quod est est ullam repellendus animi.\n\nNumquam qui pariatur totam animi atque illum. Quae aliquam quia similique qui consequuntur dolores. Aut consequatur earum doloremque consectetur fugit eaque blanditiis. At aperiam sed distinctio dolor et repellat vel.\n\nVoluptate est totam blanditiis et. Reprehenderit voluptatibus enim qui in. Deleniti odit impedit fugit. Molestiae labore eius velit sunt.', 111815, 36, 2599, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1978-09-21 14:30:23', '2022-06-13 09:45:48'),
+(35, 1, 'Odio inventore quo consequatur.', 'odio-inventore-quo-consequatur.', 'Rerum rem tempora quasi totam expedita sit. Nihil sit voluptas dolorem dolorem omnis voluptatem non. Et ut consequatur est nisi sunt eaque expedita.\n\nSuscipit libero commodi id veritatis id repellat sint. Rerum aut autem fugiat aut. Voluptatem architecto et quia ea esse occaecati corrupti. Aspernatur quasi repudiandae recusandae omnis.\n\nVoluptatibus quo itaque eum culpa ipsum cupiditate amet et. Quaerat error et dolores quo error quia non aliquam. Molestiae explicabo et rerum doloribus cum. Et eius a qui impedit fugiat molestiae.\n\nIllo consequuntur quae dolor quo. Esse ut aliquid explicabo modi rerum saepe. Soluta quasi aspernatur unde culpa quasi et. Ut occaecati minima eaque qui et et. Qui voluptas cum omnis libero nulla est.\n\nIllum et voluptas qui voluptatem doloremque. Consequatur architecto recusandae recusandae qui ea ut aut. Nihil molestias at voluptates voluptatem qui tenetur. Esse ducimus ut ab rerum. Minus recusandae voluptatem est corporis optio odio.', 234384, 41, 4948, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1989-08-13 13:21:39', '2022-06-13 09:45:48'),
+(36, 1, 'Suscipit quis tempore.', 'suscipit-quis-tempore.', 'Quia minus minus itaque suscipit sed. Sunt illum optio veritatis sint. Eum ratione commodi accusantium sit ipsa sunt.\n\nQui quae et nobis. Et facilis sapiente voluptatem rerum nihil eum. Illo magni laboriosam in qui rerum. Veniam sunt beatae quos repellendus qui expedita.\n\nEnim dolorum voluptas ab quidem ut ad. Laboriosam dicta deleniti reprehenderit amet iste qui est molestiae. Ducimus soluta incidunt est velit. Quas magnam aliquid itaque doloremque eum.\n\nError doloribus impedit et sed culpa ab nostrum. Non aut possimus ducimus quos quia. Recusandae voluptate nihil nisi quas repudiandae quisquam. Fuga repudiandae enim qui assumenda. Qui aut et nihil cum velit impedit est.\n\nCulpa culpa incidunt quis a nesciunt at facere. Expedita aut qui at eligendi. Non laudantium aspernatur fuga dolores. Animi id eveniet quaerat repellendus doloremque explicabo.', 911253, 8, 1915, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1992-03-05 00:03:14', '2022-06-13 09:45:49'),
+(37, 5, 'Ut quam cum.', 'ut-quam-cum.', 'Totam ut minima ducimus tempore ducimus. Et ducimus et magni nemo. Explicabo qui natus aut. Eveniet mollitia sequi ipsa rerum in vel.\n\nMaxime temporibus aut vel atque. Fuga dolor sapiente repudiandae quis animi repellat. Minima quis inventore quod quis voluptas quibusdam. Voluptatibus ad qui consectetur numquam corporis aliquid ducimus dolor.\n\nEum expedita quasi dolorem sit itaque assumenda. Eveniet ut ex sit ratione odit alias dolores optio. Minima unde sed vitae dolorem rerum cupiditate ullam. Esse blanditiis corporis et facere.\n\nQuo autem nostrum soluta provident. Non qui commodi esse fuga accusamus. Dolorum explicabo expedita voluptate reprehenderit. Est quo voluptas quae quisquam.\n\nCulpa placeat quos accusantium corrupti quo quos facere. Officiis doloribus dolor repellat labore laboriosam quidem adipisci et. Quos quam a aspernatur cum ut illo facere. Neque nemo iusto eveniet magni maiores ut in.', 154710, 1, 1693, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2009-03-01 13:51:46', '2022-06-13 09:45:49'),
+(38, 3, 'Nihil fuga consequatur.', 'nihil-fuga-consequatur.', 'Rem atque non fugiat eum. Facere cumque est rerum excepturi. Dolores consequatur provident doloribus exercitationem accusamus ipsa eligendi. Magni esse velit cum dolores.\n\nEaque dignissimos dolorem atque in corporis repellat repellendus error. Dolor vel quis atque consectetur architecto rerum sed ipsam. Autem consequatur porro hic neque voluptates ratione. Iure totam doloribus neque illum voluptas molestias. Assumenda temporibus veniam ut debitis voluptate est.\n\nDeleniti quo minus ipsum modi. Velit asperiores ipsum impedit. Ipsum quia quam ipsum laudantium in ipsum. Et autem animi iure quia harum ut consequatur enim.\n\nEt quos sed at aut minus facilis. Facere voluptas nisi facilis illum optio eos. Autem molestiae est est ut vel dolore. Dolorum iste ipsam laborum eum corrupti.\n\nLabore illum amet illo saepe enim illo. Provident dignissimos rerum consectetur non enim. Reprehenderit eveniet voluptatem neque dolore sint temporibus ea.', 549701, 58, 2173, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2006-05-24 11:24:13', '2022-06-13 09:45:49'),
+(39, 5, 'Dolor temporibus beatae.', 'dolor-temporibus-beatae.', 'Qui autem est quibusdam. Animi fugit ad sint sed. Sit unde ea nesciunt nesciunt deleniti. Rerum sit voluptatem dolore quia voluptas.\n\nSapiente est magnam sequi et molestias. Dolorem amet enim est ratione exercitationem rem. Quis architecto quas placeat.\n\nIure quos minima laboriosam voluptas qui. Repellendus et fuga sint aspernatur est consectetur a. Quis in dignissimos fugiat ex perferendis qui. Veritatis quidem ipsam quo. Blanditiis neque et sunt laborum occaecati corporis qui.\n\nUllam sunt in doloremque qui. Ut qui in doloribus dolores corporis similique et. Molestiae sit commodi delectus ut consequatur non quisquam. Quam odio velit eligendi itaque cumque omnis occaecati quis.\n\nAut exercitationem consequatur accusamus natus. Rem voluptatibus nihil distinctio molestias in.', 533434, 40, 1518, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1974-03-16 05:37:27', '2022-06-13 09:45:49'),
+(40, 1, 'Dolores voluptatem accusantium ex.', 'dolores-voluptatem-accusantium-ex.', 'Odio eius molestiae repellendus unde aut nulla. In et consequuntur voluptatem. Eveniet nesciunt nisi veritatis id quo et delectus. Sed ex ut dolor provident aut tempore inventore eos.\n\nUt ducimus voluptatum itaque sed corrupti in. Vel sequi quis dolor mollitia ut explicabo in. Doloremque dolorem laborum libero aperiam facere.\n\nDolorum ut recusandae libero repellat error quis et. Corrupti necessitatibus nulla nihil nihil veniam qui. Unde ipsa quas laboriosam odit.\n\nCorporis in perferendis ex eveniet laudantium soluta sit. Commodi suscipit voluptatem eos. Rerum modi qui nihil. Asperiores quas veritatis rerum ipsam ut.\n\nEt quos totam ut ut accusantium rerum voluptas. Commodi placeat eius ad. Dicta animi sint est et qui ea voluptas.', 46159, 59, 2760, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1978-09-10 07:09:17', '2022-06-13 09:45:49'),
+(41, 5, 'Molestiae soluta sint incidunt.', 'molestiae-soluta-sint-incidunt.', 'Voluptatibus atque nihil voluptates vel rem officiis. Qui officiis optio est ducimus. Possimus ullam reprehenderit reiciendis velit delectus rerum.\n\nArchitecto velit iure et quae earum sint. Autem aliquam modi dolorem eligendi aspernatur. Fuga iusto neque dolor voluptatem accusamus.\n\nVel porro nesciunt ut quis praesentium suscipit. Distinctio aut et voluptatem aut libero.\n\nMolestiae animi aut dolorem quis perferendis qui voluptas. Aut animi vero a tenetur voluptas officia. Sunt et architecto non nobis. Qui illo culpa quidem iusto molestiae possimus autem.\n\nConsequuntur quibusdam ducimus autem debitis voluptas rerum ea. Omnis amet et dolorum. Ut ipsa impedit non esse ullam est omnis sapiente.', 269014, 58, 1229, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1971-12-01 07:57:54', '2022-06-13 09:45:49'),
+(42, 3, 'Qui quo dolor impedit soluta.', 'qui-quo-dolor-impedit-soluta.', 'Iste aut earum optio quia. Mollitia consequuntur aspernatur autem suscipit qui. Quis vero ex soluta blanditiis aut ad dolore. Qui repellat explicabo dolor cumque praesentium quia.\n\nLaborum laboriosam non voluptas ipsa similique quidem. Et iusto quo voluptates nostrum blanditiis accusamus. Et quibusdam commodi dolor laborum odio eos optio laborum. Laboriosam fugiat officiis sit.\n\nItaque quo totam sed sint. Dolores et debitis ut accusantium. Dolorem asperiores est labore non dolore.\n\nExercitationem illo quis eligendi enim quasi amet velit. Et consectetur voluptatem beatae eos ad voluptate rem. Labore quidem ut dolorem vero. Eveniet officia a veniam reprehenderit.\n\nNostrum fugiat delectus adipisci temporibus. Enim cum atque hic doloribus magnam commodi. Sunt ea itaque alias aut. Illo sunt autem atque.', 366522, 57, 4383, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2016-09-04 08:08:14', '2022-06-13 09:45:49'),
+(43, 5, 'Porro in assumenda debitis.', 'porro-in-assumenda-debitis.', 'Aut rem explicabo totam libero suscipit provident sit. Omnis voluptatibus et a perspiciatis culpa. Ipsa quia similique aperiam eum.\n\nNecessitatibus tenetur minima corporis fugiat officiis. Pariatur cum nam vero voluptatem est rerum. Qui reprehenderit aut molestias quae possimus. A recusandae molestiae qui error illo deserunt.\n\nAutem id veritatis blanditiis tenetur sit culpa soluta voluptas. Fugit non odit non alias rerum. Consequatur quia debitis nihil hic aliquam modi sint. Placeat impedit sint sunt aspernatur. Ut possimus repellendus ut rerum ducimus consequatur delectus.\n\nIllum amet nostrum quis voluptatibus. Quae debitis animi consectetur nemo. Non harum voluptate consequuntur ut voluptatem. Quisquam non totam voluptas voluptatibus eum et. Tempore doloremque cumque quia ratione consequuntur ex quasi.\n\nId eum corrupti rerum nesciunt id earum. In reprehenderit voluptatibus consequuntur. Dolorum similique qui et soluta id et maiores.', 718095, 72, 4656, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1978-02-05 22:10:06', '2022-06-13 09:45:49'),
+(44, 5, 'Quia tempore iste qui.', 'quia-tempore-iste-qui.', 'Nemo animi tenetur consequatur illum voluptas. Fuga deserunt quisquam cupiditate autem optio. Pariatur labore qui qui culpa aperiam. Iure impedit qui molestiae porro dolorum.\n\nQui non commodi laudantium est quasi facere numquam nobis. Esse consequatur deleniti accusamus eum non dolorum. Et soluta eum consequatur eum magni rem dolores.\n\nDignissimos vel dolores sed esse impedit optio sapiente porro. Numquam ut corrupti voluptas possimus. Placeat quo veniam fugit dolorem. Illo et eligendi velit est.\n\nIllum magni aliquid et autem saepe et est. Sed omnis tempora qui officiis quae porro et sunt. Ullam magni alias ducimus ex esse voluptas. Ducimus dolorem qui reiciendis quia et itaque.\n\nEx illo laudantium doloribus. Quam et aut cupiditate repellendus sed quia. Nemo incidunt porro mollitia aut possimus.', 90687, 10, 3665, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1992-02-04 11:00:24', '2022-06-13 09:45:49'),
+(45, 2, 'Ea unde qui.', 'ea-unde-qui.', 'Aut ducimus molestiae nobis id ipsam at consequatur. Consequuntur sit sunt consequatur. Iure qui et fuga perspiciatis dolorem deleniti. Est consequuntur laboriosam molestiae et rerum alias sapiente vero. Error facere doloribus earum esse et.\n\nFugit consequatur autem provident dolorem quia est et eum. Numquam illo corporis ratione quia voluptatum. Porro incidunt vel autem velit illo consequuntur.\n\nReprehenderit modi minima quis minus sit. Eligendi nam cupiditate alias soluta ut. Debitis qui dolor laboriosam consequatur officiis. Fugiat eveniet qui adipisci sunt adipisci tempora voluptas illum.\n\nEum molestiae sapiente quos hic non rerum minus. Sit eaque rerum voluptas necessitatibus nostrum voluptas magni. Impedit numquam omnis necessitatibus in aliquid a quo. Ab aspernatur quia ut quam atque id autem.\n\nIllum nihil qui architecto ut eos perferendis labore. Saepe ut et velit nemo. Expedita pariatur qui ut alias odit. Dolorum porro possimus laudantium ducimus ab optio possimus rerum.', 663297, 37, 4182, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1976-03-19 18:29:17', '2022-06-13 09:45:49'),
+(46, 4, 'Pariatur id aut.', 'pariatur-id-aut.', 'Atque ipsam eum iure et magni. Sed voluptate itaque est fugit. Atque quisquam quae consequuntur reiciendis autem aspernatur sed.\n\nUt labore nobis atque beatae qui. Ut velit nihil quidem beatae. Repellendus quae ex incidunt. Quia vero ipsum enim aut.\n\nMagni sed saepe ut inventore consequatur dolores est. Sint vel quia tempora delectus quae commodi quod. Quidem placeat eum odit modi corrupti quia. Dolorem voluptate explicabo nobis ut veritatis error a.\n\nDolores sed quo explicabo blanditiis necessitatibus. Similique optio beatae corporis quo pariatur. Eos quia accusamus non et fugiat. Odio eum consectetur nesciunt ratione pariatur.\n\nNon eos quia nemo doloribus occaecati incidunt. Doloribus ipsa quaerat qui deserunt eligendi eum velit.', 812159, 52, 3090, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1973-11-07 20:41:27', '2022-06-13 09:45:49'),
+(47, 2, 'Sapiente sint amet aut.', 'sapiente-sint-amet-aut.', 'Dicta illo nam ut eos. Sint dolorem blanditiis quam perspiciatis distinctio delectus fugit qui. Cumque quos alias repellat laboriosam mollitia. Nihil doloremque laudantium et aut vel sed aut.\n\nMaiores rerum voluptatem praesentium aperiam harum exercitationem sunt. Et molestias aliquam nulla sit qui id. Adipisci culpa rerum excepturi rem hic ut.\n\nNostrum autem adipisci sed dolor eveniet quis necessitatibus. Distinctio omnis enim cum reprehenderit. Excepturi sint dolores recusandae quis beatae maiores aut. Non voluptas ut quasi reprehenderit. Temporibus asperiores qui in dolorem et dolorum dolor numquam.\n\nIpsam quia voluptas at est. Earum quia laudantium ducimus reiciendis quidem necessitatibus maiores. Nemo dolor et a iste.\n\nSapiente possimus laudantium eos repellat voluptas quibusdam. Est quaerat officia amet et ut. Omnis itaque culpa sed quia tenetur minima et.', 295612, 65, 1497, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1972-09-30 16:20:01', '2022-06-13 09:45:49'),
+(48, 5, 'Aperiam facilis.', 'aperiam-facilis.', 'Aut nostrum illum voluptatum. Vel quo nostrum velit est fugit ea totam. Cumque fugiat explicabo est expedita dolore. Delectus doloribus voluptatem repudiandae error porro.\n\nDeleniti numquam sunt ea voluptates. A est quia recusandae laborum quibusdam modi. Omnis ipsam non consequatur ipsa voluptatem quia nam.\n\nQuae doloremque et magnam magnam. Tempore pariatur quidem error quo. Qui et veritatis exercitationem id molestias debitis.\n\nEt velit dignissimos eligendi unde quia asperiores dolores. Iusto rerum officia rerum quis non beatae. Tempora libero asperiores sed voluptatem odit ut dolor ratione. Autem quia incidunt est sunt necessitatibus vel unde.\n\nIllum aut praesentium placeat commodi voluptas autem eum rem. Assumenda a placeat quis sapiente voluptatem. Voluptatem aut et error quo. Dicta incidunt dolores dolor sed quisquam ipsum laborum.', 301198, 17, 4376, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2016-05-27 12:41:28', '2022-06-13 09:45:49');
+INSERT INTO `products` (`id`, `category_id`, `name`, `slug`, `detail`, `price`, `discount`, `weight`, `stock`, `image_1`, `image_2`, `image_3`, `sold`, `created_at`, `updated_at`) VALUES
+(49, 1, 'Omnis mollitia omnis.', 'omnis-mollitia-omnis.', 'Provident nihil consequatur et laudantium dolores. Perspiciatis quibusdam expedita qui cupiditate. Sapiente odio ab accusamus quo aperiam. Consectetur quia quam ut et.\n\nAccusamus in cum odit voluptatem. Asperiores asperiores optio perspiciatis ea dolor dolorem non sapiente. Autem inventore non ut iure placeat. Vitae suscipit hic cupiditate. Eos id optio deserunt molestias.\n\nMinus ex dolores suscipit quasi. Labore animi commodi ipsum odio et.\n\nEst quia earum sapiente sed accusantium et qui itaque. Fugiat iusto deserunt quisquam velit. Quas tempore aut fuga magnam officiis.\n\nEt quia aliquam sint quas. Molestiae atque voluptatem et iusto reiciendis laborum ipsam.', 32939, 1, 2230, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1998-08-19 07:22:58', '2022-06-13 09:45:49'),
+(50, 5, 'Itaque quaerat nemo dolorem.', 'itaque-quaerat-nemo-dolorem.', 'Sed corporis sed aperiam in quas. In illo aut tempora aliquid sequi omnis dolore. Id voluptatum aut veniam id. Placeat sit dolor temporibus fugit facilis delectus.\n\nVoluptatem laudantium architecto hic quae qui in at. Ad voluptatem repudiandae sint aut consequuntur. Qui sed beatae iste a occaecati. Voluptatibus corporis ut rerum consequatur et atque qui. Quas voluptatem debitis et est dolor repellat ut.\n\nAut est cupiditate reprehenderit commodi adipisci sint. Maxime dolorem qui est suscipit. Adipisci et quod aut aliquid commodi ipsam consectetur.\n\nCulpa nisi exercitationem dolor debitis. Autem maxime doloremque ab unde consequatur. Ut corporis rem optio consequatur asperiores facere ipsum natus.\n\nMolestiae reiciendis labore itaque necessitatibus. Odio perferendis dicta illo quasi ut. Minus at ducimus sed dicta. Qui debitis nesciunt dolorum sunt.', 81382, 50, 4832, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1984-03-29 05:44:38', '2022-06-13 09:45:49'),
+(51, 1, 'Impedit sed totam vitae.', 'impedit-sed-totam-vitae.', 'In corrupti accusantium iure voluptatibus dignissimos est. Dicta molestiae iure in dolorum consequuntur soluta. Reiciendis maxime odio quidem consequatur.\n\nPerferendis amet ut sunt. Alias harum aut consectetur id qui similique. Doloremque est vero ut aut autem debitis incidunt.\n\nDebitis velit nobis sit debitis. Quod et omnis et totam alias. Ullam voluptas reprehenderit tenetur reprehenderit nisi ut omnis.\n\nRerum et qui quis ipsa omnis iste. Non similique occaecati incidunt ratione esse. Aut fugit voluptatem deserunt earum autem. Earum minima non veniam deserunt illo.\n\nId quidem non quibusdam est aut. Dolore rem est nemo necessitatibus. Praesentium maiores est saepe et praesentium nostrum. Temporibus in nulla molestiae quia doloremque sed.', 746459, 16, 3235, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1995-07-15 12:45:53', '2022-06-13 09:45:49'),
+(52, 5, 'Dolores est repellendus.', 'dolores-est-repellendus.', 'Cupiditate animi autem ut consequatur nihil architecto voluptatem. Vero pariatur quia tempore. Nihil quae modi consequuntur officia.\n\nDolores non error excepturi aliquam perspiciatis. Dolores ipsam consequatur et qui nihil ea.\n\nEx ut quia neque pariatur. Et voluptas aut modi quia dolore aut. Cupiditate aut iste iure ea. Sequi quasi error sit odit.\n\nEnim tenetur voluptate incidunt ab odit. Exercitationem error in ullam quo. Tempora non iusto accusantium vel facere nemo nisi. Excepturi ut dolore consequatur et eos illo.\n\nExercitationem magni officia ea veniam totam. Quia iusto similique qui vero ipsum architecto. Nostrum asperiores eius aspernatur quod non. Omnis est quod id exercitationem beatae.', 341180, 24, 2480, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2003-03-10 17:52:01', '2022-06-13 09:45:49'),
+(53, 4, 'Quia dignissimos dolorum velit.', 'quia-dignissimos-dolorum-velit.', 'Sunt omnis ut corporis maiores dolor neque maxime. Accusantium aliquid mollitia doloremque cum iste suscipit ab. Voluptas odio nostrum reprehenderit ratione consequatur nulla perferendis.\n\nNulla qui expedita dolore minima. Et dolor accusamus dolor qui. Libero corrupti nihil cupiditate laudantium incidunt culpa.\n\nIpsum harum quos tempora. Aut est quam tempore recusandae facere iste. At rerum magnam enim et. Et sint expedita sapiente rerum in architecto.\n\nDebitis ipsum facere et et omnis ut. Placeat quia maxime necessitatibus sit. Assumenda modi perspiciatis voluptatum qui consequatur non qui.\n\nBeatae consequatur rerum provident ipsa minima magnam sunt. Enim aut aut error sint occaecati esse aut. Rerum quaerat velit quia quasi quis nam.', 984994, 59, 1251, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1975-10-17 06:43:52', '2022-06-13 09:45:49'),
+(54, 1, 'Et iusto ut.', 'et-iusto-ut.', 'Suscipit iusto optio nesciunt. Veritatis dolores nihil ut necessitatibus. Tempora odit debitis ullam molestiae sed quod.\n\nAperiam tempora aut officiis illum. Ad temporibus sed autem ullam aut velit quia.\n\nNon consequatur optio facilis reiciendis itaque. Et exercitationem quam nobis ea in sed esse. Iure in sunt libero enim quaerat. Magnam id et voluptas sit dolores.\n\nQuaerat in nulla et voluptate animi provident. Impedit sed ullam quasi rem. Ad dignissimos commodi qui nihil porro molestias.\n\nUt reiciendis a aspernatur quia in. Nisi et iste minima. Possimus ipsum quas voluptatum corporis aperiam alias. Nemo sunt est cum.', 991154, 65, 1658, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2019-05-30 13:55:19', '2022-06-13 09:45:50'),
+(55, 3, 'Quae sunt modi et.', 'quae-sunt-modi-et.', 'Deserunt aut ad sed laboriosam. Dolor fugiat ex commodi amet vel. Aperiam et rerum repudiandae sed voluptatem odio reprehenderit.\n\nNihil quia quis autem dicta repudiandae. Aspernatur ipsum architecto voluptatem voluptatem unde error neque eos. Sed consequatur nesciunt qui sit quas.\n\nError qui repellendus dolorem. Eum repellat sint hic minus quia. Sunt id veritatis inventore quo.\n\nEligendi quia illo perspiciatis assumenda harum rerum ea. Necessitatibus autem ut dolores qui impedit. Quia quasi officiis laboriosam fugit. Velit dolor quis sunt aut qui.\n\nVoluptas voluptatum aut ratione natus et ipsum a. Minus enim aut eum harum fugit. Saepe ex velit quasi inventore.', 280076, 33, 4208, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2005-07-18 21:08:21', '2022-06-13 09:45:50'),
+(56, 2, 'Odit maiores quae libero.', 'odit-maiores-quae-libero.', 'Sint aliquam omnis nulla voluptatum quae quasi itaque. Commodi commodi id adipisci earum dolor molestias similique repellat. Et ducimus voluptatem sed. Aut esse et consequuntur ipsa asperiores minus.\n\nNihil nemo quas autem adipisci et et quia. Ea sint et omnis voluptatem soluta quisquam molestiae aut. Laboriosam enim quasi repellendus aut aliquid. Optio illo ipsa minima vel dignissimos autem amet.\n\nAmet ducimus eveniet rerum pariatur maxime nesciunt. Similique voluptatum in molestiae mollitia. Minima eaque nam debitis eos omnis possimus.\n\nEt pariatur doloremque laboriosam recusandae. Iste doloremque dolorem aspernatur nulla praesentium alias repudiandae. Rerum ipsa quia nihil.\n\nSunt ut eius dolorem voluptatum vel explicabo odit quasi. Id nihil officia voluptatem. Vero incidunt fugit sed eligendi neque inventore. Laboriosam voluptates at quis veritatis rerum repudiandae earum.', 859711, 18, 4994, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1971-06-27 12:47:16', '2022-06-13 09:45:50'),
+(57, 4, 'Unde et maxime iure.', 'unde-et-maxime-iure.', 'Tempore consectetur error dolores qui architecto nihil. Vel non tempora maiores ipsam quia qui doloribus. Quas numquam ipsa maiores dolorum sunt sunt corrupti.\n\nCommodi nihil adipisci magnam earum quia. Ratione expedita rerum dolorum sunt minima nesciunt expedita. Voluptatem alias enim blanditiis earum doloribus magnam.\n\nPorro dignissimos assumenda voluptas dolor commodi enim iusto accusantium. Odit sunt dolores itaque. Voluptatem recusandae et tempora nostrum in ea harum. Sunt facere aperiam et occaecati aut.\n\nNulla distinctio quia ab provident. Consequuntur molestias quaerat unde dolorem assumenda. Magni omnis culpa et vitae repudiandae est.\n\nPorro soluta architecto porro consequatur. Repellendus aut qui distinctio quis blanditiis nesciunt repellendus iure.', 373576, 11, 3974, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2019-03-19 03:48:18', '2022-06-13 09:45:50'),
+(58, 4, 'Voluptatem quo et.', 'voluptatem-quo-et.', 'Et harum sapiente itaque voluptatem. Aut voluptatem ea quia ratione. Voluptates occaecati enim molestiae nihil vero illum.\n\nOdio ab doloribus ex et sit qui id. Vel impedit veritatis beatae molestias dignissimos omnis architecto. Placeat explicabo atque laboriosam fugiat tempore suscipit voluptas.\n\nAut ducimus quo ad nemo error totam. Magnam qui commodi commodi non libero facilis ut dolorum. Earum at quia eum architecto dolorem ipsam. Sit fuga et explicabo enim.\n\nEst sint est aut earum voluptas nam non. Nobis nostrum pariatur blanditiis. A repudiandae ea architecto velit et aspernatur recusandae optio. Eaque qui ut expedita aut quia magni.\n\nAsperiores beatae aut nulla accusantium enim minus rerum. Assumenda quia sed aliquid et praesentium quo qui. At voluptatem non ab aperiam.', 125672, 48, 1460, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1983-04-29 09:11:39', '2022-06-13 09:45:50'),
+(59, 4, 'Exercitationem sint quis.', 'exercitationem-sint-quis.', 'Placeat aperiam doloribus ut et. Ea et inventore consequatur. Rerum deserunt quasi culpa cumque atque.\n\nMolestiae est consequuntur aut. Id quia et omnis enim consectetur. Qui aut ut distinctio libero.\n\nEt officiis aut eum architecto. Aut ipsa officia voluptatem quaerat ipsum natus.\n\nError sit tempora aut itaque est libero voluptatum illum. Rerum aut illo at sed ut minus. Laudantium repellendus cumque sit et expedita et distinctio.\n\nNisi omnis et magni rerum. Possimus rerum enim ea optio culpa tempora. Consequatur voluptates maxime beatae corrupti sed tempora assumenda.', 677326, 60, 3365, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2006-04-04 14:39:55', '2022-06-13 09:45:50'),
+(60, 5, 'Ipsam harum nihil.', 'ipsam-harum-nihil.', 'Quos pariatur impedit nobis odit recusandae. Temporibus sequi sed eaque iure nemo ut perspiciatis. Id eveniet distinctio architecto ea natus molestiae temporibus modi. Corporis omnis provident commodi ullam consectetur quia.\n\nUt et ad est aut consequatur voluptate vel. Maiores id qui non eum suscipit. Numquam nihil quis modi nulla numquam quis ex.\n\nNihil eum quia enim et reprehenderit sed magni. Eveniet odit quas libero doloremque sit laborum cumque. Perferendis est et quia numquam ea ducimus.\n\nEst ipsa dicta laborum odio sed aliquid. Sit atque minima aperiam aut sint debitis ex. Earum culpa consequatur quam natus cupiditate quisquam quos. Quam facere numquam praesentium dignissimos.\n\nSed autem fugit in facere. Est quasi aut voluptas dolorem dolor dolores. Deserunt qui eos culpa est sit labore sit nihil.', 996187, 73, 3766, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2021-03-11 20:36:47', '2022-06-13 09:45:50'),
+(61, 5, 'Voluptatem sint facere omnis.', 'voluptatem-sint-facere-omnis.', 'Enim molestias possimus reprehenderit omnis eos. Quia et dolor debitis quasi culpa architecto. Libero quos et aut ut delectus alias. Nobis porro voluptate recusandae laudantium facere culpa.\n\nEx iste quae natus dicta repellendus iure inventore et. Voluptas quod id repudiandae vero occaecati ipsa voluptatibus. Ex iste at excepturi earum illo debitis.\n\nRecusandae consequatur velit sit qui soluta. In enim omnis consequatur ut. Porro est esse expedita maxime minima saepe dolorum. Commodi iure voluptatem perspiciatis vero dolore illum.\n\nBlanditiis commodi dicta qui non debitis rerum. Dolorem eum sed nesciunt ut eaque corporis voluptas. Incidunt quis ad eos ut nesciunt deleniti. Hic quasi fuga laboriosam voluptas atque et quaerat fugiat.\n\nQuis hic saepe neque eveniet voluptatem. Nulla eligendi sit quis sed et in. Et rerum suscipit eius recusandae quaerat earum non exercitationem.', 694851, 46, 1542, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1975-12-13 19:42:27', '2022-06-13 09:45:50'),
+(62, 1, 'Provident eveniet omnis rerum.', 'provident-eveniet-omnis-rerum.', 'Quia aut fuga et et dolorum quos modi. Molestiae molestiae rerum omnis debitis sit assumenda rerum. Voluptas eaque est non expedita.\n\nEum ducimus voluptates eum vero. Quia dolor est nihil eaque error recusandae voluptas. Omnis eum est nostrum qui reiciendis et qui. Omnis earum distinctio eaque necessitatibus. Distinctio hic eum ut eius repellat error iste.\n\nEos et qui tenetur similique. Voluptate dolorum soluta corporis rerum. Libero quam voluptate repellat expedita.\n\nUt voluptatibus facere aut distinctio sed quia. Qui reiciendis molestias sint aut sit. Quae et et odit officia et. Quo voluptatem rerum perferendis optio.\n\nQuisquam explicabo ut minus. Et eius voluptas earum laborum dolorem deserunt. Vero sed ut impedit dolor ab qui repudiandae. Omnis quod vero fugiat cum porro.', 965058, 7, 4372, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1996-05-09 20:32:42', '2022-06-13 09:45:50'),
+(63, 5, 'Qui dolor rem accusamus.', 'qui-dolor-rem-accusamus.', 'Maiores voluptatem maxime sunt dolor eum tenetur sed eum. Ex id rerum voluptas sit dolorum ut voluptate. Temporibus eligendi harum sint quia est doloribus temporibus dolore. Minus aspernatur totam ut nostrum cum et.\n\nDebitis eum reprehenderit dolores sed fuga nihil natus qui. Eveniet eos ut quas provident.\n\nReiciendis delectus dolor nemo dolorem. Vel est laborum qui quaerat. Nesciunt cum dolor corrupti et.\n\nPlaceat expedita sit dolor minima. Magnam asperiores ut molestiae voluptatem aliquid. Et assumenda ducimus quos ab omnis. Deleniti sapiente eum numquam sequi.\n\nVeniam voluptatem reprehenderit neque id consequatur. Quam doloribus eveniet esse et velit. Et ex sequi et quaerat culpa consequatur. Amet et laborum laudantium ipsa commodi odit.', 23539, 18, 1022, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2016-05-20 00:53:03', '2022-06-13 09:45:50'),
+(64, 3, 'Repellat exercitationem similique voluptatem.', 'repellat-exercitationem-similique-voluptatem.', 'At necessitatibus vitae culpa eum voluptatem deserunt. Aut et fugiat alias culpa. Quasi sed ea quo nisi laboriosam.\n\nRepellendus dolores omnis dolores pariatur aut. Doloribus perspiciatis nihil repudiandae exercitationem. Animi et harum nobis id consectetur cupiditate. Qui non aut amet ex blanditiis quia quasi. Dolor blanditiis quaerat reprehenderit non doloremque laborum reprehenderit.\n\nUt vel ut est expedita esse nulla. Ex perferendis nesciunt quia incidunt maxime et et. Adipisci magnam molestiae quia voluptatem qui fugiat. Est pariatur harum modi. Accusamus earum ducimus facilis odio.\n\nIpsum possimus consectetur omnis id. Qui porro id sit consequatur dolore harum. Dolores quisquam non delectus sint ad.\n\nEt aut illo nesciunt odio voluptate in eius. Ab eveniet magnam veritatis voluptas. Maiores suscipit autem soluta error neque.', 691912, 33, 2417, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2004-04-23 00:55:36', '2022-06-13 09:45:50'),
+(65, 4, 'Aspernatur ea.', 'aspernatur-ea.', 'Error incidunt at possimus nulla voluptatum doloribus quibusdam. Molestiae corrupti et et. Facere eum sunt delectus sed ab inventore.\n\nEa aut animi itaque animi similique eos. Quo quibusdam veritatis aliquam vitae eaque earum. Ratione nostrum omnis est excepturi. Aperiam quibusdam vel quisquam.\n\nProvident ut id omnis delectus voluptatum velit reiciendis qui. Sed ut dolor ea esse corrupti quod. Sed in rem tenetur et eum iste natus. Quaerat esse minima et eaque.\n\nEos dolor qui culpa consequatur possimus. Amet quia distinctio ducimus rerum qui ipsum. Ut repellat qui architecto distinctio animi natus.\n\nQuia iure ut dolor. Non recusandae esse debitis cumque distinctio dolorum. Eligendi qui nemo fugiat aut sequi facere rerum.', 983636, 32, 2396, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2018-09-18 21:15:43', '2022-06-13 09:45:50'),
+(66, 2, 'Est qui libero.', 'est-qui-libero.', 'Deleniti impedit ea et laborum. Aut tempora ad doloremque adipisci et qui ut consectetur. Quasi facilis modi nihil dolores. Tenetur rerum et tenetur qui.\n\nTemporibus sed reprehenderit quae consectetur nemo. Fuga alias et tenetur hic. Expedita vel ad earum voluptatem dolores tempore. Rerum optio consequatur et veritatis sit.\n\nQui eos dolor commodi distinctio. Dolores adipisci ut delectus quam. Sed id quia incidunt numquam. Aut dolor nam eveniet dolor.\n\nUt est vero rerum. Esse unde nulla nihil odit.\n\nAut totam iste ut unde quis sunt optio. Voluptatem cupiditate temporibus praesentium alias ducimus. Enim accusamus corrupti et similique. Voluptatum molestias voluptatem et modi unde.', 924028, 61, 1929, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1987-02-19 20:54:49', '2022-06-13 09:45:50'),
+(67, 4, 'Veritatis est quidem saepe beatae.', 'veritatis-est-quidem-saepe-beatae.', 'Quis non qui dicta eaque. Incidunt et nemo et sunt. Et id quo assumenda cupiditate id placeat.\n\nVoluptas voluptatem repudiandae ut tenetur rem et similique et. Cupiditate quod voluptatibus dignissimos harum eveniet dolores commodi non. Nihil nihil blanditiis debitis iste fugit et.\n\nNumquam architecto quis consequatur ab aut rerum velit. Laboriosam quis magni et ducimus ut molestias. Vero enim nihil pariatur suscipit voluptatem illo. Voluptate omnis necessitatibus deleniti eos voluptatum.\n\nEligendi eveniet laboriosam quo iusto omnis suscipit voluptatem incidunt. Aspernatur ut sunt nulla ipsum excepturi consequatur. Ut enim accusantium molestiae dolor ullam eius.\n\nSit recusandae ullam provident minus a. Corrupti vero nulla asperiores aut voluptas libero. Ut voluptate non incidunt repellendus non culpa qui. Voluptas quo amet ipsa dolorem eligendi veniam et impedit.', 63691, 68, 4251, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1991-10-13 07:08:23', '2022-06-13 09:45:50'),
+(68, 4, 'Autem est consequatur.', 'autem-est-consequatur.', 'Dolorem quis magni alias. Non dignissimos quia quas aut. Omnis voluptatem voluptatem nisi beatae vel laborum. Quis odio sapiente harum dolorem dolore aspernatur.\n\nFugit quibusdam accusamus minus iusto. Quaerat eveniet a excepturi omnis rem aut. Beatae sunt non dolor. Voluptas quae perferendis nesciunt et quaerat vel. Ut quasi sed nesciunt ea.\n\nQuas eum illo dolorem dolorem error ipsam eum aperiam. Nihil nisi ipsam ad aliquid sint iure ut. Temporibus totam aliquid sed et quia vero. Voluptates dolores eius molestiae id illo ducimus et.\n\nAccusamus eius dolores molestiae nobis accusantium qui. Quas ut fuga aperiam. Ex molestias blanditiis necessitatibus et magnam ut consequuntur.\n\nEnim at deserunt quia et. Eum enim sit quidem aut illo ut a.', 361878, 6, 3463, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1978-01-28 11:09:25', '2022-06-13 09:45:51'),
+(69, 2, 'Consequatur quibusdam quis sed est.', 'consequatur-quibusdam-quis-sed-est.', 'Laborum ut voluptas sed iure consequatur. Quaerat sed modi ex omnis. Odit iste tempora beatae deserunt optio. Doloribus voluptas qui et possimus quas quidem nobis.\n\nMolestiae possimus consequatur est rem vero qui suscipit. Vero molestiae nihil ex perferendis aut et qui quis. Ipsam illum facere reprehenderit praesentium consequatur rerum.\n\nIure ut aut perspiciatis beatae. Molestiae saepe libero possimus expedita quo numquam qui odio. Quas culpa odit non.\n\nQuia omnis sint ab necessitatibus ab. Odio rerum cumque tempora qui sunt distinctio aut. Id impedit quia omnis voluptatem.\n\nEaque repudiandae reiciendis nesciunt iste explicabo repellendus. Pariatur quasi voluptatem cupiditate.', 547561, 74, 2706, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1977-02-03 17:28:15', '2022-06-13 09:45:51'),
+(70, 2, 'Sunt ut rem voluptatem doloremque.', 'sunt-ut-rem-voluptatem-doloremque.', 'Quibusdam aspernatur nisi inventore illo fugit illo eius. Voluptatem facere excepturi labore eos possimus. Laborum repudiandae rerum sed qui debitis. Ratione provident adipisci sunt dignissimos earum.\n\nUt voluptatibus enim dolores perferendis quibusdam eaque rerum. Aspernatur sed ratione distinctio et. Et id error voluptates et omnis ullam. Officiis architecto quae voluptates in recusandae qui soluta.\n\nTotam deserunt quasi sed dolorem et vero molestiae. Nihil autem aut nihil et. Facilis qui velit beatae necessitatibus eum voluptatum.\n\nQuia beatae ea perferendis nam sunt molestiae est. Dolorum qui quae quidem et molestiae aut sunt. Porro rerum earum dolor animi tempora adipisci at. Dolorem aliquam rem facere enim delectus nesciunt odit.\n\nDelectus ullam optio tempore excepturi veritatis natus nesciunt. Vero omnis vel in quisquam odio. Consequuntur eum voluptatem ipsam reprehenderit voluptate et consequatur.', 635437, 74, 2663, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1994-08-13 23:07:48', '2022-06-13 09:45:51'),
+(71, 2, 'Voluptatem aperiam.', 'voluptatem-aperiam.', 'Harum eum tempora ut pariatur. Aperiam sint blanditiis cum id. Dolorum saepe laboriosam rerum voluptatibus voluptas.\n\nFacilis ipsam consequatur dolore deleniti quaerat optio culpa. Consequatur tenetur voluptates pariatur asperiores numquam consequatur totam. Blanditiis qui distinctio doloribus mollitia eveniet accusantium laudantium.\n\nVel dolor non ipsa quia sapiente. Eligendi animi non aliquid. Animi optio tenetur dolores veritatis doloremque aut esse.\n\nSed ut voluptas accusantium. Quam et aut provident. Assumenda eum ex fuga et provident dolores.\n\nSit laudantium non et quasi. Eum ut corporis et explicabo. Et quibusdam corporis delectus consectetur. Ut quo eaque iste culpa.', 91320, 58, 1625, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2013-03-11 23:29:34', '2022-06-13 09:45:51'),
+(72, 4, 'Labore voluptas nam.', 'labore-voluptas-nam.', 'Dolor cumque ut ad aut. Ex dolores aperiam aut nam rerum consequuntur. Incidunt numquam molestiae beatae repellendus nobis. Commodi ut perspiciatis est accusamus similique dolor et. Tenetur corrupti nesciunt iure odio.\n\nLaborum eligendi laudantium ipsum. Asperiores totam maxime iure quae. Omnis beatae consectetur quisquam inventore molestiae sapiente id. Ipsam sed velit consequuntur nobis sit.\n\nVoluptates sint vel ut est. Eaque nihil nihil omnis et. Numquam quis quia enim eius occaecati pariatur. Similique totam natus nemo et.\n\nNon necessitatibus velit velit voluptatibus at minima numquam. Nemo odio totam labore eum quae dolor. Excepturi provident eos ut nisi. Voluptates debitis aperiam minus consequuntur et.\n\nOfficia deserunt quidem voluptate sunt aliquid nam. Facilis harum qui saepe mollitia aut. Tenetur distinctio veritatis accusamus quia. Ipsa qui corporis et totam ullam.', 452505, 53, 4456, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2000-03-08 08:24:06', '2022-06-13 09:45:51'),
+(73, 3, 'Veniam rerum iusto.', 'veniam-rerum-iusto.', 'Officia voluptatem blanditiis itaque est. Eum sit sapiente exercitationem accusantium itaque quas molestias sint. Vitae omnis qui corrupti necessitatibus. Consequatur et est quo optio voluptatem voluptatem incidunt.\n\nRem nulla distinctio excepturi aspernatur. Et ipsam quia repellendus eos commodi mollitia ullam. Neque quibusdam quaerat enim asperiores. Et ut iste unde et id perspiciatis sequi.\n\nDolores dolore aperiam dolores est ut sed qui. Iure sed dolorem ipsam natus assumenda repellendus. Exercitationem culpa et adipisci sed recusandae. Nostrum dolore eaque numquam quo sunt.\n\nNisi et ex adipisci autem. Dignissimos amet quia quaerat corrupti. Non accusamus consequuntur atque nam.\n\nQuia quisquam aut illum eaque consectetur et fuga rerum. Voluptatibus ut pariatur explicabo incidunt aut reprehenderit sit. Minima cum atque sit veniam quia minus. Voluptatem illo provident tempore molestiae aut eum sed.', 378623, 33, 4630, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2019-08-06 09:53:01', '2022-06-13 09:45:51'),
+(74, 2, 'Sequi tempora aperiam beatae.', 'sequi-tempora-aperiam-beatae.', 'Sed ut voluptates esse temporibus hic. Voluptate asperiores voluptatum fugit omnis voluptatum rerum. Soluta deleniti quasi iste sint.\n\nUt doloremque qui ipsa quasi ducimus aut non. Qui consequatur molestias esse itaque dolores ipsum. Quae sed ipsum recusandae hic fugit aut. Est dolorem unde ipsa.\n\nAspernatur accusantium consequatur in nesciunt velit voluptas et aut. Beatae deleniti nihil quaerat voluptatem velit aut similique. Et deserunt beatae harum. Amet excepturi a impedit animi quae placeat perspiciatis.\n\nUt quia aut sequi vel dolor qui tenetur nemo. Autem ipsum veniam deleniti itaque. Blanditiis ullam animi nesciunt sequi enim sit ad.\n\nVitae sunt itaque ea minus nobis est error. Eius reiciendis vel sed porro. Inventore dicta quae ipsam neque earum et cum est. Ut consequatur est quia et labore corporis.', 987167, 41, 4802, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1991-08-09 00:45:07', '2022-06-13 09:45:51'),
+(75, 3, 'In tempora.', 'in-tempora.', 'Laudantium perferendis enim nam fugiat veritatis suscipit ut alias. Omnis repellat est id voluptate nisi quibusdam voluptatem. Ut quos est molestiae non explicabo. Corporis illum vel corrupti illum.\n\nSimilique culpa illo sapiente optio eaque ad. Quam blanditiis eius nam. Cumque eligendi quas beatae ut non illum nihil. Odio animi dolorum ipsam ab occaecati cum ut.\n\nUt temporibus similique odit velit atque voluptatem temporibus. Corrupti sapiente nesciunt et eveniet. Voluptatem pariatur totam sunt officia. Velit dignissimos corrupti inventore illo ea.\n\nSequi necessitatibus ipsa quo culpa rerum. Amet minus commodi inventore sint odit aperiam. In ducimus natus autem sed. Tempore voluptates facere officia ut accusamus.\n\nOfficiis eius ut doloremque iusto provident et nulla quia. Accusamus saepe repudiandae maiores harum non modi. Voluptatem dolorem et quia aperiam consectetur architecto. Temporibus ut corporis placeat iusto vel.', 715130, 58, 1998, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1983-06-26 16:42:50', '2022-06-13 09:45:51'),
+(76, 4, 'Maiores voluptatem.', 'maiores-voluptatem.', 'Sequi magnam odit accusantium vel quia mollitia autem. Quia non eligendi quia ipsa iure laboriosam laborum. Aut ipsa illo minus quasi.\n\nIncidunt repellendus incidunt cum in ut. Voluptatem dignissimos voluptatem et recusandae. Omnis commodi ut molestiae esse.\n\nArchitecto ut corrupti cumque. Voluptates voluptatem voluptatem cupiditate odio. Sed perferendis autem non recusandae tempora aut. Qui praesentium maiores eveniet eos.\n\nUt dolore qui ratione molestias ipsa. Voluptatibus veniam cupiditate ut. Sunt nihil quas sit quia sequi quo autem ut. Praesentium quia excepturi cupiditate cum et natus aut ea.\n\nMolestiae ducimus eius vel sit qui quisquam. Deleniti vel earum voluptas deleniti sit et. Enim non magni ullam dignissimos eos voluptatum possimus omnis.', 242896, 19, 4768, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2005-02-22 01:15:38', '2022-06-13 09:45:51'),
+(77, 5, 'Dolore voluptatibus delectus quod.', 'dolore-voluptatibus-delectus-quod.', 'Veritatis quod hic est sint molestiae non perspiciatis et. Corporis ipsa magnam corrupti. Atque illo voluptas odio ipsum.\n\nMaxime consectetur sed aut numquam laudantium. Vel totam aut sunt eligendi minima dolorem numquam deserunt. Occaecati dignissimos provident incidunt eaque.\n\nNesciunt ipsum iste recusandae debitis aut. Ullam earum ipsa eveniet enim. Explicabo vero laudantium ea velit repellendus consequatur cum qui.\n\nNam labore laboriosam qui. Ut eaque eaque autem eos.\n\nEt quam eligendi ut quos. Ipsum voluptatem distinctio quia culpa velit qui suscipit consequatur. Sed nam corporis sunt est minus.', 194160, 71, 2656, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1979-11-04 01:09:57', '2022-06-13 09:45:51'),
+(78, 2, 'Placeat dicta dolorem.', 'placeat-dicta-dolorem.', 'Corrupti enim sed asperiores. Voluptatem possimus qui exercitationem ea sequi aliquam occaecati. Alias et magnam ut eum.\n\nAliquam quae omnis id. Natus quisquam reprehenderit qui voluptas. Possimus modi aut cupiditate. Voluptates quia deserunt beatae explicabo officiis deserunt.\n\nId illum eligendi inventore omnis error. Officiis quis debitis illum est. Molestiae pariatur omnis corrupti et voluptas optio cum. Placeat sed praesentium nihil cupiditate delectus. Hic labore id cum omnis ut autem dolorum.\n\nConsequatur et omnis iusto eum doloribus distinctio aut omnis. Voluptates ducimus incidunt in tempora eveniet laboriosam labore. Sit at in enim autem. Dolorem est iure sed est.\n\nTempore nihil ipsa animi voluptatem aspernatur consequuntur labore. Repellat laudantium voluptatem ut omnis in. Aperiam corporis molestiae velit est esse eum iure facere.', 13153, 55, 4365, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2014-08-12 13:50:06', '2022-06-13 09:45:51'),
+(79, 2, 'Rerum quis aut.', 'rerum-quis-aut.', 'Molestiae provident et error totam accusamus quasi iure. Illo quasi reiciendis dolore qui assumenda quisquam. In quis repudiandae aut commodi est reiciendis. Et voluptatem voluptas eum cupiditate architecto.\n\nDignissimos repellendus eos inventore sit. Quas illo delectus nostrum laborum.\n\nLaudantium non vero blanditiis mollitia autem. Est ad libero sapiente et impedit. Unde ratione voluptatem veniam. Et accusantium voluptatem et.\n\nVelit voluptas voluptates maiores et est aut. Qui ratione nostrum ipsam sit vel. Earum quis fuga totam aut quam. Ipsa blanditiis iste nobis fuga reiciendis laboriosam.\n\nQuo illo ut aut debitis minima. Exercitationem quia adipisci facilis excepturi perspiciatis. Vel cum cupiditate iusto rerum maxime dolorum laudantium.', 201760, 21, 2958, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1996-10-21 21:49:23', '2022-06-13 09:45:51'),
+(80, 5, 'Facere optio totam laboriosam minus.', 'facere-optio-totam-laboriosam-minus.', 'Facilis sunt voluptas impedit corrupti illo eum optio. Voluptatum dolorem dolor sit occaecati asperiores temporibus non. Qui nemo reprehenderit ducimus maiores. Quasi ex non amet earum impedit vitae autem. Velit delectus ea velit.\n\nSit quis minus fuga voluptatem. Debitis sint labore aut ullam modi suscipit fugiat. Corporis ducimus iure et et nihil deserunt odio sequi. Sequi illum et natus saepe aut eos impedit qui.\n\nCommodi non et adipisci sit quo itaque. In rerum dolore libero sed. Debitis temporibus expedita consequatur culpa. Et optio sed eum aliquid facere sapiente nisi.\n\nDucimus delectus aut eaque illum tempora molestias. Recusandae ea aspernatur est vitae ipsum adipisci corporis ullam. Quod consequatur omnis fugiat odio tempora cumque.\n\nRerum autem veritatis rem est. Et placeat nemo quasi provident illo voluptatem et. Placeat in est aliquid. Est possimus corporis ut accusantium.', 199326, 65, 1530, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1999-05-11 04:01:25', '2022-06-13 09:45:52'),
+(81, 2, 'Fugit atque quasi.', 'fugit-atque-quasi.', 'Ipsum voluptas aperiam et dolorem ex reprehenderit. Animi voluptatem dolor nihil. Velit in qui minus et laudantium reprehenderit consequatur. Quia omnis corporis labore omnis quasi dolor dignissimos.\n\nNemo minima beatae ut culpa reprehenderit. Ut ipsa nulla incidunt velit corrupti. Libero quibusdam consequatur unde nesciunt dolores.\n\nExcepturi illum ex minima beatae ipsum voluptas. Tempore velit fugiat quo et voluptas perferendis et eum. Dolor quis omnis natus enim. Aut expedita et molestias quis aliquid. Illo est dolore quis praesentium.\n\nLaborum dolorem error minus esse. Iusto consequatur molestiae dolor voluptatem et magnam. Neque tenetur officiis distinctio modi facere praesentium sequi. Sint voluptate itaque quis quam voluptatem.\n\nQuos modi eligendi amet non dicta in occaecati. Pariatur quasi consequatur neque maiores harum iure tenetur. Laboriosam qui modi dolorem.', 984662, 1, 1354, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1973-01-23 10:22:28', '2022-06-13 09:45:52'),
+(82, 3, 'Omnis quod ut.', 'omnis-quod-ut.', 'Quae porro atque nulla. Expedita dolorum occaecati culpa reprehenderit aut. Facere dolorem sed ipsam beatae impedit nihil ex omnis. Nesciunt placeat aut quaerat recusandae ea expedita amet tempora.\n\nAut molestiae laudantium et hic quis ad voluptate consequatur. Dolore similique sed libero optio. Impedit nemo quasi quaerat et totam. Omnis eos in qui eos consequatur quod repudiandae.\n\nVoluptatem minima quo numquam iste at odio qui. Ut aliquam qui eius quia culpa. Non voluptas quia quis nulla inventore perferendis quidem cum. Omnis quis reprehenderit quisquam quidem dolores officiis est illo.\n\nSed aut ducimus consequatur qui voluptate quasi. Sed est itaque asperiores unde in quis. Voluptate sint dolorem et harum eum sunt aut.\n\nLaboriosam sed corrupti blanditiis aut est iusto natus placeat. Repellat iure cumque ex ullam ea. Ut error asperiores incidunt repellendus hic qui. Officia qui consequatur voluptas.', 828808, 12, 4111, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2001-06-17 07:48:43', '2022-06-13 09:45:52'),
+(83, 3, 'Placeat debitis deleniti amet.', 'placeat-debitis-deleniti-amet.', 'Facere repellat explicabo vero et. Reiciendis nihil sunt hic. Totam suscipit dolores laborum maiores sunt est. Provident doloremque vel et modi ut consequatur suscipit.\n\nUt soluta fuga consequatur praesentium. Placeat rerum qui id. Voluptas ratione voluptate laboriosam cupiditate.\n\nTemporibus dolorem exercitationem laboriosam voluptatem ullam quia reiciendis. Dolores sunt quis quasi consequuntur. Atque fuga quia ipsum aut quae iusto.\n\nMaiores praesentium molestiae vero saepe doloremque maiores in. Beatae quasi laboriosam earum vitae iste. At ipsam quia eos quia quasi at eos. Alias quia vel dolorum vel expedita sapiente est.\n\nEt qui commodi magni itaque eum et sint. Cum officia impedit hic atque. Nam incidunt dolor id dolorum vel.', 154783, 62, 3208, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1992-02-14 18:39:22', '2022-06-13 09:45:52'),
+(84, 3, 'Sit et quod consequatur.', 'sit-et-quod-consequatur.', 'Non dignissimos atque non veniam fugit quae. Id nisi molestiae cupiditate qui dolor. Dolorem optio illo deserunt beatae voluptatum quidem aut. Suscipit voluptate reprehenderit omnis dignissimos. Dolorem ipsum sit perferendis non vel porro doloremque.\n\nSint deleniti cum excepturi perferendis ut. Consequuntur reiciendis et hic. Minima tempora veniam architecto.\n\nEt facilis quibusdam eos incidunt hic porro. Quidem nesciunt nobis cupiditate ex aut iure. Perspiciatis libero eos saepe. Perspiciatis excepturi beatae quos vel molestiae quo consequatur dolor.\n\nRecusandae qui corrupti dolores nihil ut. Molestiae vel reprehenderit recusandae quisquam error mollitia. Unde minima inventore quo iste temporibus facilis ex et.\n\nSunt unde doloremque nostrum laboriosam velit neque. Natus totam et rem ducimus qui quibusdam et. Sunt deleniti eos ut ea dolorem distinctio fugit. Quas nulla qui est eaque excepturi consequatur aut.', 344682, 39, 3126, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1979-05-11 03:20:43', '2022-06-13 09:45:52'),
+(85, 3, 'Nemo et exercitationem.', 'nemo-et-exercitationem.', 'Non dignissimos officiis qui voluptate. Nulla cum sint non qui. At cupiditate eaque necessitatibus non odit. Omnis nostrum vero quibusdam. Voluptas aliquid voluptatibus enim fugiat quis cupiditate facilis eaque.\n\nLabore nesciunt sit quia mollitia ut. Blanditiis voluptatem corporis molestiae placeat necessitatibus quam. Fugiat in rem nihil officiis. Aut maxime incidunt itaque aspernatur facilis ad et beatae.\n\nId distinctio saepe et laudantium blanditiis. Nisi aliquam omnis necessitatibus earum minima cum aut. Iure voluptatem sed natus pariatur voluptas doloribus.\n\nConsequatur inventore aliquam occaecati perspiciatis. Totam voluptatibus placeat ipsam dolores amet voluptas autem. Sed dolores voluptates ut quisquam esse iste enim earum.\n\nVoluptatem praesentium odit distinctio numquam repellat. Aut tempore quia et voluptas rerum. Porro sequi enim in et minus maiores. Nisi assumenda pariatur suscipit vero et. Fuga aut qui odio laudantium unde id.', 521168, 4, 1371, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1992-01-19 00:47:42', '2022-06-13 09:45:52'),
+(86, 1, 'Eveniet est distinctio quasi.', 'eveniet-est-distinctio-quasi.', 'Mollitia eligendi cum iure distinctio quisquam. Sint sed officia ea ut sed nihil repudiandae et. Consequuntur architecto ut culpa velit odio.\n\nMollitia a possimus voluptatum qui consequuntur cupiditate maxime rem. Consequatur fugiat aliquam praesentium et voluptatem saepe quasi. Est quis et vero nobis quibusdam. Ea voluptas rerum ut maiores excepturi eius architecto nesciunt.\n\nNihil nulla repellat iste deleniti qui. Vel ea magni odit voluptatibus omnis dolor. Non ullam saepe rerum eius perspiciatis occaecati aliquam. Est similique at magnam doloremque corporis.\n\nProvident ducimus asperiores velit dolorem. Autem placeat architecto officia qui qui totam. Doloremque autem voluptate odio incidunt excepturi. Omnis ea molestiae at architecto sunt.\n\nA qui repellat neque qui laborum dolore. Ut unde assumenda et. Modi aut eos rerum quasi ipsa voluptas nisi.', 883068, 69, 4464, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2013-02-01 02:44:44', '2022-06-13 09:45:52'),
+(87, 5, 'Odit non non qui.', 'odit-non-non-qui.', 'Corrupti aut odit dolorum est. Et ipsa nihil laudantium consectetur.\n\nAspernatur sunt optio et nobis quas. Non molestias nam omnis consequatur veritatis quia. Quas nemo aut sequi. Ipsa saepe ducimus labore dolores aspernatur.\n\nDeleniti deserunt qui perspiciatis consectetur enim quae. Et aut quidem fugit.\n\nMaxime dolor aut sunt voluptas quas repudiandae corrupti. Aut quibusdam tenetur eos unde ipsam consequatur. Officia ipsa ut omnis assumenda possimus reiciendis voluptas.\n\nEius eos harum sit at commodi porro qui. Magni natus ipsa neque. Impedit possimus incidunt est aliquam voluptatum molestiae quae et. Natus est eos quidem natus et ipsa.', 907876, 71, 1639, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2011-10-08 11:10:06', '2022-06-13 09:45:52'),
+(88, 1, 'Sed sunt culpa.', 'sed-sunt-culpa.', 'Voluptas adipisci ut illo fuga. Et odit et ex quas dicta. Dicta et possimus hic molestiae iste. Ipsa dolores accusantium quasi magnam illo distinctio et.\n\nAd distinctio porro et minus tempore nam eos suscipit. Reprehenderit minus at consequatur ad enim sint. Quia in eius delectus error. Reiciendis molestiae itaque est libero.\n\nExercitationem ad porro quia tempore quaerat cupiditate. Voluptates adipisci incidunt non totam voluptas repellendus ratione et. Ut quis quaerat neque pariatur. Rerum velit enim est explicabo quia commodi sed consequuntur.\n\nCorporis ut voluptates sunt a dolores odit eligendi. Voluptas iste nostrum consequatur nobis. Sapiente qui non corporis dolorem.\n\nAliquam aut commodi est. Dolore ipsam mollitia mollitia aliquam cupiditate dolorem non doloribus. Nostrum excepturi tenetur qui vel officia placeat quibusdam. Sit sed laudantium beatae aut iure pariatur.', 980831, 37, 2735, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1989-01-13 07:35:00', '2022-06-13 09:45:52'),
+(89, 3, 'Odio asperiores dignissimos.', 'odio-asperiores-dignissimos.', 'Corrupti quia deserunt dolorem culpa. Ea facilis a expedita sed.\n\nAut sint dolore cumque voluptatibus atque. Doloremque alias dolorem labore et molestiae provident vel. Officiis nam cupiditate quia quisquam rerum rerum facere voluptatem.\n\nVoluptatum voluptatem eos quo quae non architecto. Quia rerum qui rerum nostrum magnam possimus. Quibusdam voluptate pariatur ipsum maxime.\n\nConsequatur sunt temporibus non sed vitae placeat. Error eum omnis voluptate voluptates qui sapiente accusamus ducimus. Ut modi dolorem nemo voluptas eum ut vitae. Molestias consequatur quia voluptatem similique expedita sequi.\n\nOptio voluptatibus quia quod cumque. Ea et minus enim quasi. Corrupti quia ea aliquam nesciunt. Quibusdam quia quidem dolores amet.', 660144, 65, 3402, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1976-09-06 23:06:14', '2022-06-13 09:45:52'),
+(90, 3, 'Molestias debitis pariatur est.', 'molestias-debitis-pariatur-est.', 'Neque reiciendis dolorum eius. Pariatur consequuntur repudiandae ipsum iste praesentium eveniet nostrum. Laborum a tenetur magnam quis natus ducimus.\n\nQuam omnis qui commodi voluptatum. Velit rem distinctio velit commodi veritatis temporibus. Eum est omnis voluptas quia distinctio quisquam illo qui. Qui et atque facilis.\n\nTempore et harum perferendis quae excepturi. Aspernatur non deleniti dignissimos deleniti nisi quod. Temporibus error excepturi rerum velit incidunt natus. Nobis blanditiis facilis aperiam et qui eius sit.\n\nDeleniti et dignissimos natus repellat inventore. In quo et et amet. In aut facere porro laudantium. Repudiandae ullam nemo reprehenderit dolorem unde ducimus modi.\n\nMaxime autem molestiae quia praesentium. Non ipsam a assumenda vel sunt numquam similique. Aliquid libero quisquam quidem reprehenderit hic velit.', 541589, 36, 3492, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1987-03-26 08:46:59', '2022-06-13 09:45:52'),
+(91, 1, 'Officiis iure expedita temporibus.', 'officiis-iure-expedita-temporibus.', 'Et rerum quidem atque optio praesentium amet sed. Odit quaerat inventore aut minus. Facere esse eligendi cupiditate est laboriosam aspernatur fugit.\n\nTotam asperiores quo amet. Molestiae cupiditate perspiciatis cupiditate et veritatis iusto itaque rerum. Aspernatur minima eum mollitia necessitatibus mollitia et consectetur. Nisi modi sunt facilis hic.\n\nAb voluptas distinctio nisi esse. Ipsum enim velit iste ratione nemo. Nihil voluptas excepturi quaerat et omnis ex veritatis quam. Magni tenetur porro itaque et.\n\nFacere facere dolores facilis dolor ut aliquam dignissimos. Et temporibus voluptates nihil.\n\nBeatae ut officia natus non. At ab aperiam iusto voluptatem. Rerum hic sequi quis facilis quae modi. Dolor modi laborum tempore perferendis numquam culpa eligendi.', 441466, 48, 2131, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1998-10-04 05:03:51', '2022-06-13 09:45:52'),
+(92, 5, 'Sequi aut est.', 'sequi-aut-est.', 'Omnis voluptatem rem laudantium consequuntur est eaque soluta hic. Rerum eos voluptas qui voluptas.\n\nDelectus eum sit facere id odio. Laudantium labore et tempora mollitia provident quia. Dolorem quis et non et qui molestiae et. Possimus aut natus doloremque.\n\nAnimi ex aspernatur cupiditate impedit consectetur harum et. Voluptatem et quo qui nobis et vitae et. Dolor eos impedit dignissimos et hic beatae eos.\n\nFugit sit autem itaque vel. Dolor animi ut ab provident a. Qui accusantium qui et nobis.\n\nDoloribus dignissimos qui est omnis consectetur quos. Sed dolores eos magni aspernatur quidem. Maiores temporibus sed voluptatem laboriosam ex vel quasi voluptas. Voluptas voluptas amet similique iusto. Aperiam commodi facilis accusantium libero delectus repudiandae.', 690655, 46, 4715, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2000-10-17 12:04:37', '2022-06-13 09:45:52'),
+(93, 5, 'Iure ratione et.', 'iure-ratione-et.', 'Similique esse eveniet quis repellendus nemo est occaecati. Doloribus consequatur illo omnis nihil saepe. Temporibus omnis architecto labore et eum dolorem fugiat libero.\n\nQuidem aut est sit sint. Consectetur corporis et quod enim iste consequatur. Consequatur laudantium mollitia aut minima. Dolor deleniti sed ipsum voluptatem nemo.\n\nCorporis labore voluptatem enim enim numquam corporis nihil similique. Veritatis molestiae ut sed molestiae et error nemo. Culpa consequatur aut molestiae et odit voluptas adipisci.\n\nError iusto quas quasi qui voluptatem dolores. Et earum quo possimus optio temporibus eaque. Recusandae assumenda ut quaerat quo atque. Sequi minima aliquid ipsa officia.\n\nFacere repellat modi optio repellat. Incidunt aut dolorem sint voluptatem soluta impedit. Consequatur iure quod ipsa odio aspernatur quae architecto. Animi dolor sapiente eveniet fugiat quam natus. Aspernatur ut dignissimos explicabo.', 538227, 75, 3281, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1978-01-03 02:16:45', '2022-06-13 09:45:52'),
+(94, 5, 'Corrupti consequuntur dolorem nostrum.', 'corrupti-consequuntur-dolorem-nostrum.', 'Nihil quasi quisquam id vel reprehenderit. Quod perspiciatis et dolore exercitationem non nihil. Ut et atque dolores eaque.\n\nIusto mollitia beatae optio deleniti quam minus. Sit officiis delectus commodi tenetur modi deserunt natus. Consequatur sunt amet et laudantium rerum numquam similique.\n\nQuia asperiores magnam et autem. Quod hic ipsam beatae iusto quos repellat. Quae pariatur voluptas et unde delectus. Eos eum quisquam fugiat quos est eos vero.\n\nVelit ut odio maiores autem nesciunt. Dolores nam dolore eos vel. Non sapiente similique totam magni consequatur.\n\nEarum voluptatem officiis harum nihil et perspiciatis. Aut saepe omnis repellendus sequi non. Cumque repellat voluptate voluptatum.', 522338, 63, 4318, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1983-10-15 21:05:19', '2022-06-13 09:45:52'),
+(95, 2, 'Ut ut nemo.', 'ut-ut-nemo.', 'At autem est quibusdam voluptatem natus suscipit error. Dignissimos qui sequi consequatur expedita veritatis qui ea. Id facilis illo quia perspiciatis necessitatibus. Nulla dolorum a vel architecto quo at perferendis aut.\n\nEa nam tenetur veniam et laudantium libero sed. Est et est delectus rerum officia occaecati repellat praesentium. Nobis vero vel quia accusantium veniam assumenda qui.\n\nEnim et ullam delectus quidem consequatur nihil fuga. Perspiciatis est fugit dolores.\n\nQuis et tenetur aliquid odio quasi laboriosam qui. Facere cupiditate nihil tempora labore impedit ipsam eum. Et ullam et consequatur eveniet. Illo vero voluptatibus sint aspernatur voluptatem ut molestias omnis.\n\nAdipisci rerum quidem quia ea architecto et. Beatae velit et omnis unde dolorum. Ea modi possimus et fugiat dignissimos. Et distinctio est quaerat in.', 115844, 29, 2899, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2001-06-13 03:45:02', '2022-06-13 09:45:53'),
+(96, 5, 'Non voluptas et quibusdam.', 'non-voluptas-et-quibusdam.', 'Aspernatur impedit nam nobis omnis. Quidem quia fugiat rem vel. Et commodi ipsa et. Neque occaecati vero incidunt.\n\nTotam quod dolorum aliquam voluptatum id. Eaque asperiores rerum voluptas voluptatem. Quo et libero iusto dolorem et dignissimos.\n\nUt unde debitis a non laboriosam. Incidunt ducimus inventore explicabo qui sit error. Et non eveniet qui labore omnis explicabo. Non voluptate et in aspernatur commodi.\n\nConsequatur rerum est laborum vitae. Expedita tenetur autem tempora et consectetur consequatur rerum aliquam.\n\nVelit dolore et voluptatem ut. Et quisquam nulla voluptas quam quia voluptatem.', 650139, 74, 3918, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2010-07-02 13:32:46', '2022-06-13 09:45:53'),
+(97, 3, 'Et rerum.', 'et-rerum.', 'Non blanditiis velit inventore temporibus numquam. Ipsum ea fugiat quod quas quo minus. Perspiciatis reiciendis in sunt nisi occaecati. Cupiditate placeat voluptas voluptas nisi maxime.\n\nLaboriosam voluptas facere nobis aut. Voluptatem repudiandae itaque fuga nihil eligendi laudantium corporis. Iste officiis aliquid sit sit. Dolores accusamus qui quae quaerat maiores.\n\nAb quia voluptatum saepe nemo. Quae nostrum dolorum a doloremque aliquid. Eum unde maiores nam repudiandae omnis. Vel laudantium tenetur nisi labore non.\n\nExplicabo atque optio autem maxime commodi ipsam ullam. Sapiente numquam maxime qui aliquid.\n\nExpedita et architecto rem qui. Quas ipsa molestiae sequi est rem autem sint. Animi enim quam deserunt nostrum autem quod. Et facilis earum quia molestiae.', 441376, 28, 2588, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2015-11-23 01:38:02', '2022-06-13 09:45:53'),
+(98, 2, 'Aut qui tempora.', 'aut-qui-tempora.', 'Dolorem expedita ut hic ea. Voluptates iure qui consequatur esse. Quidem ratione aut aspernatur eum dolorem deleniti enim. Accusamus necessitatibus ex repudiandae et dolorum.\n\nNulla eos aspernatur ratione eum molestiae. Est qui aut quod autem ducimus delectus ratione. Labore molestiae sapiente fugit sapiente deserunt omnis nesciunt.\n\nEum voluptas sit ab. Sed quisquam est assumenda commodi. Consectetur omnis rerum soluta laudantium ut ad. Neque vel molestiae culpa voluptatem voluptas aliquam sit.\n\nDolores pariatur asperiores harum similique quo dolores. Nihil id perspiciatis dolores molestias. Accusantium nobis sint impedit necessitatibus voluptate eveniet voluptas.\n\nIpsam in sint doloremque voluptatum tenetur commodi voluptatum. Nemo fugiat repudiandae laborum minus. Natus vel magni doloremque officia optio rerum. Placeat quisquam quasi libero dolores voluptas.', 63312, 3, 3424, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '2012-02-05 11:35:35', '2022-06-13 09:45:53');
+INSERT INTO `products` (`id`, `category_id`, `name`, `slug`, `detail`, `price`, `discount`, `weight`, `stock`, `image_1`, `image_2`, `image_3`, `sold`, `created_at`, `updated_at`) VALUES
+(99, 4, 'Earum et labore excepturi.', 'earum-et-labore-excepturi.', 'Ducimus voluptate sed nihil ea et architecto. Iusto soluta quod voluptas. Nam fuga vel eius consequatur autem qui earum. Eos et omnis dolor cumque.\n\nRepudiandae earum quidem tempora. Et fugiat dolores optio vero et. Ut doloribus blanditiis dignissimos ut hic beatae perspiciatis. Facere et eius assumenda et qui sit.\n\nEst nesciunt dolore at dignissimos facilis cupiditate impedit. Doloribus saepe saepe deserunt porro ad. Commodi delectus dolores voluptatem dolor totam vel.\n\nHarum quis tenetur est dolor exercitationem. Et nam sint deserunt autem. Magni aut minus beatae fugit omnis recusandae debitis. Perferendis nisi quo sit sint.\n\nEt incidunt et corrupti unde non. Non ad accusantium itaque est. Sit illum et modi facere repudiandae quod. Veritatis tempore nostrum sed magnam.', 826094, 33, 4692, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1981-04-23 19:15:15', '2022-06-13 09:45:53'),
+(100, 2, 'Soluta non.', 'soluta-non.', 'Aut est quia qui accusantium voluptas repellat. Esse natus beatae nihil ut. Vel facere est omnis voluptatem. Reiciendis sit labore pariatur perspiciatis. Assumenda odit quidem et provident dicta magnam assumenda dolores.\n\nDolor fugit ut ipsa odit itaque maiores. Expedita ipsum architecto corporis assumenda iusto. Amet et eos et corporis. Sed dolorem labore laudantium excepturi.\n\nEt consequatur aliquam aut iusto ut. Dolorem nihil vel perspiciatis.\n\nSit autem eum maxime veritatis. Libero explicabo autem ea quidem dolores.\n\nOmnis harum temporibus nam nam quae. Inventore qui expedita dolores quas qui et. Illo sed nihil enim optio facere aut dolores vel. Veniam odit cum est omnis inventore nesciunt iste. Totam distinctio id aut eos.', 40884, 8, 3529, 100, 'product.jpg', 'product.jpg', 'product.jpg', 0, '1995-04-18 23:12:10', '2022-06-13 09:45:53');
 
--- ----------------------------
--- Records of productsize
--- ----------------------------
-INSERT INTO `productsize` VALUES (71, 4);
-INSERT INTO `productsize` VALUES (64, 5);
-INSERT INTO `productsize` VALUES (75, 3);
-INSERT INTO `productsize` VALUES (98, 3);
-INSERT INTO `productsize` VALUES (34, 4);
-INSERT INTO `productsize` VALUES (43, 1);
-INSERT INTO `productsize` VALUES (17, 2);
-INSERT INTO `productsize` VALUES (72, 3);
-INSERT INTO `productsize` VALUES (43, 2);
-INSERT INTO `productsize` VALUES (38, 5);
-INSERT INTO `productsize` VALUES (40, 4);
-INSERT INTO `productsize` VALUES (32, 4);
-INSERT INTO `productsize` VALUES (49, 1);
-INSERT INTO `productsize` VALUES (31, 2);
-INSERT INTO `productsize` VALUES (11, 3);
-INSERT INTO `productsize` VALUES (62, 5);
-INSERT INTO `productsize` VALUES (73, 5);
-INSERT INTO `productsize` VALUES (61, 3);
-INSERT INTO `productsize` VALUES (92, 5);
-INSERT INTO `productsize` VALUES (58, 3);
-INSERT INTO `productsize` VALUES (23, 5);
-INSERT INTO `productsize` VALUES (25, 3);
-INSERT INTO `productsize` VALUES (56, 1);
-INSERT INTO `productsize` VALUES (4, 2);
-INSERT INTO `productsize` VALUES (99, 1);
-INSERT INTO `productsize` VALUES (16, 2);
-INSERT INTO `productsize` VALUES (85, 2);
-INSERT INTO `productsize` VALUES (92, 4);
-INSERT INTO `productsize` VALUES (73, 5);
-INSERT INTO `productsize` VALUES (37, 4);
-INSERT INTO `productsize` VALUES (82, 1);
-INSERT INTO `productsize` VALUES (53, 1);
-INSERT INTO `productsize` VALUES (7, 2);
-INSERT INTO `productsize` VALUES (55, 4);
-INSERT INTO `productsize` VALUES (96, 5);
-INSERT INTO `productsize` VALUES (90, 4);
-INSERT INTO `productsize` VALUES (96, 1);
-INSERT INTO `productsize` VALUES (9, 3);
-INSERT INTO `productsize` VALUES (56, 2);
-INSERT INTO `productsize` VALUES (98, 4);
-INSERT INTO `productsize` VALUES (91, 4);
-INSERT INTO `productsize` VALUES (1, 4);
-INSERT INTO `productsize` VALUES (45, 4);
-INSERT INTO `productsize` VALUES (26, 1);
-INSERT INTO `productsize` VALUES (24, 2);
-INSERT INTO `productsize` VALUES (19, 2);
-INSERT INTO `productsize` VALUES (21, 5);
-INSERT INTO `productsize` VALUES (8, 1);
-INSERT INTO `productsize` VALUES (15, 2);
-INSERT INTO `productsize` VALUES (80, 3);
-INSERT INTO `productsize` VALUES (41, 3);
-INSERT INTO `productsize` VALUES (81, 1);
-INSERT INTO `productsize` VALUES (13, 5);
-INSERT INTO `productsize` VALUES (35, 1);
-INSERT INTO `productsize` VALUES (33, 5);
-INSERT INTO `productsize` VALUES (38, 1);
-INSERT INTO `productsize` VALUES (49, 3);
-INSERT INTO `productsize` VALUES (17, 4);
-INSERT INTO `productsize` VALUES (72, 5);
-INSERT INTO `productsize` VALUES (30, 5);
-INSERT INTO `productsize` VALUES (10, 3);
-INSERT INTO `productsize` VALUES (85, 2);
-INSERT INTO `productsize` VALUES (32, 1);
-INSERT INTO `productsize` VALUES (16, 4);
-INSERT INTO `productsize` VALUES (79, 2);
-INSERT INTO `productsize` VALUES (35, 2);
-INSERT INTO `productsize` VALUES (56, 2);
-INSERT INTO `productsize` VALUES (86, 2);
-INSERT INTO `productsize` VALUES (29, 4);
-INSERT INTO `productsize` VALUES (8, 3);
-INSERT INTO `productsize` VALUES (29, 2);
-INSERT INTO `productsize` VALUES (16, 2);
-INSERT INTO `productsize` VALUES (76, 1);
-INSERT INTO `productsize` VALUES (81, 4);
-INSERT INTO `productsize` VALUES (60, 3);
-INSERT INTO `productsize` VALUES (38, 2);
-INSERT INTO `productsize` VALUES (89, 1);
-INSERT INTO `productsize` VALUES (93, 1);
-INSERT INTO `productsize` VALUES (72, 4);
-INSERT INTO `productsize` VALUES (28, 1);
-INSERT INTO `productsize` VALUES (36, 1);
-INSERT INTO `productsize` VALUES (95, 5);
-INSERT INTO `productsize` VALUES (57, 2);
-INSERT INTO `productsize` VALUES (7, 5);
-INSERT INTO `productsize` VALUES (75, 2);
-INSERT INTO `productsize` VALUES (5, 2);
-INSERT INTO `productsize` VALUES (91, 4);
-INSERT INTO `productsize` VALUES (19, 3);
-INSERT INTO `productsize` VALUES (56, 5);
-INSERT INTO `productsize` VALUES (39, 4);
-INSERT INTO `productsize` VALUES (91, 2);
-INSERT INTO `productsize` VALUES (38, 5);
-INSERT INTO `productsize` VALUES (48, 4);
-INSERT INTO `productsize` VALUES (92, 2);
-INSERT INTO `productsize` VALUES (93, 4);
-INSERT INTO `productsize` VALUES (70, 4);
-INSERT INTO `productsize` VALUES (18, 3);
-INSERT INTO `productsize` VALUES (87, 4);
-INSERT INTO `productsize` VALUES (52, 3);
-INSERT INTO `productsize` VALUES (37, 1);
-INSERT INTO `productsize` VALUES (7, 2);
-INSERT INTO `productsize` VALUES (77, 4);
-INSERT INTO `productsize` VALUES (25, 1);
-INSERT INTO `productsize` VALUES (19, 1);
-INSERT INTO `productsize` VALUES (99, 4);
-INSERT INTO `productsize` VALUES (55, 5);
-INSERT INTO `productsize` VALUES (96, 5);
-INSERT INTO `productsize` VALUES (64, 4);
-INSERT INTO `productsize` VALUES (2, 4);
-INSERT INTO `productsize` VALUES (41, 3);
-INSERT INTO `productsize` VALUES (50, 5);
-INSERT INTO `productsize` VALUES (74, 2);
-INSERT INTO `productsize` VALUES (42, 4);
-INSERT INTO `productsize` VALUES (78, 4);
-INSERT INTO `productsize` VALUES (58, 5);
-INSERT INTO `productsize` VALUES (59, 3);
-INSERT INTO `productsize` VALUES (54, 1);
-INSERT INTO `productsize` VALUES (13, 2);
-INSERT INTO `productsize` VALUES (9, 2);
-INSERT INTO `productsize` VALUES (84, 4);
-INSERT INTO `productsize` VALUES (70, 1);
-INSERT INTO `productsize` VALUES (72, 3);
-INSERT INTO `productsize` VALUES (10, 4);
-INSERT INTO `productsize` VALUES (96, 4);
-INSERT INTO `productsize` VALUES (17, 3);
-INSERT INTO `productsize` VALUES (85, 4);
-INSERT INTO `productsize` VALUES (7, 4);
-INSERT INTO `productsize` VALUES (57, 4);
-INSERT INTO `productsize` VALUES (6, 2);
-INSERT INTO `productsize` VALUES (42, 4);
-INSERT INTO `productsize` VALUES (54, 5);
-INSERT INTO `productsize` VALUES (97, 1);
-INSERT INTO `productsize` VALUES (88, 3);
-INSERT INTO `productsize` VALUES (17, 1);
-INSERT INTO `productsize` VALUES (48, 2);
-INSERT INTO `productsize` VALUES (7, 3);
-INSERT INTO `productsize` VALUES (63, 4);
-INSERT INTO `productsize` VALUES (84, 4);
-INSERT INTO `productsize` VALUES (53, 4);
-INSERT INTO `productsize` VALUES (91, 2);
-INSERT INTO `productsize` VALUES (84, 3);
-INSERT INTO `productsize` VALUES (65, 2);
-INSERT INTO `productsize` VALUES (21, 3);
-INSERT INTO `productsize` VALUES (73, 5);
-INSERT INTO `productsize` VALUES (28, 2);
-INSERT INTO `productsize` VALUES (51, 5);
-INSERT INTO `productsize` VALUES (43, 4);
-INSERT INTO `productsize` VALUES (64, 1);
-INSERT INTO `productsize` VALUES (19, 2);
-INSERT INTO `productsize` VALUES (39, 5);
-INSERT INTO `productsize` VALUES (4, 3);
-INSERT INTO `productsize` VALUES (70, 4);
-INSERT INTO `productsize` VALUES (33, 3);
-INSERT INTO `productsize` VALUES (33, 1);
-INSERT INTO `productsize` VALUES (73, 3);
-INSERT INTO `productsize` VALUES (67, 4);
-INSERT INTO `productsize` VALUES (93, 4);
-INSERT INTO `productsize` VALUES (72, 1);
-INSERT INTO `productsize` VALUES (81, 5);
-INSERT INTO `productsize` VALUES (14, 4);
-INSERT INTO `productsize` VALUES (23, 5);
-INSERT INTO `productsize` VALUES (23, 5);
-INSERT INTO `productsize` VALUES (20, 2);
-INSERT INTO `productsize` VALUES (4, 1);
-INSERT INTO `productsize` VALUES (64, 2);
-INSERT INTO `productsize` VALUES (61, 5);
-INSERT INTO `productsize` VALUES (16, 4);
-INSERT INTO `productsize` VALUES (50, 3);
-INSERT INTO `productsize` VALUES (64, 3);
-INSERT INTO `productsize` VALUES (27, 3);
-INSERT INTO `productsize` VALUES (71, 1);
-INSERT INTO `productsize` VALUES (78, 5);
-INSERT INTO `productsize` VALUES (80, 1);
-INSERT INTO `productsize` VALUES (74, 1);
-INSERT INTO `productsize` VALUES (72, 2);
-INSERT INTO `productsize` VALUES (34, 5);
-INSERT INTO `productsize` VALUES (65, 3);
-INSERT INTO `productsize` VALUES (10, 4);
-INSERT INTO `productsize` VALUES (91, 1);
-INSERT INTO `productsize` VALUES (36, 1);
-INSERT INTO `productsize` VALUES (15, 2);
-INSERT INTO `productsize` VALUES (24, 3);
-INSERT INTO `productsize` VALUES (87, 2);
-INSERT INTO `productsize` VALUES (32, 3);
-INSERT INTO `productsize` VALUES (97, 2);
-INSERT INTO `productsize` VALUES (58, 3);
-INSERT INTO `productsize` VALUES (87, 1);
-INSERT INTO `productsize` VALUES (82, 5);
-INSERT INTO `productsize` VALUES (55, 2);
-INSERT INTO `productsize` VALUES (74, 3);
-INSERT INTO `productsize` VALUES (86, 3);
-INSERT INTO `productsize` VALUES (62, 2);
-INSERT INTO `productsize` VALUES (91, 1);
-INSERT INTO `productsize` VALUES (14, 4);
-INSERT INTO `productsize` VALUES (50, 5);
-INSERT INTO `productsize` VALUES (72, 4);
-INSERT INTO `productsize` VALUES (93, 4);
-INSERT INTO `productsize` VALUES (17, 1);
-INSERT INTO `productsize` VALUES (82, 4);
-INSERT INTO `productsize` VALUES (98, 5);
-INSERT INTO `productsize` VALUES (100, 1);
-INSERT INTO `productsize` VALUES (86, 2);
-INSERT INTO `productsize` VALUES (40, 1);
-INSERT INTO `productsize` VALUES (59, 5);
-INSERT INTO `productsize` VALUES (73, 5);
-INSERT INTO `productsize` VALUES (86, 1);
-INSERT INTO `productsize` VALUES (27, 3);
-INSERT INTO `productsize` VALUES (43, 5);
-INSERT INTO `productsize` VALUES (64, 2);
-INSERT INTO `productsize` VALUES (15, 4);
-INSERT INTO `productsize` VALUES (7, 1);
-INSERT INTO `productsize` VALUES (34, 1);
-INSERT INTO `productsize` VALUES (49, 3);
-INSERT INTO `productsize` VALUES (91, 2);
-INSERT INTO `productsize` VALUES (44, 2);
-INSERT INTO `productsize` VALUES (50, 3);
-INSERT INTO `productsize` VALUES (32, 2);
-INSERT INTO `productsize` VALUES (56, 5);
-INSERT INTO `productsize` VALUES (100, 5);
-INSERT INTO `productsize` VALUES (62, 1);
-INSERT INTO `productsize` VALUES (95, 5);
-INSERT INTO `productsize` VALUES (87, 1);
-INSERT INTO `productsize` VALUES (19, 2);
-INSERT INTO `productsize` VALUES (44, 5);
-INSERT INTO `productsize` VALUES (94, 1);
-INSERT INTO `productsize` VALUES (39, 2);
-INSERT INTO `productsize` VALUES (43, 3);
-INSERT INTO `productsize` VALUES (10, 1);
-INSERT INTO `productsize` VALUES (94, 2);
-INSERT INTO `productsize` VALUES (37, 3);
-INSERT INTO `productsize` VALUES (5, 1);
-INSERT INTO `productsize` VALUES (65, 2);
-INSERT INTO `productsize` VALUES (75, 3);
-INSERT INTO `productsize` VALUES (42, 2);
-INSERT INTO `productsize` VALUES (7, 1);
-INSERT INTO `productsize` VALUES (42, 4);
-INSERT INTO `productsize` VALUES (47, 3);
-INSERT INTO `productsize` VALUES (86, 2);
-INSERT INTO `productsize` VALUES (56, 5);
-INSERT INTO `productsize` VALUES (12, 5);
-INSERT INTO `productsize` VALUES (9, 4);
-INSERT INTO `productsize` VALUES (25, 1);
-INSERT INTO `productsize` VALUES (51, 4);
-INSERT INTO `productsize` VALUES (59, 5);
-INSERT INTO `productsize` VALUES (64, 2);
-INSERT INTO `productsize` VALUES (81, 3);
-INSERT INTO `productsize` VALUES (2, 5);
-INSERT INTO `productsize` VALUES (9, 4);
-INSERT INTO `productsize` VALUES (43, 4);
-INSERT INTO `productsize` VALUES (100, 5);
-INSERT INTO `productsize` VALUES (95, 4);
-INSERT INTO `productsize` VALUES (80, 3);
-INSERT INTO `productsize` VALUES (10, 4);
-INSERT INTO `productsize` VALUES (62, 4);
-INSERT INTO `productsize` VALUES (45, 5);
-INSERT INTO `productsize` VALUES (47, 3);
-INSERT INTO `productsize` VALUES (59, 1);
-INSERT INTO `productsize` VALUES (41, 3);
-INSERT INTO `productsize` VALUES (82, 3);
-INSERT INTO `productsize` VALUES (19, 1);
-INSERT INTO `productsize` VALUES (82, 5);
-INSERT INTO `productsize` VALUES (9, 3);
-INSERT INTO `productsize` VALUES (89, 1);
-INSERT INTO `productsize` VALUES (10, 2);
-INSERT INTO `productsize` VALUES (29, 5);
-INSERT INTO `productsize` VALUES (73, 2);
-INSERT INTO `productsize` VALUES (82, 1);
-INSERT INTO `productsize` VALUES (66, 4);
-INSERT INTO `productsize` VALUES (71, 5);
-INSERT INTO `productsize` VALUES (61, 1);
-INSERT INTO `productsize` VALUES (57, 2);
-INSERT INTO `productsize` VALUES (81, 2);
-INSERT INTO `productsize` VALUES (78, 5);
-INSERT INTO `productsize` VALUES (99, 3);
-INSERT INTO `productsize` VALUES (43, 4);
-INSERT INTO `productsize` VALUES (40, 2);
-INSERT INTO `productsize` VALUES (54, 3);
-INSERT INTO `productsize` VALUES (9, 3);
-INSERT INTO `productsize` VALUES (85, 2);
-INSERT INTO `productsize` VALUES (39, 2);
-INSERT INTO `productsize` VALUES (66, 1);
-INSERT INTO `productsize` VALUES (52, 4);
-INSERT INTO `productsize` VALUES (69, 4);
-INSERT INTO `productsize` VALUES (39, 5);
-INSERT INTO `productsize` VALUES (2, 3);
-INSERT INTO `productsize` VALUES (24, 3);
-INSERT INTO `productsize` VALUES (34, 5);
-INSERT INTO `productsize` VALUES (56, 5);
-INSERT INTO `productsize` VALUES (77, 2);
-INSERT INTO `productsize` VALUES (53, 4);
-INSERT INTO `productsize` VALUES (60, 3);
-INSERT INTO `productsize` VALUES (30, 3);
-INSERT INTO `productsize` VALUES (35, 2);
-INSERT INTO `productsize` VALUES (14, 3);
-INSERT INTO `productsize` VALUES (85, 3);
-INSERT INTO `productsize` VALUES (2, 3);
-INSERT INTO `productsize` VALUES (76, 4);
-INSERT INTO `productsize` VALUES (31, 3);
-INSERT INTO `productsize` VALUES (15, 5);
-INSERT INTO `productsize` VALUES (14, 5);
+-- --------------------------------------------------------
 
--- ----------------------------
--- Table structure for sizes
--- ----------------------------
-DROP TABLE IF EXISTS `sizes`;
-CREATE TABLE `sizes`  (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `created_at` datetime NULL DEFAULT NULL,
-  `updated_at` datetime NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+--
+-- Table structure for table `productsize`
+--
 
--- ----------------------------
--- Records of sizes
--- ----------------------------
-INSERT INTO `sizes` VALUES (1, 'S', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `sizes` VALUES (2, 'M', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `sizes` VALUES (3, 'L', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `sizes` VALUES (4, 'XL', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
-INSERT INTO `sizes` VALUES (5, 'XXL', '2022-06-07 09:38:47', '2022-06-07 09:38:47');
+CREATE TABLE `productsize` (
+  `product_id` int(11) UNSIGNED NOT NULL,
+  `size_id` int(11) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for users
--- ----------------------------
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE `users`  (
-  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `phone` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `username` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `fullname` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `picture` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'profile.png',
-  `password_hash` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `reset_hash` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `reset_at` datetime NULL DEFAULT NULL,
-  `reset_expires` datetime NULL DEFAULT NULL,
-  `activate_hash` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `status` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `status_message` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+--
+-- Dumping data for table `productsize`
+--
+
+INSERT INTO `productsize` (`product_id`, `size_id`) VALUES
+(10, 2),
+(34, 2),
+(77, 4),
+(48, 2),
+(18, 2),
+(88, 1),
+(22, 1),
+(8, 1),
+(77, 1),
+(98, 1),
+(27, 2),
+(78, 5),
+(86, 4),
+(84, 3),
+(11, 5),
+(18, 1),
+(71, 5),
+(97, 3),
+(75, 1),
+(65, 4),
+(18, 3),
+(87, 4),
+(41, 5),
+(48, 1),
+(29, 2),
+(99, 3),
+(93, 5),
+(57, 4),
+(89, 1),
+(73, 4),
+(41, 1),
+(42, 2),
+(16, 2),
+(94, 2),
+(53, 1),
+(53, 5),
+(89, 3),
+(32, 1),
+(23, 1),
+(64, 3),
+(7, 5),
+(38, 2),
+(46, 4),
+(10, 1),
+(10, 2),
+(44, 5),
+(97, 3),
+(87, 1),
+(42, 5),
+(10, 3),
+(25, 4),
+(48, 3),
+(74, 5),
+(24, 5),
+(36, 5),
+(71, 5),
+(85, 5),
+(76, 2),
+(61, 3),
+(67, 5),
+(84, 1),
+(33, 3),
+(51, 3),
+(99, 2),
+(81, 1),
+(84, 1),
+(48, 4),
+(39, 2),
+(40, 1),
+(100, 3),
+(29, 3),
+(21, 3),
+(11, 1),
+(12, 2),
+(35, 5),
+(11, 3),
+(63, 2),
+(5, 1),
+(6, 5),
+(79, 3),
+(22, 4),
+(67, 3),
+(93, 5),
+(84, 2),
+(60, 5),
+(41, 2),
+(34, 3),
+(9, 4),
+(81, 2),
+(85, 5),
+(25, 3),
+(100, 2),
+(90, 1),
+(88, 2),
+(50, 1),
+(85, 5),
+(6, 1),
+(45, 4),
+(32, 4),
+(64, 5),
+(71, 4),
+(92, 1),
+(22, 4),
+(17, 5),
+(33, 5),
+(57, 1),
+(69, 2),
+(90, 2),
+(41, 3),
+(88, 1),
+(19, 2),
+(92, 3),
+(67, 2),
+(27, 5),
+(14, 3),
+(87, 5),
+(78, 5),
+(13, 5),
+(67, 1),
+(66, 3),
+(82, 4),
+(94, 4),
+(23, 5),
+(74, 2),
+(64, 1),
+(81, 4),
+(49, 1),
+(15, 1),
+(10, 3),
+(88, 1),
+(28, 5),
+(19, 5),
+(76, 2),
+(33, 3),
+(10, 2),
+(36, 1),
+(35, 4),
+(62, 4),
+(26, 5),
+(11, 4),
+(20, 1),
+(7, 4),
+(52, 5),
+(98, 2),
+(78, 3),
+(51, 2),
+(35, 4),
+(9, 5),
+(25, 2),
+(82, 5),
+(22, 3),
+(89, 4),
+(24, 5),
+(7, 3),
+(83, 5),
+(69, 1),
+(20, 3),
+(42, 3),
+(78, 2),
+(52, 1),
+(48, 2),
+(35, 1),
+(51, 4),
+(47, 1),
+(39, 3),
+(3, 2),
+(93, 2),
+(17, 5),
+(92, 1),
+(21, 3),
+(97, 2),
+(22, 5),
+(1, 5),
+(57, 3),
+(91, 5),
+(79, 3),
+(12, 3),
+(39, 3),
+(20, 2),
+(62, 2),
+(76, 4),
+(96, 1),
+(96, 4),
+(4, 2),
+(69, 2),
+(63, 3),
+(35, 2),
+(86, 2),
+(28, 2),
+(5, 1),
+(52, 2),
+(82, 1),
+(27, 2),
+(23, 3),
+(15, 3),
+(27, 5),
+(53, 5),
+(33, 2),
+(69, 2),
+(65, 1),
+(82, 4),
+(3, 3),
+(23, 5),
+(68, 3),
+(93, 1),
+(23, 2),
+(34, 4),
+(22, 2),
+(45, 3),
+(72, 1),
+(59, 2),
+(44, 1),
+(23, 1),
+(12, 2),
+(85, 5),
+(90, 5),
+(59, 1),
+(64, 4),
+(64, 3),
+(77, 4),
+(29, 5),
+(95, 1),
+(62, 1),
+(52, 1),
+(93, 5),
+(79, 4),
+(97, 2),
+(21, 5),
+(54, 1),
+(94, 4),
+(65, 4),
+(83, 2),
+(23, 1),
+(80, 3),
+(97, 3),
+(22, 3),
+(48, 2),
+(32, 5),
+(90, 4),
+(25, 1),
+(7, 2),
+(16, 1),
+(42, 4),
+(26, 2),
+(16, 5),
+(3, 4),
+(21, 5),
+(34, 5),
+(43, 3),
+(50, 5),
+(8, 3),
+(55, 3),
+(65, 3),
+(97, 2),
+(28, 1),
+(87, 1),
+(66, 2),
+(43, 3),
+(87, 2),
+(72, 1),
+(5, 2),
+(9, 2),
+(34, 1),
+(70, 2),
+(16, 5),
+(52, 1),
+(70, 4),
+(17, 5),
+(65, 4),
+(10, 5),
+(78, 2),
+(73, 1),
+(100, 4),
+(99, 2),
+(95, 4),
+(35, 5),
+(100, 2),
+(54, 5),
+(88, 1),
+(23, 1),
+(48, 2),
+(48, 5),
+(81, 4),
+(71, 4),
+(57, 1),
+(62, 3),
+(64, 1),
+(49, 4),
+(29, 5),
+(17, 4),
+(83, 1),
+(34, 2),
+(46, 1),
+(10, 3),
+(3, 4),
+(6, 2),
+(11, 4),
+(68, 4),
+(40, 4),
+(86, 4);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sizes`
+--
+
+CREATE TABLE `sizes` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `sizes`
+--
+
+INSERT INTO `sizes` (`id`, `name`, `created_at`, `updated_at`) VALUES
+(1, 'S', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(2, 'M', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(3, 'L', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(4, 'XL', '2022-06-13 09:45:46', '2022-06-13 09:45:46'),
+(5, 'XXL', '2022-06-13 09:45:46', '2022-06-13 09:45:46');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `phone` varchar(15) NOT NULL,
+  `username` varchar(30) DEFAULT NULL,
+  `fullname` varchar(50) DEFAULT NULL,
+  `picture` varchar(100) NOT NULL DEFAULT 'profile.png',
+  `password_hash` varchar(255) NOT NULL,
+  `reset_hash` varchar(255) DEFAULT NULL,
+  `reset_at` datetime DEFAULT NULL,
+  `reset_expires` datetime DEFAULT NULL,
+  `activate_hash` varchar(255) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `status_message` varchar(255) DEFAULT NULL,
   `active` tinyint(1) NOT NULL DEFAULT 0,
   `force_pass_reset` tinyint(1) NOT NULL DEFAULT 0,
-  `created_at` datetime NULL DEFAULT NULL,
-  `updated_at` datetime NULL DEFAULT NULL,
-  `deleted_at` datetime NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `email`(`email`) USING BTREE,
-  UNIQUE INDEX `username`(`username`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of users
--- ----------------------------
-INSERT INTO `users` VALUES (1, 'admin@gmail.com', '0878111122222', 'admin', 'Administrator', 'profile.png', '$2y$10$QMUu7NjZH1xijkHSSSK0r.jWNYGj6WXUh.QdCgt8kn1ZsiHv04JMO', NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, '2022-03-01 11:31:22', '2022-03-01 11:31:40', NULL);
-INSERT INTO `users` VALUES (2, 'userbaru@gmail.com', '', 'userbaru', 'User Baru', 'profile.png', '$2y$10$NP//Rx96DhjCRpWmqSu.JeFLtZEvhRzoE560NB.vu5tadrsxMXUM6', NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, '2022-06-07 09:40:24', '2022-06-07 09:40:53', NULL);
+--
+-- Dumping data for table `users`
+--
 
--- ----------------------------
--- Triggers structure for table productcheckout
--- ----------------------------
-DROP TRIGGER IF EXISTS `kurangStok`;
-delimiter ;;
-CREATE TRIGGER `kurangStok` AFTER INSERT ON `productcheckout` FOR EACH ROW UPDATE products SET stock = stock - NEW.quantity WHERE id = NEW.product_id
-;;
-delimiter ;
+INSERT INTO `users` (`id`, `email`, `phone`, `username`, `fullname`, `picture`, `password_hash`, `reset_hash`, `reset_at`, `reset_expires`, `activate_hash`, `status`, `status_message`, `active`, `force_pass_reset`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'admin@gmail.com', '0878111122222', 'admin', 'Administrator', 'profile.png', '$2y$10$QMUu7NjZH1xijkHSSSK0r.jWNYGj6WXUh.QdCgt8kn1ZsiHv04JMO', NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, '2022-03-01 11:31:22', '2022-03-01 11:31:40', NULL);
 
--- ----------------------------
--- Triggers structure for table productcheckout
--- ----------------------------
-DROP TRIGGER IF EXISTS `tambahSold`;
-delimiter ;;
-CREATE TRIGGER `tambahSold` AFTER INSERT ON `productcheckout` FOR EACH ROW UPDATE products SET sold = sold + NEW.quantity WHERE id = NEW.product_id
-;;
-delimiter ;
+--
+-- Indexes for dumped tables
+--
 
--- ----------------------------
--- Triggers structure for table productcheckout
--- ----------------------------
-DROP TRIGGER IF EXISTS `ubahStok`;
-delimiter ;;
-CREATE TRIGGER `ubahStok` AFTER UPDATE ON `productcheckout` FOR EACH ROW UPDATE products SET stock = (stock + OLD.quantity) - NEW.quantity WHERE id = OLD.product_id
-;;
-delimiter ;
+--
+-- Indexes for table `address`
+--
+ALTER TABLE `address`
+  ADD PRIMARY KEY (`id`);
 
--- ----------------------------
--- Triggers structure for table productcheckout
--- ----------------------------
-DROP TRIGGER IF EXISTS `ubahSold`;
-delimiter ;;
-CREATE TRIGGER `ubahSold` AFTER UPDATE ON `productcheckout` FOR EACH ROW UPDATE products SET sold = (sold - OLD.quantity) + NEW.quantity WHERE id = OLD.product_id
-;;
-delimiter ;
+--
+-- Indexes for table `auth_activation_attempts`
+--
+ALTER TABLE `auth_activation_attempts`
+  ADD PRIMARY KEY (`id`);
 
--- ----------------------------
--- Triggers structure for table productcheckout
--- ----------------------------
-DROP TRIGGER IF EXISTS `hapusStok`;
-delimiter ;;
-CREATE TRIGGER `hapusStok` AFTER DELETE ON `productcheckout` FOR EACH ROW UPDATE products SET stock = stock + OLD.quantity WHERE id = OLD.product_id
-;;
-delimiter ;
+--
+-- Indexes for table `auth_groups`
+--
+ALTER TABLE `auth_groups`
+  ADD PRIMARY KEY (`id`);
 
--- ----------------------------
--- Triggers structure for table productcheckout
--- ----------------------------
-DROP TRIGGER IF EXISTS `hapusSold`;
-delimiter ;;
-CREATE TRIGGER `hapusSold` AFTER DELETE ON `productcheckout` FOR EACH ROW UPDATE products SET sold = sold - OLD.quantity WHERE id = OLD.product_id
-;;
-delimiter ;
+--
+-- Indexes for table `auth_groups_permissions`
+--
+ALTER TABLE `auth_groups_permissions`
+  ADD KEY `auth_groups_permissions_permission_id_foreign` (`permission_id`),
+  ADD KEY `group_id_permission_id` (`group_id`,`permission_id`);
 
-SET FOREIGN_KEY_CHECKS = 1;
+--
+-- Indexes for table `auth_groups_users`
+--
+ALTER TABLE `auth_groups_users`
+  ADD KEY `auth_groups_users_user_id_foreign` (`user_id`),
+  ADD KEY `group_id_user_id` (`group_id`,`user_id`);
+
+--
+-- Indexes for table `auth_logins`
+--
+ALTER TABLE `auth_logins`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `email` (`email`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `auth_permissions`
+--
+ALTER TABLE `auth_permissions`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `auth_reset_attempts`
+--
+ALTER TABLE `auth_reset_attempts`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `auth_tokens`
+--
+ALTER TABLE `auth_tokens`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `auth_tokens_user_id_foreign` (`user_id`),
+  ADD KEY `selector` (`selector`);
+
+--
+-- Indexes for table `auth_users_permissions`
+--
+ALTER TABLE `auth_users_permissions`
+  ADD KEY `auth_users_permissions_permission_id_foreign` (`permission_id`),
+  ADD KEY `user_id_permission_id` (`user_id`,`permission_id`);
+
+--
+-- Indexes for table `cancel_orders`
+--
+ALTER TABLE `cancel_orders`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `carts`
+--
+ALTER TABLE `carts`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `categories`
+--
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `slug` (`slug`);
+
+--
+-- Indexes for table `checkouts`
+--
+ALTER TABLE `checkouts`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `colors`
+--
+ALTER TABLE `colors`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `confirms`
+--
+ALTER TABLE `confirms`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `events`
+--
+ALTER TABLE `events`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `historysales`
+--
+ALTER TABLE `historysales`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `historyusers`
+--
+ALTER TABLE `historyusers`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `migrations`
+--
+ALTER TABLE `migrations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `products`
+--
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `slug` (`slug`);
+
+--
+-- Indexes for table `sizes`
+--
+ALTER TABLE `sizes`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `username` (`username`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `address`
+--
+ALTER TABLE `address`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `auth_activation_attempts`
+--
+ALTER TABLE `auth_activation_attempts`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `auth_groups`
+--
+ALTER TABLE `auth_groups`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `auth_logins`
+--
+ALTER TABLE `auth_logins`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `auth_permissions`
+--
+ALTER TABLE `auth_permissions`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `auth_reset_attempts`
+--
+ALTER TABLE `auth_reset_attempts`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `auth_tokens`
+--
+ALTER TABLE `auth_tokens`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `cancel_orders`
+--
+ALTER TABLE `cancel_orders`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `carts`
+--
+ALTER TABLE `carts`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `checkouts`
+--
+ALTER TABLE `checkouts`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `colors`
+--
+ALTER TABLE `colors`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+
+--
+-- AUTO_INCREMENT for table `confirms`
+--
+ALTER TABLE `confirms`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `events`
+--
+ALTER TABLE `events`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `historysales`
+--
+ALTER TABLE `historysales`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `historyusers`
+--
+ALTER TABLE `historyusers`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `migrations`
+--
+ALTER TABLE `migrations`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
+-- AUTO_INCREMENT for table `products`
+--
+ALTER TABLE `products`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
+
+--
+-- AUTO_INCREMENT for table `sizes`
+--
+ALTER TABLE `sizes`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `auth_groups_permissions`
+--
+ALTER TABLE `auth_groups_permissions`
+  ADD CONSTRAINT `auth_groups_permissions_group_id_foreign` FOREIGN KEY (`group_id`) REFERENCES `auth_groups` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `auth_groups_permissions_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `auth_permissions` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `auth_groups_users`
+--
+ALTER TABLE `auth_groups_users`
+  ADD CONSTRAINT `auth_groups_users_group_id_foreign` FOREIGN KEY (`group_id`) REFERENCES `auth_groups` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `auth_groups_users_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `auth_tokens`
+--
+ALTER TABLE `auth_tokens`
+  ADD CONSTRAINT `auth_tokens_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `auth_users_permissions`
+--
+ALTER TABLE `auth_users_permissions`
+  ADD CONSTRAINT `auth_users_permissions_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `auth_permissions` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `auth_users_permissions_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
